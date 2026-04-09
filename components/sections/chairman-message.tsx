@@ -12,7 +12,7 @@ export function ChairmanMessage() {
             {/* Image */}
             <div className="relative h-64 md:h-96 w-full">
               <Image
-                src="/images/chairman.jpg"
+                src="/lgaChairman (1).png"
                 alt="Chairman IGSL"
                 fill
                 className="object-cover"
@@ -27,7 +27,7 @@ export function ChairmanMessage() {
                   A Message From
                 </h3>
                 <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-                  Hon. Ade Johnson
+                  Hon. Bar. Ugo Ferdinand Ukwueze
                 </h2>
                 <p className="text-foreground/70 font-medium mb-4">
                   Chairman, IGSL

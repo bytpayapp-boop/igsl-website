@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { Navbar } from '@/components/common/navbar'
 import { Footer } from '@/components/common/footer'
 import './globals.css'
+import { ThemeProvider } from '@/components/theme-provider'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -37,15 +38,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <html lang="en">
+     
       <body className="font-sans antialiased flex flex-col min-h-screen">
-        <Navbar />
+       
         <main className="flex-1">
           {children}
         </main>
-        <Footer />
+       
         <Analytics />
       </body>
-    </html>
+        </html>
+       </ThemeProvider>
+  
   )
 }

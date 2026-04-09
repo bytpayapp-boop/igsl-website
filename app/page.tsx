@@ -17,7 +17,7 @@ export default function Home() {
       <Navbar />
       <main className="flex-grow">
         <HeroSection />
-        <ServicesSection />
+        {/* <ServicesSection /> */}
         <StatsSection />
         <ChairmanMessage />
         <AnnouncementsSection />
