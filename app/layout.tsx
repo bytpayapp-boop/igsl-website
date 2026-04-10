@@ -39,12 +39,16 @@ export default function RootLayout({
 }>) {
   return (
 
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <html lang="en">
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem
+      >
+        <html lang="en"
+        style={{scrollbarWidth:'thin'}}>
      
-      <body className="font-sans antialiased flex flex-col min-h-screen">
+      <body className="font-sans antialiased flex flex-col  min-h-screen"
+      >
        
-        <main className="flex-1">
+        <main className="flex-1 "
+        >
           {children}
         </main>
        

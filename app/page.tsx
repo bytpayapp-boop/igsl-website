@@ -18,8 +18,9 @@ export default function Home() {
       <main className="flex-grow">
         <HeroSection />
         {/* <ServicesSection /> */}
+         <ChairmanMessage />
         <StatsSection />
-        <ChairmanMessage />
+       
         <AnnouncementsSection />
       </main>
       <Footer />
