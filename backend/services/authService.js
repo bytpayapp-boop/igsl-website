@@ -5,9 +5,6 @@ const crypto = require('crypto')
 
 const prisma = new PrismaClient()
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
-const JWT_EXPIRE = '7d'
-const SALT_ROUNDS = 10
 
 class AuthService {
   /**

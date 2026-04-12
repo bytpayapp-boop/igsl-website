@@ -1,6 +1,10 @@
 const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
+const {  authTokenMiddleWare,
+    authRefreshMiddleware} = require('./middleware/auth');
+
+const {generateBothTokens, generateAccessToken}= require('./utils/jwt')
 
 dotenv.config()
 
@@ -12,7 +16,7 @@ const PORT = process.env.PORT || 3001
 // Middlewares
 // Allow requests from Render frontend
 app.use(cors({
-  allowedOrigins: [
+origin: [
     'https://igsl-website.onrender.com',
     'http://localhost:3000', // For local development
   ],
@@ -51,11 +55,8 @@ app.post('/api/auth/register', async (req, res) => {
       lgaId: process.env.DEFAULT_LGA_ID || 'default-lga',
     })
 
-    if (!result.success) {
-      return res.status(400).json(result)
-    }
-
-    res.status(201).json(result)
+   const tokenpayload = generateAccessToken(result);
+    res.status(201).json({token:tokenpayload,user:result})
   } catch (error) {
     console.error('Register error:', error)
     res.status(500).json({

@@ -107,7 +107,10 @@ export function RegisterForm() {
         email: formData.email,
         password: formData.password,
         phone: '', // Backend requires phone, optional for now
-      })
+      });
+
+      console.log('Registration successful:',response.data);
+      localStorage.setItem('user',response.data.user);
 
       toast.success('Registration successful! Redirecting to login...')
       setTimeout(() => {
