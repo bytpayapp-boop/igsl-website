@@ -92,18 +92,9 @@ class AuthService {
         where: {
           OR: [{ email: username }, { phone: username }, { fullName: username }],
         },
-        select: {
-          id: true,
-          fullName: true,
-          email: true,
-          phone: true,
-          userType: true,
-          createdAt: true,
-        },
         include: {
           staffProfile: true,
         },
-        
       })
 
       if (!user) {
