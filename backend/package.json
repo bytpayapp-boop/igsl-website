@@ -1,0 +1,36 @@
+{
+  "name": "igsl-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "NODE_ENV=production node server.js",
+    "migrate": "npx prisma migrate dev",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "studio": "npx prisma studio",
+    "generate": "npx prisma generate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "igsl",
+    "local-government",
+    "authentication",
+    "prisma",
+    "express"
+  ],
+  "author": "IGSL Development",
+  "license": "ISC",
+  "description": "Backend API for IGSL Local Government Portal",
+  "dependencies": {
+    "@prisma/client": "^7.7.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.1.2",
+    "prisma": "^7.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

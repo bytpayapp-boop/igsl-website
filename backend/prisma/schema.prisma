@@ -1,0 +1,579 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
+  relationMode = "prisma"
+}
+
+// ===== ENUMS =====
+
+enum UserType {
+  CITIZEN
+  STAFF
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum StaffRole {
+  SUPER_ADMIN
+  CHAIRMAN
+  HOD
+  CLERK
+  VERIFIER
+  ACCOUNT_OFFICER
+  AUDITOR
+  SUPPORT
+}
+
+enum ApplicationType {
+  IDENTIFICATION_CERTIFICATE
+  INDIGENE_CERTIFICATE
+  BUSINESS_PREMISES
+  LOCAL_TAX_CLEARANCE
+  TENEMENT_RATE
+  OTHER
+}
+
+enum ApplicationStatus {
+  DRAFT
+  SUBMITTED
+  PAYMENT_PENDING
+  PAYMENT_CONFIRMED
+  UNDER_REVIEW
+  PENDING_VERIFICATION
+  VERIFIED
+  APPROVED
+  REJECTED
+  CANCELLED
+  ISSUED
+  REVOKED
+}
+
+enum VerificationStatus {
+  NOT_STARTED
+  PENDING
+  IN_REVIEW
+  VERIFIED
+  FAILED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  INITIATED
+  PROCESSING
+  SUCCESS
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  FLUTTERWAVE
+  PAYSTACK
+  MANUAL
+  BANK_TRANSFER
+}
+
+enum CertificateStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+  VOIDED
+}
+
+enum DocumentType {
+  PASSPORT_PHOTO
+  NIN_SLIP
+  BIRTH_CERTIFICATE
+  AGE_DECLARATION
+  UTILITY_BILL
+  COMMUNITY_LETTER
+  APPLICATION_ATTACHMENT
+  PAYMENT_RECEIPT
+  OTHER
+}
+
+enum ReviewDecision {
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_CORRECTION
+}
+
+enum DeliveryChannel {
+  EMAIL
+  SMS
+  WHATSAPP
+  SYSTEM
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  READ
+}
+
+enum OtpType {
+  EMAIL_VERIFICATION
+  PHONE_VERIFICATION
+  PASSWORD_RESET
+}
+
+// ===== CORE MODELS =====
+
+model Lga {
+  id                 String             @id @default(uuid())
+  name               String
+  code               String             @unique
+  stateName          String
+  country            String             @default("Nigeria")
+  headquarters       String?
+  chairmanName       String?
+  officialEmail      String?
+  officialPhone      String?
+  websiteUrl         String?
+  logoUrl            String?
+  sealImageUrl       String?
+  address            String?
+  timezone           String             @default("Africa/Lagos")
+  isActive           Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  wards              Ward[]
+  serviceConfigs     ServiceConfig[]
+  applicationSeries  ApplicationSequence[]
+  users              User[]
+  applications       Application[]
+  certificates       Certificate[]
+  paymentRecords     Payment[]
+  auditLogs          AuditLog[]
+  announcements      Announcement[]
+  settings           SystemSetting[]
+
+  @@index([name])
+  @@index([stateName])
+}
+
+model Ward {
+  id          String    @id @default(uuid())
+  lgaId       String
+  name        String
+  code        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  lga         Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  users       User[]
+  addresses   Address[]
+  applications Application[]
+
+  @@unique([lgaId, name])
+  @@unique([lgaId, code])
+  @@index([lgaId])
+}
+
+model User {
+  id                    String               @id @default(uuid())
+  lgaId                 String
+  wardId                String?
+  userType              UserType             @default(CITIZEN)
+
+  // Identity fields
+  firstName             String
+  middleName            String?
+  lastName              String
+  fullName              String?
+  email                 String?              @unique
+  phone                 String               @unique
+  alternatePhone        String?
+  passwordHash          String?
+  gender                Gender?
+  dateOfBirth           DateTime?
+  nin                   String?              @unique
+  nationalIdVerified    Boolean              @default(false)
+
+  // Address & origin
+  occupation            String?
+  placeOfBirth          String?
+  stateOfOrigin         String?
+  lgaOfOrigin           String?
+  nationality           String?              @default("Nigerian")
+  profilePhotoUrl       String?
+
+  // Password reset fields
+  resetTokenHash        String?
+  resetTokenExpiry      DateTime?
+
+  // Account status
+  isActive              Boolean              @default(true)
+  isPhoneVerified       Boolean              @default(false)
+  isEmailVerified       Boolean              @default(false)
+  lastLoginAt           DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+
+  // Relations
+  lga                   Lga                  @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  ward                  Ward?                @relation(fields: [wardId], references: [id], onDelete: SetNull)
+  addresses             Address[]
+  staffProfile          StaffProfile?
+  applications          Application[]        @relation("ApplicantApplications")
+  submittedApplications Application[]        @relation("ApplicationSubmitter")
+  reviews               ApplicationReview[]
+  certificatesIssued    Certificate[]        @relation("CertificateIssuedBy")
+  auditLogs             AuditLog[]
+  notifications         Notification[]
+  uploads               UploadedDocument[]
+  otpCodes              OtpCode[]
+
+  @@index([lgaId])
+  @@index([wardId])
+  @@index([phone])
+  @@index([email])
+  @@index([nin])
+  @@index([lastName, firstName])
+}
+
+model StaffProfile {
+  id                    String       @id @default(uuid())
+  userId                String       @unique
+  employeeCode          String?      @unique
+  role                  StaffRole
+  department            String?
+  signatureImageUrl     String?
+  canApproveCertificates Boolean     @default(false)
+  canVerifyApplications Boolean      @default(false)
+  canManagePayments     Boolean      @default(false)
+  canManageSettings     Boolean      @default(false)
+  canViewAuditLogs      Boolean      @default(false)
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  user                  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([role])
+}
+
+model OtpCode {
+  id          String      @id @default(uuid())
+  userId      String
+  code        String
+  type        OtpType
+  attempts    Int         @default(0)
+  expiresAt   DateTime
+  isUsed      Boolean     @default(false)
+  usedAt      DateTime?
+  createdAt   DateTime    @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([code])
+  @@index([expiresAt])
+}
+
+model Address {
+  id            String    @id @default(uuid())
+  userId        String?
+  wardId        String?
+  line1         String
+  line2         String?
+  city          String?
+  state         String
+  postalCode    String?
+  country       String    @default("Nigeria")
+  landmark      String?
+  isPrimary     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ward          Ward?     @relation(fields: [wardId], references: [id], onDelete: SetNull)
+  applications  Application[]
+
+  @@index([userId])
+  @@index([wardId])
+}
+
+// ===== SERVICE & APPLICATION MODELS =====
+
+model ServiceConfig {
+  id                      String             @id @default(uuid())
+  lgaId                   String
+  serviceType             ApplicationType
+  name                    String
+  slug                    String
+  description             String?
+  feeInKobo               BigInt
+  processingDays          Int?
+  requiresNin             Boolean            @default(false)
+  requiresPassport        Boolean            @default(true)
+  requiresCommunityLetter Boolean            @default(false)
+  requiresBirthDocument   Boolean            @default(false)
+  requiresAddressProof    Boolean            @default(false)
+  requiresManualApproval  Boolean            @default(true)
+  validityDays            Int?
+  prefix                  String?
+  templateName            String?
+  certificateTitle        String?
+  isActive                Boolean            @default(true)
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+
+  lga                     Lga                @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  applications            Application[]
+
+  @@unique([lgaId, serviceType])
+  @@index([lgaId])
+  @@index([slug])
+}
+
+model ApplicationSequence {
+  id          String    @id @default(uuid())
+  lgaId       String
+  serviceType ApplicationType
+  year        Int
+  sequenceNum BigInt
+  lastUsedAt  DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  lga         Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
+  @@unique([lgaId, serviceType, year])
+  @@index([lgaId])
+}
+
+model Application {
+  id                      String               @id @default(uuid())
+  lgaId                   String
+  serviceConfigId         String
+  applicantId             String
+  submittedByUserId       String?
+  addressId               String?
+  refNumber               String               @unique
+  status                  ApplicationStatus    @default(DRAFT)
+  verificationStatus      VerificationStatus   @default(NOT_STARTED)
+  paymentStatus           PaymentStatus        @default(PENDING)
+  reviewDecision          ReviewDecision       @default(PENDING)
+  
+  // Application data
+  applicationData         Json?
+  attachedDocuments       UploadedDocument[]
+  
+  // Metadata
+  submittedAt             DateTime?
+  approvedAt              DateTime?
+  issuedAt                DateTime?
+  expiresAt               DateTime?
+  notes                   String?
+  
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+
+  lga                     Lga                  @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  serviceConfig           ServiceConfig        @relation(fields: [serviceConfigId], references: [id])
+  applicant               User                 @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
+  submittedBy             User?                @relation("ApplicationSubmitter", fields: [submittedByUserId], references: [id], onDelete: SetNull)
+  address                 Address?             @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  reviews                 ApplicationReview[]
+  payments                Payment[]
+  certificate             Certificate?
+
+  @@index([lgaId])
+  @@index([applicantId])
+  @@index([serviceConfigId])
+  @@index([status])
+  @@index([refNumber])
+}
+
+model ApplicationReview {
+  id              String           @id @default(uuid())
+  applicationId   String
+  reviewedByUserId String
+  decision        ReviewDecision
+  comments        String?
+  findingsData    Json?
+  reviewedAt      DateTime         @default(now())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  application     Application      @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  reviewedBy      User             @relation(fields: [reviewedByUserId], references: [id])
+
+  @@index([applicationId])
+  @@index([reviewedByUserId])
+}
+
+// ===== PAYMENT & CERTIFICATE MODELS =====
+
+model Payment {
+  id                  String           @id @default(uuid())
+  applicationId       String
+  lgaId               String
+  referenceNumber     String           @unique
+  amountInKobo        BigInt
+  provider            PaymentProvider
+  status              PaymentStatus    @default(PENDING)
+  transactionId       String?          @unique
+  metadata            Json?
+  
+  initiatedAt         DateTime         @default(now())
+  completedAt         DateTime?
+  failureReason       String?
+  
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  application         Application      @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  lga                 Lga              @relation(fields: [lgaId], references: [id])
+
+  @@index([applicationId])
+  @@index([referenceNumber])
+  @@index([transactionId])
+  @@index([status])
+}
+
+model Certificate {
+  id                String            @id @default(uuid())
+  applicationId     String            @unique
+  lgaId             String
+  certificateNumber String            @unique
+  issuedByUserId    String
+  status            CertificateStatus @default(ACTIVE)
+  
+  // Certificate content
+  certificateData   Json              // Stores generated certificate data
+  certificateUrl    String?           // URL to PDF/image
+  
+  // Validity tracking
+  issuedAt          DateTime          @default(now())
+  expiresAt         DateTime?
+  revokedAt         DateTime?
+  revocationReason  String?
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  application       Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  lga               Lga               @relation(fields: [lgaId], references: [id])
+  issuedBy          User              @relation("CertificateIssuedBy", fields: [issuedByUserId], references: [id])
+
+  @@index([lgaId])
+  @@index([certificateNumber])
+  @@index([status])
+}
+
+// ===== DOCUMENT & NOTIFICATION MODELS =====
+
+model UploadedDocument {
+  id              String       @id @default(uuid())
+  userId          String?
+  applicationId   String?
+  documentType    DocumentType
+  fileName        String
+  fileUrl         String
+  fileSize        Int
+  mimeType        String
+  
+  uploadedAt      DateTime     @default(now())
+  createdAt       DateTime     @default(now())
+
+  user            User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application     Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([applicationId])
+}
+
+model Notification {
+  id              String               @id @default(uuid())
+  userId          String
+  title           String
+  message         String
+  channel         DeliveryChannel
+  status          NotificationStatus   @default(PENDING)
+  
+  relatedEntityId String?
+  relatedEntityType String?
+  
+  sentAt          DateTime?
+  readAt          DateTime?
+  createdAt       DateTime             @default(now())
+
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ===== AUDIT & SYSTEM MODELS =====
+
+model AuditLog {
+  id            String    @id @default(uuid())
+  userId        String?
+  lgaId         String
+  action        String
+  entityType    String
+  entityId      String
+  changes       Json?
+  ipAddress     String?
+  userAgent     String?
+  
+  createdAt     DateTime  @default(now())
+
+  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  lga           Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([lgaId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model SystemSetting {
+  id            String    @id @default(uuid())
+  lgaId         String
+  key           String
+  value         String
+  description   String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  lga           Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
+  @@unique([lgaId, key])
+  @@index([lgaId])
+}
+
+model Announcement {
+  id            String    @id @default(uuid())
+  lgaId         String
+  title         String
+  content       String
+  imageUrl      String?
+  isActive      Boolean   @default(true)
+  
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  lga           Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
+  @@index([lgaId])
+  @@index([publishedAt])
+}
