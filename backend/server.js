@@ -76,6 +76,8 @@ app.post('/api/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body
 
+    console.log(`${username} logging back in`)
+
     // Validate required fields
     if (!username || !password) {
       return res.status(400).json({
@@ -90,6 +92,7 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json(result)
     }
 
+    console.log('Logged in successfully')
     res.status(200).json(result)
   } catch (error) {
     console.error('Login error:', error)
