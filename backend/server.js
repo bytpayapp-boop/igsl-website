@@ -57,8 +57,8 @@ app.post('/api/auth/register', async (req, res) => {
       lgaId: process.env.DEFAULT_LGA_ID || 'default-lga',
     })
 console.log('Registration successful')
-   const tokenpayload = generateAccessToken(result);
-    res.status(201).json({token:tokenpayload,user:result})
+   const token = generateAccessToken(result.user);
+    res.status(201).json({...result,token})
   } catch (error) {
     console.error('Register error:', error)
     res.status(500).json({
