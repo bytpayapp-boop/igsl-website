@@ -31,7 +31,7 @@ class AuthService {
       }
 
       // Hash password
-      const passwordHash = await bcrypt.hash(password, SALT_ROUNDS)
+      const passwordHash = await bcrypt.hash(password, 10)
 
     //   // Extract first and last name from username for basic identity
     //   const nameParts = username.split(' ')

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { Eye, EyeOff, Lock, UserCheck } from 'lucide-react'
+import { Eye, EyeOff, ShieldCheck, Lock, UserCheck } from 'lucide-react'
 
 const BACKEND_URL = 'https://igsl-website.onrender.com'
 
