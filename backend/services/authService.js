@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
+const { generateAccessToken } = require('../utils/jwt')
 
 const prisma = new PrismaClient()
 
@@ -91,9 +92,18 @@ class AuthService {
         where: {
           OR: [{ email: username }, { phone: username }, { fullName: username }],
         },
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+          phone: true,
+          userType: true,
+          createdAt: true,
+        },
         include: {
           staffProfile: true,
         },
+        
       })
 
       if (!user) {
@@ -118,16 +128,10 @@ class AuthService {
       })
 
       // Generate token
-      const token = jwt.sign(
-        {
-          userId: user.id,
-          email: user.email,
-          userType: user.userType,
-          role: user.staffProfile?.role || null,
-        },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRE }
-      )
+      let userDetail;
+      let {staffProfile, ...rest}=user;
+      userDetail = {...rest};
+     const token = generateAccessToken(userDetail)
 
       return {
         success: true,
