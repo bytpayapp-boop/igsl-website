@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-
 }
 
 datasource db {
@@ -133,327 +132,329 @@ enum OtpType {
 // ===== CORE MODELS =====
 
 model Lga {
-  id                 String             @id @default(cuid())
-  name               String
-  code               String             @unique
-  stateName          String             @map("state_name")
-  country            String             @default("Nigeria")
-  headquarters       String?
-  chairmanName       String?            @map("chairman_name")
-  officialEmail      String?            @map("official_email")
-  officialPhone      String?            @map("official_phone")
-  websiteUrl         String?            @map("website_url")
-  logoUrl            String?            @map("logo_url")
-  sealImageUrl       String?            @map("seal_image_url")
-  address            String?
-  timezone           String             @default("Africa/Lagos")
-  isActive           Boolean            @default(true) @map("is_active")
-  createdAt          DateTime           @default(now()) @map("created_at")
-  updatedAt          DateTime           @updatedAt @map("updated_at")
+  id            String   @id @default(cuid())
+  name          String
+  code          String   @unique
+  stateName     String   @map("state_name")
+  country       String   @default("Nigeria")
+  headquarters  String?
+  chairmanName  String?  @map("chairman_name")
+  officialEmail String?  @map("official_email")
+  officialPhone String?  @map("official_phone")
+  websiteUrl    String?  @map("website_url")
+  logoUrl       String?  @map("logo_url")
+  sealImageUrl  String?  @map("seal_image_url")
+  address       String?
+  timezone      String   @default("Africa/Lagos")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
-  wards              Ward[]
-  serviceConfigs     ServiceConfig[]
-  applicationSeries  ApplicationSequence[]
-  users              User[]
-  applications       Application[]
-  certificates       Certificate[]
-  paymentRecords     Payment[]
-  auditLogs          AuditLog[]
-  announcements      Announcement[]
-  settings           SystemSetting[]
+  wards             Ward[]
+  serviceConfigs    ServiceConfig[]
+  applicationSeries ApplicationSequence[]
+  users             User[]
+  applications      Application[]
+  certificates      Certificate[]
+  paymentRecords    Payment[]
+  auditLogs         AuditLog[]
+  announcements     Announcement[]
+  settings          SystemSetting[]
 
-  @@map("lgas")
   @@index([name])
   @@index([stateName])
+  @@map("lgas")
 }
 
 model Ward {
-  id          String    @id @default(cuid())
-  lgaId       String    @map("lga_id")
-  name        String
-  code        String?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  id        String   @id @default(cuid())
+  lgaId     String   @map("lga_id")
+  name      String
+  code      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  lga         Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-  users       User[]
-  addresses   Address[]
+  lga          Lga           @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  users        User[]
+  addresses    Address[]
   applications Application[]
 
-  @@map("wards")
   @@unique([lgaId, name])
   @@unique([lgaId, code])
   @@index([lgaId])
+  @@map("wards")
 }
 
 model User {
-  id                    String               @id @default(cuid())
-  lgaId                 String               @map("lga_id")
-  wardId                String?              @map("ward_id")
-  userType              UserType             @default(CITIZEN) @map("user_type")
+  id       String   @id @default(cuid())
+  lgaId    String   @map("lga_id")
+  wardId   String?  @map("ward_id")
+  userType UserType @default(CITIZEN) @map("user_type")
 
   // Identity fields
   //firstName             String
   // middleName            String?
   //lastName              String
-  fullName              String?              @map("full_name")
-  email                 String?              @unique
-  phone                 String               @unique
-  alternatePhone        String?              @map("alternate_phone")
-  passwordHash          String?              @map("password_hash")
-  gender                Gender?
-  dateOfBirth           DateTime?            @map("date_of_birth")
-  nin                   String?              @unique
-  nationalIdVerified    Boolean              @default(false) @map("national_id_verified")
+  fullName           String?   @map("full_name")
+  email              String?   @unique
+  phone              String    @unique
+  alternatePhone     String?   @map("alternate_phone")
+  passwordHash       String?   @map("password_hash")
+  gender             Gender?
+  dateOfBirth        DateTime? @map("date_of_birth")
+  nin                String?   @unique
+  nationalIdVerified Boolean   @default(false) @map("national_id_verified")
 
   // Address & origin
-  occupation            String?
-  placeOfBirth          String?              @map("place_of_birth")
-  stateOfOrigin         String?              @map("state_of_origin")
-  lgaOfOrigin           String?              @map("lga_of_origin")
-  nationality           String?              @default("Nigerian")
-  profilePhotoUrl       String?              @map("profile_photo_url")
+  occupation      String?
+  placeOfBirth    String? @map("place_of_birth")
+  stateOfOrigin   String? @map("state_of_origin")
+  lgaOfOrigin     String? @map("lga_of_origin")
+  nationality     String? @default("Nigerian")
+  profilePhotoUrl String? @map("profile_photo_url")
 
   // Password reset fields
-  resetTokenHash        String?              @map("reset_token_hash")
-  resetTokenExpiry      DateTime?            @map("reset_token_expiry")
+  resetTokenHash   String?   @map("reset_token_hash")
+  resetTokenExpiry DateTime? @map("reset_token_expiry")
 
   // Account status
-  isActive              Boolean              @default(true) @map("is_active")
-  isPhoneVerified       Boolean              @default(false) @map("is_phone_verified")
-  isEmailVerified       Boolean              @default(false) @map("is_email_verified")
-  lastLoginAt           DateTime?            @map("last_login_at")
-  createdAt             DateTime             @default(now()) @map("created_at")
-  updatedAt             DateTime             @updatedAt @map("updated_at")
+  isActive        Boolean   @default(true) @map("is_active")
+  isPhoneVerified Boolean   @default(false) @map("is_phone_verified")
+  isEmailVerified Boolean   @default(false) @map("is_email_verified")
+  lastLoginAt     DateTime? @map("last_login_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
 
   // Relations
-  lga                   Lga                  @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-  ward                  Ward?                @relation(fields: [wardId], references: [id], onDelete: SetNull)
+  lga                   Lga                 @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  ward                  Ward?               @relation(fields: [wardId], references: [id], onDelete: SetNull)
   addresses             Address[]
   staffProfile          StaffProfile?
-  applications          Application[]        @relation("ApplicantApplications")
-  submittedApplications Application[]        @relation("ApplicationSubmitter")
+  applications          Application[]       @relation("ApplicantApplications")
+  submittedApplications Application[]       @relation("ApplicationSubmitter")
   reviews               ApplicationReview[]
-  certificatesIssued    Certificate[]        @relation("CertificateIssuedBy")
+  certificatesIssued    Certificate[]       @relation("CertificateIssuedBy")
   auditLogs             AuditLog[]
   notifications         Notification[]
   uploads               UploadedDocument[]
   otpCodes              OtpCode[]
 
-  @@map("users")
   @@index([lgaId])
   @@index([wardId])
   @@index([phone])
   @@index([email])
   @@index([nin])
+  @@map("users")
 }
 
 model StaffProfile {
-  id                    String       @id @default(cuid())
-  userId                String       @unique @map("user_id")
-  employeeCode          String?      @unique @map("employee_code")
-  role                  StaffRole
-  department            String?
-  signatureImageUrl     String?      @map("signature_image_url")
-  canApproveCertificates Boolean     @default(false) @map("can_approve_certificates")
-  canVerifyApplications Boolean      @default(false) @map("can_verify_applications")
-  canManagePayments     Boolean      @default(false) @map("can_manage_payments")
-  canManageSettings     Boolean      @default(false) @map("can_manage_settings")
-  canViewAuditLogs      Boolean      @default(false) @map("can_view_audit_logs")
-  createdAt             DateTime     @default(now()) @map("created_at")
-  updatedAt             DateTime     @updatedAt @map("updated_at")
+  id                     String    @id @default(cuid())
+  userId                 String    @unique @map("user_id")
+  employeeCode           String?   @unique @map("employee_code")
+  role                   StaffRole
+  department             String?
+  signatureImageUrl      String?   @map("signature_image_url")
+  canApproveCertificates Boolean   @default(false) @map("can_approve_certificates")
+  canVerifyApplications  Boolean   @default(false) @map("can_verify_applications")
+  canManagePayments      Boolean   @default(false) @map("can_manage_payments")
+  canManageSettings      Boolean   @default(false) @map("can_manage_settings")
+  canViewAuditLogs       Boolean   @default(false) @map("can_view_audit_logs")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
 
-  user                  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("staff_profiles")
   @@index([role])
+  @@map("staff_profiles")
 }
 
 model OtpCode {
-  id          String      @id @default(cuid())
-  userId      String      @map("user_id")
-  code        String
-  type        OtpType
-  attempts    Int         @default(0)
-  expiresAt   DateTime    @map("expires_at")
-  isUsed      Boolean     @default(false) @map("is_used")
-  usedAt      DateTime?   @map("used_at")
-  createdAt   DateTime    @default(now()) @map("created_at")
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  code      String
+  type      OtpType
+  attempts  Int       @default(0)
+  expiresAt DateTime  @map("expires_at")
+  isUsed    Boolean   @default(false) @map("is_used")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
 
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("otp_codes")
   @@index([userId])
   @@index([code])
   @@index([expiresAt])
+  @@map("otp_codes")
 }
 
 model Address {
-  id            String    @id @default(cuid())
-  userId        String?   @map("user_id")
-  wardId        String?   @map("ward_id")
-  line1         String
-  line2         String?
-  city          String?
-  state         String
-  postalCode    String?   @map("postal_code")
-  country       String    @default("Nigeria")
-  landmark      String?
-  isPrimary     Boolean   @default(false) @map("is_primary")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id         String   @id @default(cuid())
+  userId     String?  @map("user_id")
+  wardId     String?  @map("ward_id")
+  line1      String
+  line2      String?
+  city       String?
+  state      String
+  postalCode String?  @map("postal_code")
+  country    String   @default("Nigeria")
+  landmark   String?
+  isPrimary  Boolean  @default(false) @map("is_primary")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
-  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ward          Ward?     @relation(fields: [wardId], references: [id], onDelete: SetNull)
-  applications  Application[]
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ward         Ward?         @relation(fields: [wardId], references: [id], onDelete: SetNull)
+  applications Application[]
 
-  @@map("addresses")
   @@index([userId])
   @@index([wardId])
+  @@map("addresses")
 }
 
 // ===== SERVICE & APPLICATION MODELS =====
 
 model ServiceConfig {
-  id                      String             @id @default(cuid())
-  lgaId                   String             @map("lga_id")
-  serviceType             ApplicationType    @map("service_type")
+  id                      String          @id @default(cuid())
+  lgaId                   String          @map("lga_id")
+  serviceType             ApplicationType @map("service_type")
   name                    String
   slug                    String
   description             String?
-  feeInKobo               BigInt             @map("fee_in_kobo")
-  processingDays          Int?               @map("processing_days")
-  requiresNin             Boolean            @default(false) @map("requires_nin")
-  requiresPassport        Boolean            @default(true) @map("requires_passport")
-  requiresCommunityLetter Boolean            @default(false) @map("requires_community_letter")
-  requiresBirthDocument   Boolean            @default(false) @map("requires_birth_document")
-  requiresAddressProof    Boolean            @default(false) @map("requires_address_proof")
-  requiresManualApproval  Boolean            @default(true) @map("requires_manual_approval")
-  validityDays            Int?               @map("validity_days")
+  feeInKobo               BigInt          @map("fee_in_kobo")
+  processingDays          Int?            @map("processing_days")
+  requiresNin             Boolean         @default(false) @map("requires_nin")
+  requiresPassport        Boolean         @default(true) @map("requires_passport")
+  requiresCommunityLetter Boolean         @default(false) @map("requires_community_letter")
+  requiresBirthDocument   Boolean         @default(false) @map("requires_birth_document")
+  requiresAddressProof    Boolean         @default(false) @map("requires_address_proof")
+  requiresManualApproval  Boolean         @default(true) @map("requires_manual_approval")
+  validityDays            Int?            @map("validity_days")
   prefix                  String?
-  templateName            String?            @map("template_name")
-  certificateTitle        String?            @map("certificate_title")
-  isActive                Boolean            @default(true) @map("is_active")
-  createdAt               DateTime           @default(now()) @map("created_at")
-  updatedAt               DateTime           @updatedAt @map("updated_at")
+  templateName            String?         @map("template_name")
+  certificateTitle        String?         @map("certificate_title")
+  isActive                Boolean         @default(true) @map("is_active")
+  createdAt               DateTime        @default(now()) @map("created_at")
+  updatedAt               DateTime        @updatedAt @map("updated_at")
 
-  lga                     Lga                @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-  applications            Application[]
+  lga          Lga           @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  applications Application[]
 
-  @@map("service_configs")
   @@unique([lgaId, serviceType])
   @@index([lgaId])
   @@index([slug])
+  @@map("service_configs")
 }
 
 model ApplicationSequence {
-  id          String    @id @default(cuid())
-  lgaId       String    @map("lga_id")
+  id          String          @id @default(cuid())
+  lgaId       String          @map("lga_id")
   serviceType ApplicationType @map("service_type")
   year        Int
-  sequenceNum BigInt    @map("sequence_num")
-  lastUsedAt  DateTime  @default(now()) @map("last_used_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  sequenceNum BigInt          @map("sequence_num")
+  lastUsedAt  DateTime        @default(now()) @map("last_used_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
 
-  lga         Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
 
-  @@map("application_sequences")
   @@unique([lgaId, serviceType, year])
   @@index([lgaId])
+  @@map("application_sequences")
 }
 
 model Application {
-  id                      String               @id @default(cuid())
-  lgaId                   String               @map("lga_id")
-  serviceConfigId         String               @map("service_config_id")
-  applicantId             String               @map("applicant_id")
-  submittedByUserId       String?              @map("submitted_by_user_id")
-  addressId               String?              @map("address_id")
-  refNumber               String               @unique @map("ref_number")
-  status                  ApplicationStatus    @default(DRAFT)
-  verificationStatus      VerificationStatus   @default(NOT_STARTED) @map("verification_status")
-  paymentStatus           PaymentStatus        @default(PENDING) @map("payment_status")
-  reviewDecision          ReviewDecision       @default(PENDING) @map("review_decision")
-  
+  id                 String             @id @default(cuid())
+  lgaId              String             @map("lga_id")
+  serviceConfigId    String             @map("service_config_id")
+  applicantId        String             @map("applicant_id")
+  submittedByUserId  String?            @map("submitted_by_user_id")
+  addressId          String?            @map("address_id")
+  refNumber          String             @unique @map("ref_number")
+  status             ApplicationStatus  @default(DRAFT)
+  verificationStatus VerificationStatus @default(NOT_STARTED) @map("verification_status")
+  paymentStatus      PaymentStatus      @default(PENDING) @map("payment_status")
+  reviewDecision     ReviewDecision     @default(PENDING) @map("review_decision")
+
   // Application data
-  applicationData         Json?                @map("application_data")
-  attachedDocuments       UploadedDocument[]
-  
+  applicationData   Json?              @map("application_data")
+  attachedDocuments UploadedDocument[]
+
   // Metadata
-  submittedAt             DateTime?            @map("submitted_at")
-  approvedAt              DateTime?            @map("approved_at")
-  issuedAt                DateTime?            @map("issued_at")
-  expiresAt               DateTime?            @map("expires_at")
-  notes                   String?
-  
-  createdAt               DateTime             @default(now()) @map("created_at")
-  updatedAt               DateTime             @updatedAt @map("updated_at")
+  submittedAt DateTime? @map("submitted_at")
+  approvedAt  DateTime? @map("approved_at")
+  issuedAt    DateTime? @map("issued_at")
+  expiresAt   DateTime? @map("expires_at")
+  notes       String?
 
-  lga                     Lga                  @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-  serviceConfig           ServiceConfig        @relation(fields: [serviceConfigId], references: [id])
-  applicant               User                 @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
-  submittedBy             User?                @relation("ApplicationSubmitter", fields: [submittedByUserId], references: [id], onDelete: SetNull)
-  address                 Address?             @relation(fields: [addressId], references: [id], onDelete: SetNull)
-  reviews                 ApplicationReview[]
-  payments                Payment[]
-  certificate             Certificate?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("applications")
+  lga           Lga                 @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  serviceConfig ServiceConfig       @relation(fields: [serviceConfigId], references: [id])
+  applicant     User                @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
+  submittedBy   User?               @relation("ApplicationSubmitter", fields: [submittedByUserId], references: [id], onDelete: SetNull)
+  address       Address?            @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  reviews       ApplicationReview[]
+  payments      Payment[]
+  certificate   Certificate?
+  Ward          Ward?               @relation(fields: [wardId], references: [id])
+  wardId        String?
+
   @@index([lgaId])
   @@index([applicantId])
   @@index([serviceConfigId])
   @@index([status])
   @@index([refNumber])
+  @@map("applications")
 }
 
 model ApplicationReview {
-  id              String           @id @default(cuid())
-  applicationId   String           @map("application_id")
-  reviewedByUserId String          @map("reviewed_by_user_id")
-  decision        ReviewDecision
-  comments        String?
-  findingsData    Json?            @map("findings_data")
-  reviewedAt      DateTime         @default(now()) @map("reviewed_at")
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
+  id               String         @id @default(cuid())
+  applicationId    String         @map("application_id")
+  reviewedByUserId String         @map("reviewed_by_user_id")
+  decision         ReviewDecision
+  comments         String?
+  findingsData     Json?          @map("findings_data")
+  reviewedAt       DateTime       @default(now()) @map("reviewed_at")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
 
-  application     Application      @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  reviewedBy      User             @relation(fields: [reviewedByUserId], references: [id])
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  reviewedBy  User        @relation(fields: [reviewedByUserId], references: [id])
 
-  @@map("application_reviews")
   @@index([applicationId])
   @@index([reviewedByUserId])
+  @@map("application_reviews")
 }
 
 // ===== PAYMENT & CERTIFICATE MODELS =====
 
 model Payment {
-  id                  String           @id @default(cuid())
-  applicationId       String           @map("application_id")
-  lgaId               String           @map("lga_id")
-  referenceNumber     String           @unique @map("reference_number")
-  amountInKobo        BigInt           @map("amount_in_kobo")
-  provider            PaymentProvider
-  status              PaymentStatus    @default(PENDING)
-  transactionId       String?          @unique @map("transaction_id")
-  metadata            Json?
-  
-  initiatedAt         DateTime         @default(now()) @map("initiated_at")
-  completedAt         DateTime?        @map("completed_at")
-  failureReason       String?          @map("failure_reason")
-  
-  createdAt           DateTime         @default(now()) @map("created_at")
-  updatedAt           DateTime         @updatedAt @map("updated_at")
+  id              String          @id @default(cuid())
+  applicationId   String          @map("application_id")
+  lgaId           String          @map("lga_id")
+  referenceNumber String          @unique @map("reference_number")
+  amountInKobo    BigInt          @map("amount_in_kobo")
+  provider        PaymentProvider
+  status          PaymentStatus   @default(PENDING)
+  transactionId   String?         @unique @map("transaction_id")
+  metadata        Json?
 
-  application         Application      @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  lga                 Lga              @relation(fields: [lgaId], references: [id])
+  initiatedAt   DateTime  @default(now()) @map("initiated_at")
+  completedAt   DateTime? @map("completed_at")
+  failureReason String?   @map("failure_reason")
 
-  @@map("payments")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  lga         Lga         @relation(fields: [lgaId], references: [id])
+
   @@index([applicationId])
   @@index([referenceNumber])
   @@index([transactionId])
   @@index([status])
+  @@map("payments")
 }
 
 model Certificate {
@@ -463,132 +464,132 @@ model Certificate {
   certificateNumber String            @unique @map("certificate_number")
   issuedByUserId    String            @map("issued_by_user_id")
   status            CertificateStatus @default(ACTIVE)
-  
+
   // Certificate content
-  certificateData   Json              @map("certificate_data") // Stores generated certificate data
-  certificateUrl    String?           @map("certificate_url") // URL to PDF/image
-  
+  certificateData Json    @map("certificate_data") // Stores generated certificate data
+  certificateUrl  String? @map("certificate_url") // URL to PDF/image
+
   // Validity tracking
-  issuedAt          DateTime          @default(now()) @map("issued_at")
-  expiresAt         DateTime?         @map("expires_at")
-  revokedAt         DateTime?         @map("revoked_at")
-  revocationReason  String?           @map("revocation_reason")
-  
-  createdAt         DateTime          @default(now()) @map("created_at")
-  updatedAt         DateTime          @updatedAt @map("updated_at")
+  issuedAt         DateTime  @default(now()) @map("issued_at")
+  expiresAt        DateTime? @map("expires_at")
+  revokedAt        DateTime? @map("revoked_at")
+  revocationReason String?   @map("revocation_reason")
 
-  application       Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  lga               Lga               @relation(fields: [lgaId], references: [id])
-  issuedBy          User              @relation("CertificateIssuedBy", fields: [issuedByUserId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("certificates")
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  lga         Lga         @relation(fields: [lgaId], references: [id])
+  issuedBy    User        @relation("CertificateIssuedBy", fields: [issuedByUserId], references: [id])
+
   @@index([lgaId])
   @@index([certificateNumber])
   @@index([status])
+  @@map("certificates")
 }
 
 // ===== DOCUMENT & NOTIFICATION MODELS =====
 
 model UploadedDocument {
-  id              String       @id @default(cuid())
-  userId          String?      @map("user_id")
-  applicationId   String?      @map("application_id")
-  documentType    DocumentType @map("document_type")
-  fileName        String       @map("file_name")
-  fileUrl         String       @map("file_url")
-  fileSize        Int          @map("file_size")
-  mimeType        String       @map("mime_type")
-  
-  uploadedAt      DateTime     @default(now()) @map("uploaded_at")
-  createdAt       DateTime     @default(now()) @map("created_at")
+  id            String       @id @default(cuid())
+  userId        String?      @map("user_id")
+  applicationId String?      @map("application_id")
+  documentType  DocumentType @map("document_type")
+  fileName      String       @map("file_name")
+  fileUrl       String       @map("file_url")
+  fileSize      Int          @map("file_size")
+  mimeType      String       @map("mime_type")
 
-  user            User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  application     Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  @@map("uploaded_documents")
+  user        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@index([applicationId])
+  @@map("uploaded_documents")
 }
 
 model Notification {
-  id              String               @id @default(cuid())
-  userId          String               @map("user_id")
-  title           String
-  message         String
-  channel         DeliveryChannel
-  status          NotificationStatus   @default(PENDING)
-  
-  relatedEntityId String?              @map("related_entity_id")
-  relatedEntityType String?            @map("related_entity_type")
-  
-  sentAt          DateTime?            @map("sent_at")
-  readAt          DateTime?            @map("read_at")
-  createdAt       DateTime             @default(now()) @map("created_at")
+  id      String             @id @default(cuid())
+  userId  String             @map("user_id")
+  title   String
+  message String
+  channel DeliveryChannel
+  status  NotificationStatus @default(PENDING)
 
-  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relatedEntityId   String? @map("related_entity_id")
+  relatedEntityType String? @map("related_entity_type")
 
-  @@map("notifications")
+  sentAt    DateTime? @map("sent_at")
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@index([status])
+  @@map("notifications")
 }
 
 // ===== AUDIT & SYSTEM MODELS =====
 
 model AuditLog {
-  id            String    @id @default(cuid())
-  userId        String?   @map("user_id")
-  lgaId         String    @map("lga_id")
-  action        String
-  entityType    String    @map("entity_type")
-  entityId      String    @map("entity_id")
-  changes       Json?
-  ipAddress     String?   @map("ip_address")
-  userAgent     String?   @map("user_agent")
-  
-  createdAt     DateTime  @default(now()) @map("created_at")
+  id         String  @id @default(cuid())
+  userId     String? @map("user_id")
+  lgaId      String  @map("lga_id")
+  action     String
+  entityType String  @map("entity_type")
+  entityId   String  @map("entity_id")
+  changes    Json?
+  ipAddress  String? @map("ip_address")
+  userAgent  String? @map("user_agent")
 
-  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  lga           Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
 
-  @@map("audit_logs")
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  lga  Lga   @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@index([lgaId])
   @@index([action])
   @@index([createdAt])
+  @@map("audit_logs")
 }
 
 model SystemSetting {
-  id            String    @id @default(cuid())
-  lgaId         String    @map("lga_id")
-  key           String
-  value         String
-  description   String?
-  
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id          String  @id @default(cuid())
+  lgaId       String  @map("lga_id")
+  key         String
+  value       String
+  description String?
 
-  lga           Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("system_settings")
+  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
   @@unique([lgaId, key])
   @@index([lgaId])
+  @@map("system_settings")
 }
 
 model Announcement {
-  id            String    @id @default(cuid())
-  lgaId         String    @map("lga_id")
-  title         String
-  content       String
-  imageUrl      String?   @map("image_url")
-  isActive      Boolean   @default(true) @map("is_active")
-  
-  publishedAt   DateTime? @map("published_at")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id       String  @id @default(cuid())
+  lgaId    String  @map("lga_id")
+  title    String
+  content  String
+  imageUrl String? @map("image_url")
+  isActive Boolean @default(true) @map("is_active")
 
-  lga           Lga       @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  @@map("announcements")
+  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
   @@index([lgaId])
   @@index([publishedAt])
+  @@map("announcements")
 }
