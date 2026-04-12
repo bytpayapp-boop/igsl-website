@@ -36,16 +36,15 @@ class AuthService {
       // Hash password
       const passwordHash = await bcrypt.hash(password, SALT_ROUNDS)
 
-      // Extract first and last name from username for basic identity
-      const nameParts = username.split(' ')
-      const firstName = nameParts[0]
-      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0]
+    //   // Extract first and last name from username for basic identity
+    //   const nameParts = username.split(' ')
+    //   const firstName = nameParts[0]
+    //   const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0]
 
-      // Create user
+    //   // Create user
       const user = await prisma.user.create({
         data: {
-          firstName,
-          lastName,
+        
           fullName: username,
           email,
           phone,
