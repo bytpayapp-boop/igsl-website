@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { Eye, EyeOff, Lock, UserCheck } from 'lucide-react'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001'
+const BACKEND_URL = 'https://igsl-website.onrender.com'
 
 interface LoginFormData {
   username: string

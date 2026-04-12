@@ -9,12 +9,19 @@ const AuthService = require('./services/authService')
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Middleware
-app.use(cors())
+// Middlewares
+// Allow requests from Render frontend
+app.use(cors({
+  allowedOrigins: [
+    'https://igsl-website.onrender.com',
+    'http://localhost:3000', // For local development
+  ],
+  credentials: true,
+}))
 app.use(express.json())
 
 // Health check
-app.get('/health', (req, res) => {
+app.head('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend server is running' })
 })
 

@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint ."
+    "build": "npm run build",
+    "start": "node server.js",
+    "lint": "eslint .",
+    "postinstall": "npx prisma migrate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
