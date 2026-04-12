@@ -10,13 +10,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from 'sonner'
-import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail, User, Phone } from 'lucide-react'
 
 const BACKEND_URL = 'https://igsl-website.onrender.com'
 
 interface RegisterFormData {
   username: string
   email: string
+  phone: string
   password: string
   confirmPassword: string
   agreeTerms: boolean
@@ -31,6 +32,7 @@ export function RegisterForm() {
   const [formData, setFormData] = useState<RegisterFormData>({
     username: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
@@ -53,6 +55,13 @@ export function RegisterForm() {
       newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address'
+    }
+
+    // Phone validation
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required'
+    } else if (!/^\+?[\d\s\-()]{10,}$/.test(formData.phone.replace(/\s+/g, ''))) {
+      newErrors.phone = 'Please enter a valid phone number'
     }
 
     // Password validation
@@ -106,7 +115,7 @@ export function RegisterForm() {
         username: formData.username,
         email: formData.email,
         password: formData.password,
-        phone: '', // Backend requires phone, optional for now
+        phone: formData.phone,
       });
 
       console.log('Registration successful:',response.data);
@@ -186,6 +195,31 @@ export function RegisterForm() {
               />
               {errors.email && (
                 <p className="text-xs text-destructive font-medium">{errors.email}</p>
+              )}
+            </div>
+
+            {/* Phone Field */}
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-sm font-medium flex items-center gap-2">
+                <Phone className="w-4 h-4 text-primary" />
+                Phone Number
+              </Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="+234 (0) 123 456 7890"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className={`transition ${
+                  errors.phone
+                    ? 'border-destructive focus-visible:ring-destructive'
+                    : 'border-primary/20 focus-visible:ring-primary'
+                }`}
+                disabled={isLoading}
+              />
+              {errors.phone && (
+                <p className="text-xs text-destructive font-medium">{errors.phone}</p>
               )}
             </div>
 

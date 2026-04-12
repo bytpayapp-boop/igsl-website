@@ -38,7 +38,8 @@ app.head('/health', (req, res) => {
  */
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { username, email, password, phone } = req.body
+    const { username, email, password, phone } = req.body;
+    console.log('Incoming registration from:',req.body.email);
 
     // Validate required fields
     if (!username || !email || !password || !phone) {
@@ -55,7 +56,7 @@ app.post('/api/auth/register', async (req, res) => {
       phone,
       lgaId: process.env.DEFAULT_LGA_ID || 'default-lga',
     })
-
+console.log('Registration successful')
    const tokenpayload = generateAccessToken(result);
     res.status(201).json({token:tokenpayload,user:result})
   } catch (error) {
