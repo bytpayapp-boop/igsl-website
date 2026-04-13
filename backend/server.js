@@ -383,6 +383,91 @@ app.post('/api/auth/logout', async (req, res) => {
   }
 })
 
+// ===== ANONYMOUS MESSAGE ROUTES =====
+
+/**
+ * POST /api/anonymous-message
+ * Submit an anonymous message
+ */
+app.post('/api/anonymous-message', async (req, res) => {
+  try {
+    const { message, fullName, email, phone, category, lgaId, ipAddress, userAgent } = req.body
+
+    // Validate required fields
+    if (!message || typeof message !== 'string' || message.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Message cannot be empty',
+      })
+    }
+
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message: 'Category is required',
+      })
+    }
+
+    // Log the anonymous message (for now, just console.log)
+    // TODO: Save to database using Prisma when database is set up
+    const messageLog = {
+      id: `MSG-${Date.now()}`,
+      message: message.substring(0, 100) + '...',
+      category,
+      fullName: fullName || 'Anonymous',
+      email: email || 'Not provided',
+      phone: phone || 'Not provided',
+      lgaId: lgaId || 'default-lga',
+      ipAddress: ipAddress || 'unknown',
+      userAgent: userAgent ? userAgent.substring(0, 100) : 'unknown',
+      receivedAt: new Date().toISOString(),
+      status: 'RECEIVED'
+    }
+
+    console.log('Anonymous Message Received:', messageLog)
+
+    // TODO: Database integration example (uncomment when database is ready):
+    // const anonymousMessage = await prisma.anonymousMessage.create({
+    //   data: {
+    //     message: message.trim(),
+    //     fullName: fullName || 'Anonymous',
+    //     email: email || null,
+    //     phone: phone || null,
+    //     category: category.toUpperCase(),
+    //     lgaId: lgaId || 'default-lga',
+    //     ipAddress,
+    //     userAgent,
+    //     status: 'RECEIVED',
+    //     submittedAt: new Date(),
+    //   }
+    // })
+
+    res.status(200).json({
+      success: true,
+      message: 'Your message has been received. Thank you for your feedback.',
+      messageId: messageLog.id,
+      timestamp: new Date().toISOString()
+    })
+  } catch (error) {
+    console.error('Error processing anonymous message:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to process your message. Please try again later.',
+    })
+  }
+})
+
+/**
+ * GET /api/anonymous-message/health
+ * Check API health
+ */
+app.get('/api/anonymous-message/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Anonymous message API is running'
+  })
+})
+
 // Error handler
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err)

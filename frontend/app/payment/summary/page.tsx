@@ -82,31 +82,32 @@ else{
     setIsProcessing(true)
     try {
 
-      FlutterwaveCheckout({
-      public_key: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
-      amount: amount,
-      currency: "NGN",
-      tx_ref: `Flutterwave_${'ezeh@gmail.com'}_${JSON.stringify(applicationData)}`,
-      payment_options: "banktransfer,ussd",
-      customer: {
-        email: 'ezehmark@gmail.com',//user?.email,
-        phone_number: '09033443344', //user?.phone,
-        name: 'Ezeh Mar E' //user?.fullName,
-      },
-      customizations: {
-        title: `BytPay Funding - Ezeh Mark`, //${user?.fullName.split(" ")[0]}
-        description: "The Fastest Way to Fund Your Wallet Automatically",
-        logo: "https://bytpay.live/BytPayLogo.png",
-      },
-      callback: (res) => {
-        if (typeof (window as any).closePaymentModal === "function")
-          window.closePaymentModal();
-      },
-      onClose: () => {
-        setLoading(false);
-      },
-    });
+    //   FlutterwaveCheckout({
+    //   public_key: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
+    //   amount: amount,
+    //   currency: "NGN",
+    //   tx_ref: `Flutterwave_${'ezeh@gmail.com'}_${JSON.stringify(applicationData)}`,
+    //   payment_options: "banktransfer,ussd",
+    //   customer: {
+    //     email: 'ezehmark@gmail.com',//user?.email,
+    //     phone_number: '09033443344', //user?.phone,
+    //     name: 'Ezeh Mar E' //user?.fullName,
+    //   },
+    //   customizations: {
+    //     title: `BytPay Funding - Ezeh Mark`, //${user?.fullName.split(" ")[0]}
+    //     description: "The Fastest Way to Fund Your Wallet Automatically",
+    //     logo: "https://bytpay.live/BytPayLogo.png",
+    //   },
+    //   callback: (res) => {
+    //     if (typeof (window as any).closePaymentModal === "function")
+    //       window.closePaymentModal(); 
+    //   },
+    //   onClose: () => {
+    //     setLoading(false);
+    //   },
+    // });
       
+    setTimeout(()=>router.push('/success'),2000)
       // Randomly succeed or fail for demo purposes (90% success rate)
      
     } catch (error) {

@@ -12,9 +12,9 @@ import {
 export const mockBlogPosts: BlogPost[] = [
   {
     id: '1',
-    title: 'New Local Government Identification Program Launched',
+    title: 'New LG Identification, Birth certificates Program Launched',
     slug: 'new-identification-program',
-    coverImage: '/images/blog-1.jpg',
+    coverImage: '/blog-1.png',
     content:
       'We are pleased to announce the launch of our new streamlined Local Government Identification program. This initiative aims to make it easier for citizens to obtain their identification documents.',
     category: 'announcements',
@@ -25,43 +25,44 @@ export const mockBlogPosts: BlogPost[] = [
   },
   {
     id: '2',
-    title: 'Community Development Projects Update',
-    slug: 'community-development-update',
-    coverImage: '/images/blog-2.jpg',
+    title: 'Preparing our Youths for the new Era...',
+    slug: 'youth-development-update',
+    coverImage: '/blog-2.jpg',
     content:
-      'Our recent community development initiatives have reached important milestones. Read about the progress on infrastructure, education, and health projects across our jurisdiction.',
+      'Over 3000 (three thousand youths, both within and outside the Local Government have massively been trained and empowered on the frontier technologies in this AI era',
     category: 'updates',
-    tags: ['community', 'development', 'infrastructure'],
+    tags: ['youth', 'development', 'empowerment'],
     author: 'IGSL Development Office',
-    date: new Date('2024-03-10'),
+    date: new Date('2026-02-10'),
     status: 'published',
   },
-  {
+   {
     id: '3',
-    title: 'Birth Certificate Processing Made Easier',
-    slug: 'birth-certificate-easier',
-    coverImage: '/images/blog-3.jpg',
+    title: 'Meet The New Couple',
+    slug: 'new-wedding',
+    coverImage: '/blog-4.jpg',
     content:
-      'We have simplified our birth certificate application process. Applicants can now submit documents online and track their application status in real-time.',
-    category: 'services',
-    tags: ['birth-certificate', 'vital-records', 'services'],
-    author: 'IGSL Records Department',
-    date: new Date('2024-03-05'),
+      'It happend on the 10th of April, 2026 - The epitomizing ceremony that marks  the begining of a union. The honourabe Personal Asssistant to the Performing Chairman of Igbo-Eze South, Isaac Onoyima, in a white wedding with his beutiful damsel. A memorable event it was',
+    category: 'leadership',
+    tags: ['wedding', 'marriage', 'family'],
+    author: 'IGSL Public Affairs',
+    date: new Date('2026-04-10'),
     status: 'published',
   },
   {
     id: '4',
-    title: 'Meet the New Administration',
-    slug: 'new-administration',
-    coverImage: '/images/blog-4.jpg',
+    title: 'Ultra Modern Secretariat Building, One of A Kind ',
+    slug: 'ultra-modern-building',
+    coverImage: '/blog-3.jpg',
     content:
-      'Introducing the newly elected administration committed to serving our community with integrity, transparency, and dedication to development.',
-    category: 'leadership',
-    tags: ['administration', 'leadership', 'governance'],
-    author: 'IGSL Public Affairs',
-    date: new Date('2024-02-28'),
+      'The massive project, an ultra modern building infraastructure that started as a dream, is now fully completed, and about to be commissioned for offical use',
+    category: 'infrastructure',
+    tags: ['infrastructure', 'building', 'services'],
+    author: 'Hon. Isaac, PA to Chaairman on Media and Publicity',
+    date: new Date('2026-04-05'),
     status: 'published',
   },
+ 
 ]
 
 // Mock Archive Items

@@ -129,6 +129,23 @@ enum OtpType {
   PASSWORD_RESET
 }
 
+enum MessageCategory {
+  GENERAL
+  COMPLAINT
+  SUGGESTION
+  COMMENDATION
+  REPORT
+  OTHER
+}
+
+enum MessageStatus {
+  RECEIVED
+  UNDER_REVIEW
+  ACKNOWLEDGED
+  RESOLVED
+  CLOSED
+}
+
 // ===== CORE MODELS =====
 
 model Lga {
@@ -160,6 +177,7 @@ model Lga {
   auditLogs         AuditLog[]
   announcements     Announcement[]
   settings          SystemSetting[]
+  anonymousMessages AnonymousMessage[]
 
   @@index([name])
   @@index([stateName])
@@ -592,4 +610,32 @@ model Announcement {
   @@index([lgaId])
   @@index([publishedAt])
   @@map("announcements")
+}
+
+model AnonymousMessage {
+  id          String           @id @default(cuid())
+  lgaId       String           @map("lga_id")
+  userId      String?          @map("user_id")
+  fullName    String?          @map("full_name")
+  email       String?
+  phone       String?
+  message     String
+  category    MessageCategory  @default(GENERAL)
+  status      MessageStatus    @default(RECEIVED)
+  ipAddress   String?          @map("ip_address")
+  userAgent   String?          @map("user_agent")
+  reviewedBy  String?          @map("reviewed_by")
+  reviewNote  String?          @map("review_note")
+  reviewedAt  DateTime?        @map("reviewed_at")
+  submittedAt DateTime         @default(now()) @map("submitted_at")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
+
+  @@index([lgaId])
+  @@index([category])
+  @@index([status])
+  @@index([submittedAt])
+  @@map("anonymous_messages")
 }

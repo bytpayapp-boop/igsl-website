@@ -23,8 +23,8 @@ function StatItem({ number, index, label }: StatItemProps) {
   }, [count, number])
 
   return (
-    <Card className="text-center border-transparent hover:border-green-600/10 relative overflow-hidden hover:shadow-lg transition-all">
-      <div className={`absolute h-40 w-40 rounded-full animate-pul group:hover:scale-[1.4] group-hover:-top-10 -left-10 transition-all bg-green-600/10 z-[80] ${index%2==0?'-top-20 -left-20':'-bottom-20 -right-20'} -top-20 -left-20`}/>
+    <Card className="group text-center border-transparent hover:border-green-600/10 relative overflow-hidden hover:shadow-lg transition-all">
+      <div className={`absolute h-40 w-40 rounded-full group-hover:scale-[1.8] transition-all bg-green-600/10 z-[80]  -bottom-20 -right-20`}/>
       <CardContent className="pt-8 pb-8 z-[100] ">
         <div className="text-4xl md:text-5xl font-bold text-green-600/80 mb-2">
           {count.toLocaleString()}+

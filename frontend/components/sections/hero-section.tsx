@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { FileText, Users, Award, HandHeart, Facebook, Youtube, X } from 'lucide-react'
+import { FileText, Users, Award, HandHeart, Facebook, Youtube, X, MessageCircle } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -167,21 +167,32 @@ export function HeroSection() {
 
               
 
-            {/* CTA Link */}
-            <div className=" absolute p-6 px-8 bg-white cursor-pointer shadow-sm rounded-sm z-200 md:-mt-24 right-10 hover:shadow-lg transition-all">
+            {/* CTA Links */}
+            <div className="absolute flex flex-col gap-3 p-6 px-8 bg-white cursor-pointer shadow-sm rounded-sm z-200 md:-mt-24 right-10 hover:shadow-lg transition-all">
             
               <Link
                 href="/services"
-                className="text-green-600  transition-colors font-medium inline-flex items-center gap-2"
+                className="text-green-600 hover:text-green-700 transition-colors font-medium inline-flex items-center justify-between gap-2 px-4 py-2 rounded-lg hover:bg-green-50"
               >
-                Explore services
+                <span>Explore services</span>
+                <span>→</span>
+              </Link>
+              
+              <Link
+                href="/anonymous-message"
+                className="text-blue-600 hover:text-blue-700 transition-colors font-medium inline-flex items-center justify-between gap-2 px-4 py-2 rounded-lg hover:bg-blue-50"
+              >
+                <span className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  Drop Message
+                </span>
                 <span>→</span>
               </Link>
             </div>
           </div>
 
           {/* Right Visual Section */}
-          <div className="relative h-full hidden lg:flex items-center justify-center">
+          <div className="relative h-full lg:flex items-center justify-center">
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-transparent to-orange-500/20 rounded-3xl blur-2xl"></div>
 
