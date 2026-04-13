@@ -254,9 +254,26 @@ export function BirthCertificateForm({ onSubmit }: BirthCertificateFormProps) {
                       <SelectValue placeholder="Select ward" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Array.from({ length: 12 }, (_, i) => (
-                        <SelectItem key={i} value={`Ward ${i + 1}`}>
-                          Ward {i + 1}
+                      {[
+                        'Alor-Agu',
+                        'Amebo/Hausa/Yoruba',
+                        'Ezema Ward',
+                        'Echara/Isiagu Ward',
+                        'Iheaka (Ugo Akoyi)',
+                        'Iheaka (Likki/Akutara Ward)',
+                        'Iheakpu (Ezzi Ngwu Ward)',
+                        'Iheakpu (Ajuona Ogbagu Ward)',
+                        'Itchi/Uwani I',
+                        'Itchi/Uwani II',
+                        'Nkalagu Obukpa',
+                        'Ovoko (Ajuona Ward)',
+                        'Ovoko (Umuelo/Ovoko Agu Ward)',
+                        'Ovoko (Umulolo Ward)',
+                        'Uhunowerre',
+                        'Unadu'
+                      ].map((ward) => (
+                        <SelectItem key={ward} value={ward}>
+                          {ward}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -300,7 +317,7 @@ export function BirthCertificateForm({ onSubmit }: BirthCertificateFormProps) {
                       className="mr-2"
                       required
                     />
-                    <label htmlFor="declaration" className="cursor-pointer">
+                    <label htmlFor="declaration" className="dark:text-gray-500 cursor-pointer">
                       I hereby declare that the above information is true and correct to the best of my
                       knowledge. I understand that providing false information is an offense under the law.
                     </label>
@@ -308,7 +325,7 @@ export function BirthCertificateForm({ onSubmit }: BirthCertificateFormProps) {
                 </div>
 
                 <div className="bg-accent/10 p-4 rounded-lg">
-                  <p className="font-semibold text-primary mb-1">Application Fee: NGN 3,500</p>
+                  <p className="font-semibold text-gray-300 mb-1">Application Fee: NGN 3,500</p>
                   <p className="text-sm text-foreground/70">
                     Processing time: 3-5 business days
                   </p>

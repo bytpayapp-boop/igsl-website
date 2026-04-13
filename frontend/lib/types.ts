@@ -73,6 +73,8 @@ export interface Payment {
   status: PaymentStatus
   transactionRef: string
   date: Date
+  applicantName: string
+  referenceNumber: string
 }
 
 // Certificate Types

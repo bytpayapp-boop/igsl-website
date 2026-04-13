@@ -29,69 +29,69 @@ export function HeroSection() {
       observer.observe(serviceRef.current)
     }
 
-    const cardObserver1 = new IntersectionObserver(([card])=>{
+    // const cardObserver1 = new IntersectionObserver(([card])=>{
     
   
-          if(card.isIntersecting){
-            card.target.classList.add('animateCard1')
-          }
+    //       if(card.isIntersecting){
+    //         card.target.classList.add('animateCard1')
+    //       }
        
       
-    },{threshold:1});
+    // },{threshold:1});
 
-    if(cardRef1.current){
-      cardObserver1.observe(cardRef1.current)
-    }
+    // if(cardRef1.current){
+    //   cardObserver1.observe(cardRef1.current)
+    // }
     
 
-    //card 2
+    // //card 2
 
-    const cardObserver2 = new IntersectionObserver(([card])=>{
-    
-  
-          if(card.isIntersecting){
-            card.target.classList.add('animateCard2')
-          }
-       
-      
-    },{threshold:1});
-
-    if(cardRef2.current){
-      cardObserver2.observe(cardRef2.current)
-    }
-
-
-    //card 3
-
-    const cardObserver3 = new IntersectionObserver(([card])=>{
+    // const cardObserver2 = new IntersectionObserver(([card])=>{
     
   
-          if(card.isIntersecting){
-            card.target.classList.add('animateCard3')
-          }
+    //       if(card.isIntersecting){
+    //         card.target.classList.add('animateCard2')
+    //       }
        
       
-    },{threshold:1});
+    // },{threshold:1});
 
-    if(cardRef3.current){
-      cardObserver3.observe(cardRef3.current)
-    }
+    // if(cardRef2.current){
+    //   cardObserver2.observe(cardRef2.current)
+    // }
+
+
+    // //card 3
+
+    // const cardObserver3 = new IntersectionObserver(([card])=>{
+    
+  
+    //       if(card.isIntersecting){
+    //         card.target.classList.add('animateCard3')
+    //       }
+       
+      
+    // },{threshold:1});
+
+    // if(cardRef3.current){
+    //   cardObserver3.observe(cardRef3.current)
+    // }
     //return part
     return () => {
       if (serviceRef.current) {
         observer.unobserve(serviceRef.current)
       }
-      if(cardRef1.current){
-        cardObserver1.unobserve(cardRef1.current)
-      }
-      if(cardRef2.current){
-        cardObserver2.unobserve(cardRef2.current)
+      // if(cardRef1.current){
+      //   cardObserver1.unobserve(cardRef1.current)
+      // }
+      // if(cardRef2.current){
+      //   cardObserver2.unobserve(cardRef2.current)
 
 
-      }
-      if(cardRef3.current){
-        cardObserver3.unobserve(cardRef3.current)
-      }
+      // }
+      // if(cardRef3.current){
+      //   cardObserver3.unobserve(cardRef3.current)
+      // }
     }
   }, [])
   const features = [
@@ -115,7 +115,7 @@ export function HeroSection() {
   const router = useRouter()
 
   return (
-    <section className="min-h-screen w-full bg-gradient-to-br -mt-20 pt-10 from-white via-white to-white relative md:pl-10 overflow-hidden">
+    <section className="min-h-screen w-full -mt-20 pt-10 bg-white/80 dark:bg-gray-800 relative md:pl-10 overflow-hidden">
       {/* Background decorative elements - Nigerian flag colors */}
      
       <div className="absolute inset-0 overflow-hidden">
@@ -134,8 +134,8 @@ export function HeroSection() {
             </div>
             <div className='z-[50] relative'>
               <p className="text-green-700 text-sm z-[50] font-medium mb-2">Welcome to</p>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-800 leading-tight mb-4">
-                Igbo-Eze South <span className="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(180, 137, 33, 1)] via-gray-500 to-gray-700">Local Government</span>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-800 dark:text-gray-300 leading-tight mb-4">
+                Igbo-Eze South <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-500 to-gray-700 dark:from-gray-200 dark:via-gray-400 dark:to-gray-100">Local Government</span>
               </h1>
               <p className="text-green-700 text-lg md:text-xl mt-4">
                 Building a better future for our people...
@@ -156,8 +156,8 @@ export function HeroSection() {
                         <Icon className="h-6 w-6 text-green-600" style={{color: '#4ADE80'}} />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-gray-700 font-semibold text-lg">{feature.title}</h3>
-                        <p className="text-gray-600 text-sm mt-1">{feature.description}</p>
+                        <h3 className="text-gray-700 dark:text-gray-300 font-semibold text-lg">{feature.title}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{feature.description}</p>
                       </div>
                     </div>
                   </div>
@@ -188,12 +188,12 @@ export function HeroSection() {
             {/* Service Preview Cards */}
             <div 
             ref={serviceRef}
-            className="relative space-y-4 w-full max-w-sm">
+            className="relative space-y-6 w-full max-w-sm">
               <div ref={cardRef1}
               className="transform  opacity-90">
                 <div 
                 onClick={()=>router.push('/services/birth-certificate')}
-                className="bg-gradient-to-tr from-green-900 to-green-500 hover:rotate-6 transition-all cursor-pointer rounded-xl p-6 text-white shadow-2xl border border-green-400/30">
+                className="bg-gradient-to-tr from-green-900 to-green-500 hover:scale-[1.1] transition-all cursor-pointer rounded-xl p-6 text-white shadow-2xl border border-green-400/30">
                   <h3 className="text-xl font-bold mb-2">Birth Certificate</h3>
                   <p className="text-sm opacity-90">Official LG birth registration</p>
                 </div>
@@ -202,7 +202,7 @@ export function HeroSection() {
               <div ref={cardRef2}
               onClick={()=>router.push('/services/identification')}
               className="transform  opacity-90">
-                <div className="bg-gradient-to-br cursor-pointer from-white/80 to-white hover:-rotate-6 transition-all rounded-xl p-6 text-gray-800 shadow-2xl border border-yellow-400/30">
+                <div className="bg-gradient-to-br cursor-pointer from-white/80 to-white hover:scale-[1.1] transition-all rounded-xl p-6 text-gray-800 shadow-2xl border border-yellow-400/30">
                   <h3 className="text-xl font-bold mb-2">Local Government ID</h3>
                   <p className="text-sm opacity-90">Your LG, your identity</p>
                 </div>
@@ -210,7 +210,7 @@ export function HeroSection() {
 
               <div ref={cardRef3}
               className="transform  opacity-90">
-                <div className="bg-gradient-to-tr from-orange-500 to-yellow-500/90 cursor-pointer hover:rotate-6 transition-all to-green-500 rounded-xl p-6 text-white shadow-2xl border border-orange-400/30">
+                <div className="bg-gradient-to-tr from-orange-800 to-yellow-600/90 cursor-pointer hover:scale-[1.1] transition-all to-green-500 rounded-xl p-6 text-white shadow-2xl border border-orange-400/30">
                   <h3 className="text-xl font-bold mb-2">Government Services</h3>
                   <p className="text-sm opacity-90">Our peoople-oriented services</p>
                 </div>

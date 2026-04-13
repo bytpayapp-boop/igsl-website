@@ -31,14 +31,14 @@ export function Navbar() {
                 className="w-10 h-10"
               />
             </div>
-            <span className="sm:inline text-gray-600">IGSL</span>
+            <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
-                <Button  className="text-primary-foreground cursor-pointer hover:bg-white hover:text-green-600">
+                <Button  className="text-primary-foreground hover:translate-y-[4px] cursor-pointer hover:bg-white transition-all hover:text-green-600">
                   {link.label}
                 </Button>
               </Link>

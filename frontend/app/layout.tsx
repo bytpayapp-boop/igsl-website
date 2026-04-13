@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Navbar } from '@/components/common/navbar'
 import { Footer } from '@/components/common/footer'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: 'IGSL Local Government',
   description: 'Official portal of IGSL Local Government - Services, Information, and Citizen Engagement',
-  generator: 'v0.app',
+  generator: 'Ezeh Mark',
   icons: {
     icon: [
       {

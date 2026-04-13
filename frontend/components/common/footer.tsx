@@ -3,13 +3,13 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="bg-primary/20 text-gray-700 dark:text-primary-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Organization Info */}
           <div>
-            <h3 className="font-bold text-lg mb-4">IGSL Government</h3>
-            <p className="text-sm text-primary-foreground/80">
+            <h3 className="font-bold text-xl mb-4">IGSL</h3>
+            <p className="text-sm ">
               Serving our community with integrity, transparency, and commitment to development.
             </p>
           </div>
@@ -68,10 +68,10 @@ export function Footer() {
                 <Clock size={16} className="mt-0.5 flex-shrink-0" />
                 <div>
                   <div>Monday - Friday</div>
-                  <div className="text-primary-foreground/80">8:00 AM - 5:00 PM</div>
+                  <div className="">8:00 AM - 5:00 PM</div>
                 </div>
               </li>
-              <li className="text-primary-foreground/80">
+              <li className="font-semibold">
                 Closed on weekends and public holidays
               </li>
             </ul>
@@ -80,8 +80,8 @@ export function Footer() {
 
         {/* Divider */}
         <div className="border-t border-primary-foreground/20 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-primary-foreground/80">
-            <p>&copy; 2024 IGSL Local Government. All rights reserved.</p>
+          <div className="flex flex-col md:flex-row justify-between items-center text-sm font-semibold">
+            <p>&copy; 2024 IGSL - Enugu State. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <Link href="#" className="hover:text-accent transition">
                 Privacy Policy

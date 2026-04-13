@@ -51,25 +51,25 @@ export default function PaymentSuccessPage() {
               <h3 className="font-semibold text-primary mb-4">Transaction Details</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-foreground/70">Reference Number:</span>
+                  <span className="text-foreground">Reference Number:</span>
                   <span className="font-mono font-medium text-foreground">
                     {transaction?.reference || 'TRX-XXXXXXXX'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-foreground/70">Amount Paid:</span>
+                  <span className="text-foreground">Amount Paid:</span>
                   <span className="font-medium text-foreground">
                     NGN {transaction?.amount?.toLocaleString() || '0'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-foreground/70">Application Type:</span>
+                  <span className="text-foreground">Application Type:</span>
                   <span className="font-medium text-foreground capitalize">
                     {transaction?.type === 'identification' ? 'Local Government ID' : 'Birth Certificate'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-foreground/70">Date & Time:</span>
+                  <span className="text-foreground">Date & Time:</span>
                   <span className="font-medium text-foreground">
                     {transaction?.timestamp
                       ? new Date(transaction.timestamp).toLocaleString()
@@ -123,7 +123,7 @@ export default function PaymentSuccessPage() {
             <Separator />
 
             {/* Important Notes */}
-            <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+            <div className="bg-blue-50 border dark:bg-gray-800 border-blue-200 p-4 rounded-lg">
               <h4 className="font-semibold text-primary mb-2">Important Notes</h4>
               <ul className="space-y-1 text-sm text-foreground/70">
                 <li>• Keep your reference number for tracking and inquiry purposes</li>

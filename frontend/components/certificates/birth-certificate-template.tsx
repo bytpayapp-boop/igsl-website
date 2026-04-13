@@ -82,7 +82,7 @@ export function BirthCertificateTemplate({
   return (
     <div
       ref={printableArea}
-      className="min-h-screen bg-[#e9ecef] flex items-center justify-center p-6"
+      className="min-h-screen bg-[#e9ecef] mx-auto w-190 flex items-center justify-center p-6"
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Montserrat:wght@400;700&display=swap');
@@ -192,7 +192,7 @@ export function BirthCertificateTemplate({
           </div>
 
           {/* Official Seal */}
-          <div className="absolute right-[80px] bottom-[130px] -mt-24 rotate-[-15deg]">
+          <div className="absolute right-[80px] bottom-[110px] -mt-24 rotate-[-15deg]">
             <img
               src="/chairmanStamp1.1.png"
               alt="Chairman Stamp"

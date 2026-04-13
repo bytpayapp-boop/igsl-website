@@ -274,6 +274,8 @@ export const mockPayments: Payment[] = [
     status: 'successful',
     transactionRef: 'TRX-2024-001',
     date: new Date('2024-03-10'),
+    applicantName: 'John Doe',
+    referenceNumber: 'REF-001',
   },
   {
     id: 'PAY-002',
@@ -283,6 +285,8 @@ export const mockPayments: Payment[] = [
     status: 'pending',
     transactionRef: 'TRX-2024-002',
     date: new Date('2024-03-08'),
+    applicantName: 'Jane Smith',
+    referenceNumber: 'REF-002',
   },
   {
     id: 'PAY-003',
@@ -292,6 +296,8 @@ export const mockPayments: Payment[] = [
     status: 'successful',
     transactionRef: 'TRX-2024-003',
     date: new Date('2024-03-05'),
+    applicantName: 'Michael Johnson',
+    referenceNumber: 'REF-003',
   },
 ]
 

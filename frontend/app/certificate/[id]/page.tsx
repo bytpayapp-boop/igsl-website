@@ -113,13 +113,13 @@ export default function CertificatePage() {
                       className="w-10 h-10"
                     />
                   </div>
-                  <span className="sm:inline text-gray-600">IGSL</span>
+                  <span className="sm:inline text-gray-600 dark:text-gray-300">IGSL</span>
                 </Link>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         {/* Header */}
         <div className="mb-8 flex gap-6 md:gap-30 flex-col md:flex-row">
           <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">Your Certificate</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-primary dark:text-gray-300  mb-2">Your Certificate</h1>
           <p className="text-foreground/70">Official government certificate for your records</p>
         </div>
 
@@ -189,7 +189,7 @@ export default function CertificatePage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 p-3 rounded text-sm text-foreground/70 border border-blue-200">
+            <div className="bg-blue-50 dark:bg-gray-800 p-3 rounded text-sm text-foreground/70 border border-blue-200">
               <p>
                 <strong>Note:</strong> This certificate is official and can be presented as proof of the application status. Keep the reference number safe for future inquiries.
               </p>

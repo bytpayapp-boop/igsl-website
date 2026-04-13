@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,24 +8,69 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { ArrowRight, ShieldCheck } from 'lucide-react'
 import { toast } from 'sonner'
+import axios from 'axios'
 
 const FEES = {
   identification: 5000,
   'birth-certificate': 3500,
 }
 
-export default function PaymentSummaryPage() {
+function PaymentSummaryContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const type = searchParams.get('type') || 'identification'
   const [isProcessing, setIsProcessing] = useState(false)
-  const [accepted, setAccepted] = useState(false)
+  const [accepted, setAccepted] = useState(false);
+  const[amount,setAmout]=useState(4000);
+  const[Loading,setLoading]=useState(false);
+  const[queryTrxStatus,setQueryTrxStatus]=useState(false);
+  const[token,setToken]=useState('')
 
-  const applicationData = typeof window !== 'undefined' ? 
+  const [polling,setPolling]=useState(false)
+
+ const applicationData = typeof window !== 'undefined' ? 
     JSON.parse(sessionStorage.getItem('applicationData') || '{}') : 
-    {}
+    {};
 
-  const amount = FEES[type as keyof typeof FEES] || 5000
+    //polling handler:
+
+    const handlePoll =async()=>{
+const response = await axios.get(`https://igsl-website.onrender.com/query/status/${user.email}`,
+  {headers:{'Authorization':`Bearer ${token}`}}
+);
+
+if (response.data.msg=='success'){
+  router.push('/success');
+}
+
+}
+  useEffect(()=>{
+const storedToken = sessionStorage.getItem('token');
+setToken(storedToken || '');
+
+    const user = JSON.parse(sessionStorage.getItem('user') || '');
+
+    console.log('The user submitting application is:',user);
+    console.log('Application data:',applicationData)
+
+
+
+
+let interval;
+if(polling){
+interval = setInterval(()=>{
+  handlePoll()
+},4000)
+}
+
+else{
+  clearInterval(interval)
+}
+   
+    
+  },[polling]);
+
+  // const amount = FEES[type as keyof typeof FEES] || 5000
   const typeName = type === 'identification' ? 'Local Government ID' : 'Birth Certificate'
 
   const handlePayment = async () => {
@@ -36,28 +81,34 @@ export default function PaymentSummaryPage() {
 
     setIsProcessing(true)
     try {
-      // Simulate Flutterwave payment flow
-      await new Promise((resolve) => setTimeout(resolve, 2000));
 
+      FlutterwaveCheckout({
+      public_key: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
+      amount: amount,
+      currency: "NGN",
+      tx_ref: `Flutterwave_${'ezeh@gmail.com'}_${JSON.stringify(applicationData)}`,
+      payment_options: "banktransfer,ussd",
+      customer: {
+        email: 'ezehmark@gmail.com',//user?.email,
+        phone_number: '09033443344', //user?.phone,
+        name: 'Ezeh Mar E' //user?.fullName,
+      },
+      customizations: {
+        title: `BytPay Funding - Ezeh Mark`, //${user?.fullName.split(" ")[0]}
+        description: "The Fastest Way to Fund Your Wallet Automatically",
+        logo: "https://bytpay.live/BytPayLogo.png",
+      },
+      callback: (res) => {
+        if (typeof (window as any).closePaymentModal === "function")
+          window.closePaymentModal();
+      },
+      onClose: () => {
+        setLoading(false);
+      },
+    });
+      
       // Randomly succeed or fail for demo purposes (90% success rate)
-      const success = true //Math.random() > 0.1
-      console.log('Success:',success)
-
-      if (success) {
-        // Store transaction data
-        sessionStorage.setItem(
-          'transaction',
-          JSON.stringify({
-            reference: `TRX-${Date.now()}`,
-            amount,
-            type,
-            timestamp: new Date().toISOString(),
-          })
-        )
-        router.push('/payment/success')
-      } else {
-        router.push('/payment/failed')
-      }
+     
     } catch (error) {
       toast.error('Payment processing failed')
       setIsProcessing(false)
@@ -66,11 +117,14 @@ export default function PaymentSummaryPage() {
 
   return (
     <div className="min-h-screen bg-background py-12">
+      <script  src='https://checkout.flutterwave.com/v3.js'
+      strategy="afterInteractive"
+      />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">Payment Summary</h1>
-          <p className="text-foreground/70">Review and confirm your payment details</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-2">Payment Summary</h1>
+          <p className="text-primary">Review and confirm your payment details</p>
         </div>
 
         <Card>
@@ -128,7 +182,7 @@ export default function PaymentSummaryPage() {
             <div className="bg-primary/5 p-4 rounded-lg">
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-primary">Total Amount Due:</span>
-                <span className="text-3xl font-bold text-primary">
+                <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">
                   NGN {amount.toLocaleString()}
                 </span>
               </div>
@@ -144,7 +198,7 @@ export default function PaymentSummaryPage() {
             </div>
 
             {/* Terms Acceptance */}
-            <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+            <div className="bg-gray-200 dark:bg-gray-700 border border-blue-200 p-4 rounded-lg">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -152,7 +206,7 @@ export default function PaymentSummaryPage() {
                   onChange={(e) => setAccepted(e.target.checked)}
                   className="mt-1"
                 />
-                <span className="text-sm text-foreground">
+                <span className="text-sm text-foreground dark:text-gray-300">
                   I acknowledge that I have reviewed the application details and the charges
                   above. I authorize IGSL to process my payment for the application. I
                   understand that this payment is non-refundable unless the application is rejected
@@ -190,5 +244,13 @@ export default function PaymentSummaryPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function PaymentSummaryPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">Loading...</div>}>
+      <PaymentSummaryContent />
+    </Suspense>
   )
 }

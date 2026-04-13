@@ -6,9 +6,9 @@ import { Facebook, X, Youtube } from 'lucide-react'
 
 export function ChairmanMessage() {
   return (
-    <section className="bg-green-600/20  py-16">
+    <section className="bg-white/80 dark:bg-gray-800  py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Card className="overflow-hidden bg-white/90 shadow-lg">
+        <Card className="overflow-hidden bg-white/90 dark:bg-gray-900 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             {/* Image */}
             <div className="relative h-64 md:h-96 w-full rounded-lg">
@@ -22,15 +22,15 @@ export function ChairmanMessage() {
             </div>
 
             {/* Message */}
-            <CardContent className="pt-8 md:pt-0 text-gray-700">
-              <div className="mb-4">
-                <h3 className="text-sm font-semibold  uppercase tracking-wider mb-2">
+            <CardContent className="pt-8 md:pt-0 dark:text-white/95 text-gray-700">
+              <div className="mb-4 ">
+                <h3 className="text-sm font-semibold  dark:text-gray-300 uppercase tracking-wider mb-2">
                   A Message From
                 </h3>
-                <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold dark:text-gray-200 text-primary mb-4">
                   Hon. Bar. Ugo Ferdinand Ukwueze
                 </h2>
-                <p className="text-gray-500 font-medium mb-4">
+                <p className="text-gray-500 dark:text-primary font-medium mb-4">
                   Chairman, IGSL
                 </p>
               </div>

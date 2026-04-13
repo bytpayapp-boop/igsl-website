@@ -42,7 +42,7 @@ export function LocalGovtIdTemplate({
   })
 
   return (
-    <div className="min-h-screen bg-[#e9ecef] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#e9ecef] w-180 flex mx-auto items-center justify-center p-6">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Montserrat:wght@400;700&display=swap');
       `}</style>
@@ -85,7 +85,7 @@ export function LocalGovtIdTemplate({
           </div>
 
           <h1
-            className="text-center text-[#107e66] font-bold text-[27px] tracking-[0.02em] leading-none uppercase"
+            className="text-center whitespace-nowrap text-[#107e66] font-bold text-[27px] tracking-[0.02em] leading-none uppercase"
             style={{
               fontFamily: 'Montserrat, sans-serif',
             }}
@@ -211,14 +211,14 @@ export function LocalGovtIdTemplate({
               <div className="text-center">
                 <div className="h-12 border-b border-foreground/50 w-32 mb-1"></div>
                 <p className="text-[12px] font-semibold">SECRETARY</p>
-                <p className="text-[10px]">Igbo-Eze South L.G</p>
+                <p className="text-[10px]">Igbo-Eze South L.G.A</p>
               </div>
           
             </div>
           </div>
 
           {/* Official Stamp */}
-          <div className="absolute right-[60px] bottom-[250px] -mt-24 rotate-[-15deg]">
+          <div className="absolute right-[60px] bottom-[170px] -mt-24 rotate-[-15deg]">
             <img
               src="/chairmanStamp1.1.png"
               alt="Official Stamp"
