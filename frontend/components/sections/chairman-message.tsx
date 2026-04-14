@@ -6,7 +6,7 @@ import { Facebook, X, Youtube } from 'lucide-react'
 
 export function ChairmanMessage() {
   return (
-    <section className="bg-white/80 dark:bg-gray-800  py-16">
+    <section className="bg-white/80 dark:bg-gray-800  py-2 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Card className="overflow-hidden bg-white/90 dark:bg-gray-900 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -52,7 +52,7 @@ export function ChairmanMessage() {
               </Link>
               {/* Social Media Icons */}
               <div className="flex gap-4  items-center justify-center">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition-colors">
+                <a href="https://www.facebook.com/ugoferdinand.ukwueze" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition-colors">
                   <Facebook size={24} />
                 </a>
                 <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 transition-colors">

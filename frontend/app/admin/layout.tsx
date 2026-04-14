@@ -34,11 +34,27 @@ export default function AdminLayout({
 
   return (
     <div className="flex h-screen bg-background">
+      {/* Mobile Menu Button */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="border border-border"
+        >
+          {sidebarOpen ? (
+            <X className="w-4 h-4" />
+          ) : (
+            <Menu className="w-4 h-4" />
+          )}
+        </Button>
+      </div>
+
       {/* Sidebar */}
       <aside
         className={`${
-          sidebarOpen ? 'w-64' : 'w-20'
-        } border-r border-border bg-secondary/5 transition-all duration-300 flex flex-col`}
+          sidebarOpen ? 'w-64' : 'w-20 md:w-64'
+        } ${sidebarOpen ? 'fixed md:relative' : 'hidden md:flex'} md:flex md:flex-col md:w-64 border-r border-border bg-secondary/40 backdrop-blur-md transition-all duration-300 flex flex-col h-screen md:h-auto z-40`}
       >
         {/* Logo */}
         <div className="p-6 border-b border-border flex items-center justify-between">
@@ -51,6 +67,7 @@ export default function AdminLayout({
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="hidden md:block"
           >
             {sidebarOpen ? (
               <X className="w-4 h-4" />
@@ -95,8 +112,16 @@ export default function AdminLayout({
         </div>
       </aside>
 
+      {/* Overlay for mobile */}
+      {sidebarOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-30"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto md:pl-0 pl-0 pt-16 md:pt-0">
         <div className="p-8">
           {children}
         </div>

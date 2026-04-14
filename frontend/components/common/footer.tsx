@@ -81,7 +81,7 @@ export function Footer() {
         {/* Divider */}
         <div className="border-t border-primary-foreground/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm font-semibold">
-            <p>&copy; 2024 IGSL - Enugu State. All rights reserved.</p>
+            <p>&copy; 2026 IGSL - Enugu State. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <Link href="#" className="hover:text-accent transition">
                 Privacy Policy

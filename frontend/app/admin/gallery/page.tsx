@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -9,6 +10,7 @@ import { mockGalleryItems } from '@/lib/mock-data'
 import { Trash2, Edit, Plus, Search, Upload } from 'lucide-react'
 
 export default function AdminGalleryPage() {
+  const router = useRouter()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
@@ -32,9 +34,9 @@ export default function AdminGalleryPage() {
           <h1 className="text-3xl font-bold text-primary">Gallery</h1>
           <p className="text-foreground/70 mt-1">Manage gallery photos and images</p>
         </div>
-        <Button className="flex items-center gap-2">
+        <Button className="flex items-center gap-2" onClick={() => router.push('/admin/upload')}>
           <Upload className="w-4 h-4" />
-          Upload Images
+          Upload More
         </Button>
       </div>
 

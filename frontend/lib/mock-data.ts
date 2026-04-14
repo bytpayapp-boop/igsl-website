@@ -12,7 +12,7 @@ import {
 export const mockBlogPosts: BlogPost[] = [
   {
     id: '1',
-    title: 'New LG Identification, Birth certificates Program Launched',
+    title: 'New Digital LG Identification, Birth certificates Program Launched',
     slug: 'new-identification-program',
     coverImage: '/blog-1.png',
     content:

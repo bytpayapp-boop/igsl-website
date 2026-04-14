@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { FileText, Users, Award, HandHeart, Facebook, Youtube, X, MessageCircle } from 'lucide-react'
+import { FileText, Users, Award, HandHeart, Facebook, Youtube, X, MessageCircle, Globe, Zap, FileUser } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -119,7 +119,7 @@ export function HeroSection() {
       {/* Background decorative elements - Nigerian flag colors */}
      
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -right-20 -top-4 w-96 h-96 bg-gradient-to-br from-green-400 via-yellow-400 to-orange-500 rounded-full opacity-10 blur-3xl"></div>
+        <div className="absolute -right-20 -top-4 w-96 h-96 bg-gradient-to-br from-green-400 via-yellow-700 to-orange-600 rounded-full opacity-10 blur-3xl"></div>
         <div className="absolute -bottom-10 right-20 w-full h-96 bg-gradient-to-tr from-green-600 via-green-600 to-orange-400 rounded-full opacity-5 blur-3xl"></div>
       </div>
 
@@ -168,26 +168,52 @@ export function HeroSection() {
               
 
             {/* CTA Links */}
-            <div className="absolute flex flex-col gap-3 p-6 px-8 bg-white cursor-pointer shadow-sm rounded-sm z-200 md:-mt-24 right-10 hover:shadow-lg transition-all">
-            
-              <Link
-                href="/services"
-                className="text-green-600 hover:text-green-700 transition-colors font-medium inline-flex items-center justify-between gap-2 px-4 py-2 rounded-lg hover:bg-green-50"
-              >
-                <span>Explore services</span>
-                <span>→</span>
-              </Link>
+            <div className="absolute flex flex-col gap-3 md:p-4 z-50 md:px-6 md:-mt-24 md:right-10 transition-all flex-wrap justify-center mx-auto md:justify-start ">
               
-              <Link
-                href="/anonymous-message"
-                className="text-blue-600 hover:text-blue-700 transition-colors font-medium inline-flex items-center justify-between gap-2 px-4 py-2 rounded-lg hover:bg-blue-50"
+              {/* <Link
+                href="/services"
+                className="bg-green-600 hover:bg-green-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
               >
                 <span className="flex items-center gap-2">
-                  <MessageCircle className="h-4 w-4" />
+                  <Globe className="h-4 w-4" />
+                  Explore Services
+                </span>
+              </Link> */}
+
+              <div className='flex gap-4 md:hidden'>
+
+
+              <Link
+                href="/services/birth-certificate"
+                className="bg-green-700 hover:bg-green-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+              >
+                <span className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Birth Certificate
+                </span>
+              </Link>
+
+              <Link
+                href="/services/identification"
+                className="bg-orange-700 hover:bg-orange-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+              >
+                <span className="flex items-center gap-2">
+                  <FileUser className="h-4 w-4" />
+                  ID Certificate
+                </span>
+              </Link>
+
+              </div>
+
+              <button
+                onClick={()=>router.push("/anonymous-message")}
+                className="bg-indigo-700 hover:bg-indigo-700 mx-auto text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <MessageCircle className="h-4 animate-bounce w-4" />
                   Drop Message
                 </span>
-                <span>→</span>
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -196,10 +222,10 @@ export function HeroSection() {
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-transparent to-orange-500/20 rounded-3xl blur-2xl"></div>
 
-            {/* Service Preview Cards */}
+            {/* Service Preview Cards - Desktop view */}
             <div 
             ref={serviceRef}
-            className="relative space-y-6 w-full max-w-sm">
+            className="relative hidden md:block space-y-6 w-full max-w-sm">
               <div ref={cardRef1}
               className="transform  opacity-90">
                 <div 

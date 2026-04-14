@@ -47,14 +47,14 @@ export function Navbar() {
 
           {/* Auth Links */}
           <div className="hidden md:flex items-center gap-2">
-            <Link href="/auth/login">
+            <Link href="/auth/register">
               <Button className="text-primary-foreground bg-transparent hover:bg-white/20">
                 Login
               </Button>
             </Link>
-            <Link href="/auth/register">
+            <Link href="/admin">
               <Button className="border border-white bg-white text-primary hover:bg-primary hover:text-white">
-                Sign Up
+                Staff
               </Button>
             </Link>
             {/* <Link href="/admin">

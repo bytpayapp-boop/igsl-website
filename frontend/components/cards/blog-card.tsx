@@ -11,13 +11,13 @@ interface BlogCardProps {
 export function BlogCard({ post }: BlogCardProps) {
   return (
     <Link href={`/blog/${post.slug}`}>
-      <Card className="h-full hover:shadow-lg transition-shadow overflow-hidden cursor-pointer border-border hover:border-accent">
+      <Card className="h-full hover:shadow-lg group transition-shadow overflow-hidden cursor-pointer border-border hover:border-primary/80">
         <div className="relative w-full h-48 bg-muted">
           <Image
             src={post.coverImage}
             alt={post.title}
             fill
-            className="object-cover"
+            className="object-cover group-hover:scale-[1.2] transition-all"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
@@ -33,7 +33,7 @@ export function BlogCard({ post }: BlogCardProps) {
           <h3 className="font-bold text-primary line-clamp-2">{post.title}</h3>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-foreground/70 line-clamp-2">{post.content}</p>
+          <p className="text-sm text-gray-700 dark:text-white/90 line-clamp-2">{post.content}</p>
         </CardContent>
       </Card>
     </Link>

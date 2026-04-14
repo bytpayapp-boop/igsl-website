@@ -27,9 +27,9 @@ function StatItem({ number, index, label }: StatItemProps) {
       <div className={`absolute h-40 w-40 rounded-full group-hover:scale-[1.8] transition-all bg-green-600/10 z-[80]  -bottom-20 -right-20`}/>
       <CardContent className="pt-8 pb-8 z-[100] ">
         <div className="text-4xl md:text-5xl font-bold text-green-600/80 mb-2">
-          {count.toLocaleString()}+
+          {count.toLocaleString()}
         </div>
-        <p className="text-foreground/70 text-lg">{label}</p>
+        <p className="text-foreground/90 text-lg">{label}</p>
       </CardContent>
     </Card>
   )
@@ -44,11 +44,11 @@ export function StatsSection() {
   ]
 
   return (
-    <section className="bg-white/20 dark:bg-gray-800 bg-gradient-to-br  dark:from-gray-800 dark:via-gray-900 dark:to-gray-200/90 py-16">
+    <section className="bg-white/20 dark:bg-gray-800 bg-gradient-to-b  from-white via-green-200/10 to-white dark:from-gray-800 dark:via-green-200/20 dark:to-gray-800 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">
-            Our Imapact in Our People
+            Our Imapacts In Office
           </h2>
           <p className="text-lg text-foreground/70">
             Serving the community with dedication and excellence

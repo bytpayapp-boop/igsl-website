@@ -16,11 +16,11 @@ export default function AdminDashboard() {
   const stats = mockDashboardStats
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background p-2 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2">Admin Dashboard</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Admin Dashboard</h1>
           <p className="text-foreground/70">Welcome back! Here's your overview.</p>
         </div>
 

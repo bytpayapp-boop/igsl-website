@@ -10,7 +10,7 @@ export function AnnouncementsSection() {
     <section className="max-w-7xl bg-white/20  dark:bg-gray-800 mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="flex items-center justify-between mb-12">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-2">
             Latest News & Announcements
           </h2>
           <p className="text-lg text-foreground/70">
