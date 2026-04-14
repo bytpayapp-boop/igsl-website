@@ -10,21 +10,26 @@ export const metadata: Metadata = {
   description: 'Official portal of IGSL Local Government - Services, Information, and Citizen Engagement',
   generator: 'Ezeh Mark',
   icons: {
-    icon: [
-      {
-        url: '/coatOfArm.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/coatOfArm.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      // {
-      //   url: '/icon.svg',
-      //   type: 'image/svg+xml',
-      // },
-    ],
+    icon: '/favicon.ico',
     apple: '/apple-icon.png',
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/manifest.json',
+  openGraph: {
+    title: 'IGSL Local Government',
+    description: 'Official portal of IGSL Local Government - Services, Information, and Citizen Engagement',
+    url: 'https://igsl.gov.ng',
+    siteName: 'IGSL Local Government',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'IGSL Local Government Portal',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
   },
 }
 
