@@ -87,7 +87,7 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <div className="px-4 py-2 space-y-2">
+            <div className="px-4 py-2 flex flex-col space-y-[4px]">
               <Link href="/auth/login">
                 <Button className="w-full text-primary-foreground bg-green-600 hover:bg-green-700">
                   Login

@@ -7,8 +7,24 @@ import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata: Metadata = {
   title: 'IGSL Local Government',
-  description: 'Official portal of IGSL Local Government - Services, Information, and Citizen Engagement',
+  description: 'Official portal of Igbo-Eze South LGA - Services, Information, and Citizen Engagement',
   generator: 'Ezeh Mark',
+  metadataBase: new URL('https://igsl.vercel.app'),
+  alternates: {
+    canonical: 'https://igsl.vercel.app',
+  },
+  keywords: [
+    'IGSL Local Government',
+    'Igbo-Eze South',
+    'Local Government Services',
+    'Birth Certificate',
+    'Government ID',
+    'Citizen Portal',
+    'Enugu State',
+  ],
+  authors: [{ name: 'Ezeh Mark' }],
+  creator: 'Ezeh Mark',
+  publisher: 'IGSL Local Government',
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-icon.png',
@@ -16,9 +32,9 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   openGraph: {
-    title: 'IGSL Local Government',
+    title: 'IGSL Local Government - Services & Citizen Engagement',
     description: 'Official portal of IGSL Local Government - Services, Information, and Citizen Engagement',
-    url: 'https://igsl.gov.ng',
+    url: 'https://igsl.vercel.app',
     siteName: 'IGSL Local Government',
     images: [
       {
@@ -31,6 +47,13 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'IGSL Local Government - Services & Citizen Engagement',
+    description: 'Official portal of IGSL Local Government - Services, Information, and Citizen Engagement',
+    images: ['/og-image.png'],
+  },
+  themeColor: '#ffffff',
 }
 
 export default function RootLayout({
@@ -43,6 +66,12 @@ export default function RootLayout({
       className='bg-white'
       style={{scrollbarWidth:'thin'}}
       suppressHydrationWarning>
+      <head>
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://igsl.vercel.app" />
+      </head>
       <body className="font-sans antialiased flex flex-col  min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <main className="flex-1">

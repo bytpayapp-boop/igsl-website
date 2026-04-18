@@ -29,7 +29,7 @@ export const mockBlogPosts: BlogPost[] = [
     slug: 'youth-development-update',
     coverImage: '/blog-2.jpg',
     content:
-      'Over 3000 (three thousand youths, both within and outside the Local Government have massively been trained and empowered on the frontier technologies in this AI era',
+      'Over 3000 (three thousand) youths, both within and outside the Local Government have massively been trained and empowered on the frontier technologies in this AI era',
     category: 'updates',
     tags: ['youth', 'development', 'empowerment'],
     author: 'IGSL Development Office',

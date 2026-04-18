@@ -1,99 +1,18 @@
 'use client'
-import Link from 'next/link'
+
 import { Button } from '@/components/ui/button'
-import { FileText, Users, Award, HandHeart, Facebook, Youtube, X, MessageCircle, Globe, Zap, FileUser } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { FileText, Users, Award, HandHeart, Facebook, Youtube, X, MessageCircle, Globe, Zap, FileUser } from 'lucide-react'
+// import { useEffect} from 'react'
+
 
 export function HeroSection() {
 
 
-  const serviceRef = useRef(null);
-  const cardRef1= useRef(null)
-   const cardRef2= useRef(null)
-    const cardRef3= useRef(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-
-          if (entry.isIntersecting) {
-            entry.target.classList.add('moveUp')
-          }
-    
-      },
-      { threshold: 0.5 }
-    )
-    
-    if (serviceRef.current) {
-      observer.observe(serviceRef.current)
-    }
-
-    // const cardObserver1 = new IntersectionObserver(([card])=>{
-    
   
-    //       if(card.isIntersecting){
-    //         card.target.classList.add('animateCard1')
-    //       }
-       
-      
-    // },{threshold:1});
 
-    // if(cardRef1.current){
-    //   cardObserver1.observe(cardRef1.current)
-    // }
-    
-
-    // //card 2
-
-    // const cardObserver2 = new IntersectionObserver(([card])=>{
-    
-  
-    //       if(card.isIntersecting){
-    //         card.target.classList.add('animateCard2')
-    //       }
-       
-      
-    // },{threshold:1});
-
-    // if(cardRef2.current){
-    //   cardObserver2.observe(cardRef2.current)
-    // }
-
-
-    // //card 3
-
-    // const cardObserver3 = new IntersectionObserver(([card])=>{
-    
-  
-    //       if(card.isIntersecting){
-    //         card.target.classList.add('animateCard3')
-    //       }
-       
-      
-    // },{threshold:1});
-
-    // if(cardRef3.current){
-    //   cardObserver3.observe(cardRef3.current)
-    // }
-    //return part
-    return () => {
-      if (serviceRef.current) {
-        observer.unobserve(serviceRef.current)
-      }
-      // if(cardRef1.current){
-      //   cardObserver1.unobserve(cardRef1.current)
-      // }
-      // if(cardRef2.current){
-      //   cardObserver2.unobserve(cardRef2.current)
-
-
-      // }
-      // if(cardRef3.current){
-      //   cardObserver3.unobserve(cardRef3.current)
-      // }
-    }
-  }, [])
+ 
   const features = [
     {
       icon: FileText,
@@ -224,9 +143,8 @@ export function HeroSection() {
 
             {/* Service Preview Cards - Desktop view */}
             <div 
-            ref={serviceRef}
             className="relative hidden md:block space-y-6 w-full max-w-sm">
-              <div ref={cardRef1}
+              <div
               className="transform  opacity-90">
                 <div 
                 onClick={()=>router.push('/services/birth-certificate')}
@@ -236,7 +154,7 @@ export function HeroSection() {
                 </div>
               </div>
 
-              <div ref={cardRef2}
+              <div
               onClick={()=>router.push('/services/identification')}
               className="transform  opacity-90">
                 <div className="bg-gradient-to-br cursor-pointer from-white/80 to-white hover:scale-[1.1] transition-all rounded-xl p-6 text-gray-800 shadow-2xl border border-yellow-400/30">
@@ -245,7 +163,7 @@ export function HeroSection() {
                 </div>
               </div>
 
-              <div ref={cardRef3}
+              <div
               className="transform  opacity-90">
                 <div className="bg-gradient-to-tr from-orange-800 to-yellow-600/90 cursor-pointer hover:scale-[1.1] transition-all to-green-500 rounded-xl p-6 text-white shadow-2xl border border-orange-400/30">
                   <h3 className="text-xl font-bold mb-2">Government Services</h3>

@@ -246,7 +246,7 @@ export default async function BlogDetailPage({
           {/* Sidebar - 1 col */}
           <aside className="lg:col-span-1 space-y-6">
             {/* Article Info Card */}
-            <Card className="border border-border bg-secondary sticky top-20">
+            <Card className="border border-border bg-yellow-900/50 sticky top-20">
               <CardContent className="pt-6">
                 <div className="space-y-4">
                   <div>

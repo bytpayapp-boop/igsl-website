@@ -48,7 +48,7 @@ export function StatsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">
-            Our Imapacts In Office
+            Our Impacts In Office
           </h2>
           <p className="text-lg text-foreground/70">
             Serving the community with dedication and excellence
