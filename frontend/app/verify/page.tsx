@@ -1,13 +1,21 @@
-import { Metadata } from 'next'
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Navbar } from '@/components/common/navbar'
 import { Footer } from '@/components/common/footer'
-
-export const metadata: Metadata = {
-  title: 'Certificate Verification - IGSL',
-  description: 'Your certificate is official and valid. Thank you for using IGSL.',
-}
+import { useSearchParams } from 'next/navigation'
+import { userAgent } from 'next/server'
+// export const metadata: Metadata = {
+//   title: 'Certificate Verification - IGSL',
+//   description: 'Your certificate is official and valid. Thank you for using IGSL.',
+// }
 
 export default function VerifyPage() {
+const[user,setUser] = useState(null)
+  const params = useSearchParams();
+  useEffect(()=>{
+console.log('Params:',params)
+  },[])
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -45,10 +53,10 @@ export default function VerifyPage() {
           {/* Main Message */}
           <div className="space-y-4 mb-8">
             <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">
-              Your Certificate is Official and Valid
+              Certificate is Official and Valid
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 font-medium">
-              Thank you for using IGSL
+            {`Belongs to ${user?.n}, issued by`}<span className='font-bold'>IGSl</span>
             </p>
           </div>
 
