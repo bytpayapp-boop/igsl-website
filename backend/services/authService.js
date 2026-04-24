@@ -47,7 +47,7 @@ console.log('Payload for this registration:',data)
           email,
           phone,
           passwordHash,
-          lgaId: lgaId || 'default-lga', // Ensure LGA is set
+          // lgaId: lgaId || 'default-lga', // Ensure LGA is set
           userType: 'CITIZEN',
           isActive: true,
           isEmailVerified: false,
@@ -63,11 +63,7 @@ console.log('Payload for this registration:',data)
         },
       })
 
-      return {
-        success: true,
-        message: 'Registration successful',
-        user,
-      }
+    
     } catch (error) {
       return {
         success: false,
