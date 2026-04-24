@@ -336,7 +336,7 @@ model Application {
 
  //user  @relation('userId', fields:[userId], references:[id], onDelete:Cascade)
 
-userId String @map('user_id')
+//userId String @map('user_id')
   submittedByUserId  String?            @map("submitted_by_user_id")
   addressId          String?            @map("address_id")
   refNumber          String             @unique @map("ref_number")
