@@ -457,25 +457,13 @@ app.post('/api/anonymous-message', async (req, res) => {
   }
 })
 
-/**
- * GET /api/anonymous-message/health
- * Check API health
- */
-app.get('/api/anonymous-message/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Anonymous message API is running'
-  })
+//Flutterwave webh00k
+
+app.post('/flutterwaveTest',async(req,res)=>{
+    console.log('Incoming Flutterwave webhoook with:',req.body);
 })
 
-// Error handler
-app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err)
-  res.status(500).json({
-    success: false,
-    message: 'Internal server error',
-  })
-})
+
 
 // Start server
 app.listen(PORT, () => {

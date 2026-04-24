@@ -3,6 +3,7 @@
 import { useState, Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Script from 'next/script'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -27,6 +28,7 @@ function PaymentSummaryContent() {
   const[token,setToken]=useState('')
 
   const [polling,setPolling]=useState(false)
+  const[user,setUser]=useState(null)
 
  const applicationData = typeof window !== 'undefined' ? 
     JSON.parse(sessionStorage.getItem('applicationData') || '{}') : 
@@ -46,11 +48,17 @@ if (response.data.msg=='success'){
 }
   useEffect(()=>{
 const storedToken = sessionStorage.getItem('token');
+setToken(token)
+console.log('the token for this transaction user is:',token)
 setToken(storedToken || '');
-
-    const user = JSON.parse(sessionStorage.getItem('user') || '');
+const userData = sessionStorage.getItem('user')
+    if(userData){
+      const user = JSON.parse(userData);
+      setUser(user)
 
     console.log('The user submitting application is:',user);
+  }
+
     console.log('Application data:',applicationData)
 
 
@@ -80,32 +88,34 @@ else{
     }
 
     setIsProcessing(true)
+    if(user){
     try {
 
-    //   FlutterwaveCheckout({
-    //   public_key: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
-    //   amount: amount,
-    //   currency: "NGN",
-    //   tx_ref: `Flutterwave_${'ezeh@gmail.com'}_${JSON.stringify(applicationData)}`,
-    //   payment_options: "banktransfer,ussd",
-    //   customer: {
-    //     email: 'ezehmark@gmail.com',//user?.email,
-    //     phone_number: '09033443344', //user?.phone,
-    //     name: 'Ezeh Mar E' //user?.fullName,
-    //   },
-    //   customizations: {
-    //     title: `BytPay Funding - Ezeh Mark`, //${user?.fullName.split(" ")[0]}
-    //     description: "The Fastest Way to Fund Your Wallet Automatically",
-    //     logo: "https://bytpay.live/BytPayLogo.png",
-    //   },
-    //   callback: (res) => {
-    //     if (typeof (window as any).closePaymentModal === "function")
-    //       window.closePaymentModal(); 
-    //   },
-    //   onClose: () => {
-    //     setLoading(false);
-    //   },
-    // });
+      FlutterwaveCheckout({
+      public_key: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
+      amount: amount,
+      currency: "NGN",
+      tx_ref: `Flutterwave_${'ezeh@gmail.com'}_${JSON.stringify(applicationData)}`,
+      payment_options: "banktransfer,ussd",
+      customer: {
+        email: user?.email,
+        phone_number: user?.phone,
+        name: user?.fullName,
+      },
+      customizations: {
+        title: `BytPay Funding - Ezeh Mark`, //${user?.fullName.split(" ")[0]}
+        description: "The Fastest Way to Fund Your Wallet Automatically",
+        logo: "/coatOfArm.png",
+      },
+      callback: (res) => {
+        if (typeof (window as any).closePaymentModal === "function")
+          window.closePaymentModal(); 
+      },
+      onClose: () => {
+        setLoading(false);
+
+      },
+    });
       
     setTimeout(()=>router.push('/success'),2000)
       // Randomly succeed or fail for demo purposes (90% success rate)
@@ -116,10 +126,16 @@ else{
     }
   }
 
+   setTimeout(()=>router.push('/success'),2000)
+      // Randomly succeed or fail for demo purposes (90% success rate)
+
+  }
+
   return (
     <div className="min-h-screen bg-background py-12">
-      <script  src='https://checkout.flutterwave.com/v3.js'
-      strategy="afterInteractive"
+      <Script
+        src="https://checkout.flutterwave.com/v3.js"
+        strategy="afterInteractive"
       />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}

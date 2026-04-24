@@ -1,10 +1,13 @@
+'use client'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Facebook, X, Youtube } from 'lucide-react'
-
+import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
+import  {useRouter}  from 'next/navigation'
 export function ChairmanMessage() {
+  const router = useRouter()
   return (
     <section className="bg-white/80 dark:bg-gray-800  py-2 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,7 +26,7 @@ export function ChairmanMessage() {
 
             {/* Message */}
             <CardContent className="pt-8 md:pt-0 dark:text-white/95 text-gray-700">
-              <div className="mb-4 ">
+              <div onClick={()=>router.push('/verify')} className="mb-4 ">
                 <h3 className="text-sm font-semibold  dark:text-gray-300 uppercase tracking-wider mb-2">
                   A Message From
                 </h3>
@@ -46,7 +49,8 @@ export function ChairmanMessage() {
               <div className='flex gap-4 justify-between items-center md:px-4'>
 
               <Link href="/about">
-                <Button className="bg-primary hover:bg-primary/90">
+                <Button 
+                className="bg-primary hover:bg-primary/90">
                   Learn More About Our Vision
                 </Button>
               </Link>

@@ -148,64 +148,22 @@ enum MessageStatus {
 
 // ===== CORE MODELS =====
 
-model Lga {
-  id            String   @id @default(cuid())
-  name          String
-  code          String   @unique
-  stateName     String   @map("state_name")
-  country       String   @default("Nigeria")
-  headquarters  String?
-  chairmanName  String?  @map("chairman_name")
-  officialEmail String?  @map("official_email")
-  officialPhone String?  @map("official_phone")
-  websiteUrl    String?  @map("website_url")
-  logoUrl       String?  @map("logo_url")
-  sealImageUrl  String?  @map("seal_image_url")
-  address       String?
-  timezone      String   @default("Africa/Lagos")
-  isActive      Boolean  @default(true) @map("is_active")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-
-  wards             Ward[]
-  serviceConfigs    ServiceConfig[]
-  applicationSeries ApplicationSequence[]
-  users             User[]
-  applications      Application[]
-  certificates      Certificate[]
-  paymentRecords    Payment[]
-  auditLogs         AuditLog[]
-  announcements     Announcement[]
-  settings          SystemSetting[]
-  anonymousMessages AnonymousMessage[]
-
-  @@index([name])
-  @@index([stateName])
-  @@map("lgas")
-}
-
 model Ward {
   id        String   @id @default(cuid())
-  lgaId     String   @map("lga_id")
-  name      String
-  code      String?
+  name      String   @unique
+  code      String?  @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  lga          Lga           @relation(fields: [lgaId], references: [id], onDelete: Cascade)
   users        User[]
   addresses    Address[]
   applications Application[]
 
-  @@unique([lgaId, name])
-  @@unique([lgaId, code])
-  @@index([lgaId])
   @@map("wards")
 }
 
 model User {
   id       String   @id @default(cuid())
-  lgaId    String   @map("lga_id")
   wardId   String?  @map("ward_id")
   userType UserType @default(CITIZEN) @map("user_type")
 
@@ -244,7 +202,6 @@ model User {
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
   // Relations
-  lga                   Lga                 @relation(fields: [lgaId], references: [id], onDelete: Cascade)
   ward                  Ward?               @relation(fields: [wardId], references: [id], onDelete: SetNull)
   addresses             Address[]
   staffProfile          StaffProfile?
@@ -257,7 +214,6 @@ model User {
   uploads               UploadedDocument[]
   otpCodes              OtpCode[]
 
-  @@index([lgaId])
   @@index([wardId])
   @@index([phone])
   @@index([email])
@@ -333,7 +289,6 @@ model Address {
 
 model ServiceConfig {
   id                      String          @id @default(cuid())
-  lgaId                   String          @map("lga_id")
   serviceType             ApplicationType @map("service_type")
   name                    String
   slug                    String
@@ -354,18 +309,15 @@ model ServiceConfig {
   createdAt               DateTime        @default(now()) @map("created_at")
   updatedAt               DateTime        @updatedAt @map("updated_at")
 
-  lga          Lga           @relation(fields: [lgaId], references: [id], onDelete: Cascade)
   applications Application[]
 
-  @@unique([lgaId, serviceType])
-  @@index([lgaId])
+  @@unique([serviceType])
   @@index([slug])
   @@map("service_configs")
 }
 
 model ApplicationSequence {
   id          String          @id @default(cuid())
-  lgaId       String          @map("lga_id")
   serviceType ApplicationType @map("service_type")
   year        Int
   sequenceNum BigInt          @map("sequence_num")
@@ -373,18 +325,18 @@ model ApplicationSequence {
   createdAt   DateTime        @default(now()) @map("created_at")
   updatedAt   DateTime        @updatedAt @map("updated_at")
 
-  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-
-  @@unique([lgaId, serviceType, year])
-  @@index([lgaId])
+  @@unique([serviceType, year])
   @@map("application_sequences")
 }
 
 model Application {
   id                 String             @id @default(cuid())
-  lgaId              String             @map("lga_id")
   serviceConfigId    String             @map("service_config_id")
   applicantId        String             @map("applicant_id")
+
+ //user  @relation('userId', fields:[userId], references:[id], onDelete:Cascade)
+
+userId String @map('user_id')
   submittedByUserId  String?            @map("submitted_by_user_id")
   addressId          String?            @map("address_id")
   refNumber          String             @unique @map("ref_number")
@@ -407,7 +359,6 @@ model Application {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  lga           Lga                 @relation(fields: [lgaId], references: [id], onDelete: Cascade)
   serviceConfig ServiceConfig       @relation(fields: [serviceConfigId], references: [id])
   applicant     User                @relation("ApplicantApplications", fields: [applicantId], references: [id], onDelete: Cascade)
   submittedBy   User?               @relation("ApplicationSubmitter", fields: [submittedByUserId], references: [id], onDelete: SetNull)
@@ -418,7 +369,6 @@ model Application {
   Ward          Ward?               @relation(fields: [wardId], references: [id])
   wardId        String?
 
-  @@index([lgaId])
   @@index([applicantId])
   @@index([serviceConfigId])
   @@index([status])
@@ -450,7 +400,6 @@ model ApplicationReview {
 model Payment {
   id              String          @id @default(cuid())
   applicationId   String          @map("application_id")
-  lgaId           String          @map("lga_id")
   referenceNumber String          @unique @map("reference_number")
   amountInKobo    BigInt          @map("amount_in_kobo")
   provider        PaymentProvider
@@ -466,7 +415,6 @@ model Payment {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  lga         Lga         @relation(fields: [lgaId], references: [id])
 
   @@index([applicationId])
   @@index([referenceNumber])
@@ -478,7 +426,6 @@ model Payment {
 model Certificate {
   id                String            @id @default(cuid())
   applicationId     String            @unique @map("application_id")
-  lgaId             String            @map("lga_id")
   certificateNumber String            @unique @map("certificate_number")
   issuedByUserId    String            @map("issued_by_user_id")
   status            CertificateStatus @default(ACTIVE)
@@ -497,10 +444,8 @@ model Certificate {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  lga         Lga         @relation(fields: [lgaId], references: [id])
   issuedBy    User        @relation("CertificateIssuedBy", fields: [issuedByUserId], references: [id])
 
-  @@index([lgaId])
   @@index([certificateNumber])
   @@index([status])
   @@map("certificates")
@@ -556,7 +501,6 @@ model Notification {
 model AuditLog {
   id         String  @id @default(cuid())
   userId     String? @map("user_id")
-  lgaId      String  @map("lga_id")
   action     String
   entityType String  @map("entity_type")
   entityId   String  @map("entity_id")
@@ -567,10 +511,8 @@ model AuditLog {
   createdAt DateTime @default(now()) @map("created_at")
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  lga  Lga   @relation(fields: [lgaId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@index([lgaId])
   @@index([action])
   @@index([createdAt])
   @@map("audit_logs")
@@ -578,24 +520,18 @@ model AuditLog {
 
 model SystemSetting {
   id          String  @id @default(cuid())
-  lgaId       String  @map("lga_id")
-  key         String
+  key         String  @unique
   value       String
   description String?
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-
-  @@unique([lgaId, key])
-  @@index([lgaId])
   @@map("system_settings")
 }
 
 model Announcement {
   id       String  @id @default(cuid())
-  lgaId    String  @map("lga_id")
   title    String
   content  String
   imageUrl String? @map("image_url")
@@ -605,16 +541,12 @@ model Announcement {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-
-  @@index([lgaId])
   @@index([publishedAt])
   @@map("announcements")
 }
 
 model AnonymousMessage {
   id          String           @id @default(cuid())
-  lgaId       String           @map("lga_id")
   userId      String?          @map("user_id")
   fullName    String?          @map("full_name")
   email       String?
@@ -631,9 +563,6 @@ model AnonymousMessage {
   createdAt   DateTime         @default(now()) @map("created_at")
   updatedAt   DateTime         @updatedAt @map("updated_at")
 
-  lga Lga @relation(fields: [lgaId], references: [id], onDelete: Cascade)
-
-  @@index([lgaId])
   @@index([category])
   @@index([status])
   @@index([submittedAt])
