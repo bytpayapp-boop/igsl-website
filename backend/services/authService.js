@@ -61,7 +61,12 @@ console.log('Payload for this registration:',data)
           userType: true,
           createdAt: true,
         },
-      })
+      });
+      return{
+        success:true,
+        message:'Registration is now successful',
+        user
+      }
 
     
     } catch (error) {
