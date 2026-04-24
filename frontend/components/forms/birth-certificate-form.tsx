@@ -58,6 +58,7 @@ export function BirthCertificateForm({ onSubmit }: BirthCertificateFormProps) {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
+    sessionStorage.clear();
     e.preventDefault()
 
     if (step < 4) {
@@ -71,6 +72,8 @@ export function BirthCertificateForm({ onSubmit }: BirthCertificateFormProps) {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
+     
+      
       if (onSubmit) {
         onSubmit(formData as BirthCertificateFormData)
       } else {

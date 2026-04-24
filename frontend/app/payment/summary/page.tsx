@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { ArrowRight, ShieldCheck } from 'lucide-react'
 import { toast } from 'sonner'
 import axios from 'axios'
+import { timeStamp } from 'console'
 
 const FEES = {
   identification: 5000,
@@ -22,13 +23,20 @@ function PaymentSummaryContent() {
   const type = searchParams.get('type') || 'identification'
   const [isProcessing, setIsProcessing] = useState(false)
   const [accepted, setAccepted] = useState(false);
-  const[amount,setAmout]=useState(4000);
+  // const[amount,setAmout]=useState(4000);
   const[Loading,setLoading]=useState(false);
   const[queryTrxStatus,setQueryTrxStatus]=useState(false);
   const[token,setToken]=useState('')
 
   const [polling,setPolling]=useState(false)
   const[user,setUser]=useState(null)
+  const[transaction,setTransaction] =useState({
+    amount:400,
+    type:type,
+    reference:'test-tx',
+    timestamp:Date.now()
+
+  })
 
  const applicationData = typeof window !== 'undefined' ? 
     JSON.parse(sessionStorage.getItem('applicationData') || '{}') : 
@@ -47,6 +55,7 @@ if (response.data.msg=='success'){
 
 }
   useEffect(()=>{
+    console.log('Application data fromt payment summary page:',applicationData)
 const storedToken = sessionStorage.getItem('token');
 setToken(token)
 console.log('the token for this transaction user is:',token)
@@ -86,9 +95,14 @@ else{
       toast.error('Please accept the terms and conditions')
       return
     }
+    const applicationDataWithDate = {...applicationData,date:Date.now()}
+    sessionStorage.setItem('transaction',JSON.stringify(transaction))
+    sessionStorage.setItem('applicationData',JSON.stringify(applicationDataWithDate));
+    console.log('Application data updated with date of payment:',applicationDataWithDate)
 
-    setIsProcessing(true)
+  
     if(user){
+        setIsProcessing(true)
     try {
 
       FlutterwaveCheckout({
@@ -117,7 +131,7 @@ else{
       },
     });
       
-    setTimeout(()=>router.push('/success'),2000)
+    setTimeout(()=>router.push('/payment/success'),2000)
       // Randomly succeed or fail for demo purposes (90% success rate)
      
     } catch (error) {
@@ -126,7 +140,7 @@ else{
     }
   }
 
-   setTimeout(()=>router.push('/success'),2000)
+   setTimeout(()=>router.push('/payment/success'),2000)
       // Randomly succeed or fail for demo purposes (90% success rate)
 
   }
@@ -180,7 +194,7 @@ else{
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-foreground/70">Application Fee:</span>
-                  <span className="font-medium">NGN {amount.toLocaleString()}</span>
+                  <span className="font-medium">NGN {transaction.amount.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-foreground/70">Processing Fee:</span>
@@ -200,7 +214,7 @@ else{
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-primary">Total Amount Due:</span>
                 <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-                  NGN {amount.toLocaleString()}
+                  NGN {transaction.amount.toLocaleString()}
                 </span>
               </div>
             </div>

@@ -23,11 +23,11 @@ export default function CertificatePage() {
     setIsMounted(true)
     // Get application data from session
     const appData = sessionStorage.getItem('applicationData');
-    const transactionStatus = sessionStorage.getItem('transaction');
-    if(transactionStatus){
-      setTrxType(JSON.parse(transactionStatus).type)
-    }
-    console.log('Transaction status is:',transactionStatus)
+    console.log('application data from cartificate page:',appData)
+
+   
+    console.log('Transaction data:',appData)
+   
     if (appData) {
       const parsedData = JSON.parse(appData);
       console.log('Parsed application data:',parsedData)

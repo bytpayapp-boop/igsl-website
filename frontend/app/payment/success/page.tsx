@@ -6,12 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle2, Download, Home, FileText } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import dayjs from 'dayjs'
+import { timeStamp } from 'console'
 
 export default function PaymentSuccessPage() {
   const [transaction, setTransaction] = useState<any>(null)
 
   useEffect(() => {
-    const txData = sessionStorage.getItem('transaction')
+    const txData = sessionStorage.getItem('transaction');
+    console.log('Tansaction data from success page:',txData)
     if (txData) {
       setTransaction(JSON.parse(txData))
     }
@@ -72,7 +75,7 @@ export default function PaymentSuccessPage() {
                   <span className="text-foreground">Date & Time:</span>
                   <span className="font-medium text-foreground">
                     {transaction?.timestamp
-                      ? new Date(transaction.timestamp).toLocaleString()
+                      ? dayjs(Date.now()).format('DD MMMM, YYYY hh:mm A')
                       : 'N/A'}
                   </span>
                 </div>
@@ -91,18 +94,14 @@ export default function PaymentSuccessPage() {
                     title: 'Application Review',
                     desc: 'Your application will be reviewed by our team within 1-2 business days.',
                   },
+                
                   {
                     num: '2',
-                    title: 'Processing',
-                    desc: 'Once approved, your document will be processed within 3-5 business days.',
-                  },
-                  {
-                    num: '3',
                     title: 'Notification',
                     desc: 'You will receive an email/SMS notification when your document is ready.',
                   },
                   {
-                    num: '4',
+                    num: '3',
                     title: 'Collection/Delivery',
                     desc: 'You can collect your document or have it delivered to your address.',
                   },

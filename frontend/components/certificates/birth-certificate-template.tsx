@@ -1,7 +1,8 @@
 'use client'
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import dayjs from 'dayjs'
+import QRCode from 'qrcode';
 
 interface BirthCertificateTemplateProps {
   data: any
@@ -10,12 +11,13 @@ interface BirthCertificateTemplateProps {
 }
 
 function LargeCenterBackground() {
+
   return (
     <div className="absolute inset-0 opacity-[0.08] pointer-events-none overflow-hidden flex items-center justify-center">
       <img
         src="/coatOfArm.png"
         alt="Background Watermark"
-        className="w-96 h-96 object-contain"
+        className="w-90 h-90 object-contain"
         aria-hidden="true"
       />
     </div>
@@ -44,6 +46,14 @@ export function BirthCertificateTemplate({
     month: 'long',
     year: 'numeric',
   })
+
+  
+  const[qr,setQr]=useState('')
+  useEffect(()=>{
+    const dataString = JSON.stringify({n:data.childFullName,w:data.ward,d:data.date})
+    const encoded = btoa(dataString)
+        const qrImageUrl = QRCode.toDataURL(`https://igsl.vercel.app/verify/${encoded}`).then(setQr)
+  });
 
   const formatDateOfBirth = (date: any) => {
     if (!date) return ""
@@ -116,7 +126,11 @@ export function BirthCertificateTemplate({
         <div className="absolute right-[19px] bottom-[110px] w-0 h-0 border-t-[24px] border-t-transparent border-b-[24px] border-b-transparent border-l-[16px] border-l-[#d5d8d4]" />
         */}
 
-        <div className="relative z-10 h-full px-12 pt-8 pb-8 flex flex-col">
+        <div className="relative z-10 h-full px-12 pt-8 flex flex-col">
+
+           <div className="h-20 w-20 absolute top-12 left-12 flex">
+            <img src={qr} className="object-cover"/>
+            </div>
           {/* Header */}
           <div className="flex items-start justify-between mb-2">
             <div className="w-16" />
@@ -134,7 +148,7 @@ export function BirthCertificateTemplate({
                 FORM D
               </div>
               <div className="text-[14px] mt-2 mr-2 font-semibold">
-                No. <span className="font-normal">{referenceNumber.slice(-5)}</span>
+                No. <span className="font-normal">{referenceNumber}</span>
               </div>
             </div>
           </div>
@@ -192,13 +206,14 @@ export function BirthCertificateTemplate({
           </div>
 
           {/* Official Seal */}
-          <div className="absolute right-[80px] bottom-[110px] -mt-24 rotate-[-15deg]">
+          <div className="absolute right-[80px] flex flex-col gap-6 bottom-[110px] -mt-24 rotate-[-15deg]">
             <img
               src="/chairmanStamp1.1.png"
               alt="Chairman Stamp"
               className="w-[240px] h-auto object-contain"
               style={{ opacity: 0.9 }}
             />
+           
           </div>
         </div>
       </div>
