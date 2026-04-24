@@ -14,7 +14,7 @@ class AuthService {
   static async register(data) {
     try {
       const { username, email, password, phone, lgaId } = data
-
+console.log('Payload for this registration:',data)
       // Validate input
       if (!username || !email || !password || !phone) {
         throw new Error('Username, email, password, and phone are required')

@@ -56,9 +56,10 @@ app.post('/api/auth/register', async (req, res) => {
       phone,
       lgaId: process.env.DEFAULT_LGA_ID || 'default-lga',
     })
-console.log('Registration successful')
+console.log('Registration successful');
+console.log('Registered data:',result)
    const token = generateAccessToken(result.user);
-    res.status(201).json({...result,token})
+    res.status(201).json({...result,token:token})
   } catch (error) {
     console.error('Register error:', error)
     res.status(500).json({

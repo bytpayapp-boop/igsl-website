@@ -1,21 +1,21 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { Navbar } from '@/components/common/navbar'
 import { Footer } from '@/components/common/footer'
 import { useSearchParams } from 'next/navigation'
-import { userAgent } from 'next/server'
 // export const metadata: Metadata = {
 //   title: 'Certificate Verification - IGSL',
 //   description: 'Your certificate is official and valid. Thank you for using IGSL.',
 // }
+export const dynamic = 'force-dynamic'
 
-export default function VerifyPage() {
-const[user,setUser] = useState(null)
-  const params = useSearchParams();
-  useEffect(()=>{
-console.log('Params:',params)
-  },[])
+function VerifyContent() {
+  const [user, setUser] = useState(null)
+  const params = useSearchParams()
+  useEffect(() => {
+    console.log('Params:', params)
+  }, [params]);
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -40,7 +40,6 @@ console.log('Params:',params)
                 viewBox="0 0 24 24"
               >
                 <path
-                
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
@@ -56,7 +55,8 @@ console.log('Params:',params)
               Certificate is Official and Valid
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 font-medium">
-            {`Belongs to ${user?.n}, issued by`}<span className='font-bold'>IGSl</span>
+              {`Belongs to ${user?.n}, issued by`}
+              <span className="font-bold">IGSL</span>
             </p>
           </div>
 
@@ -95,5 +95,13 @@ console.log('Params:',params)
       </main>
       <Footer />
     </div>
+  )
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyContent />
+    </Suspense>
   )
 }

@@ -48,12 +48,26 @@ export function BirthCertificateTemplate({
   })
 
   
-  const[qr,setQr]=useState('')
-  useEffect(()=>{
-    const dataString = JSON.stringify({n:data.childFullName,w:data.ward,d:data.date})
-    const encoded = btoa(dataString)
-        const qrImageUrl = QRCode.toDataURL(`https://igsl.vercel.app/verify/${encoded}`).then(setQr)
-  });
+  const [qr, setQr] = useState('')
+  useEffect(() => {
+    const generateQR = async () => {
+      try {
+        const dataString = JSON.stringify({
+          n: data.childFullName,
+          w: data.ward,
+          d: data.date,
+        })
+        const encoded = btoa(dataString)
+        const qrImageUrl = await QRCode.toDataURL(
+          `https://igsl.vercel.app/verify/${encodeURIComponent(encoded)}`
+        )
+        setQr(qrImageUrl)
+      } catch (error) {
+        console.error('Failed to generate QR code:', error)
+      }
+    }
+    generateQR()
+  }, [data.childFullName, data.ward, data.date])
 
   const formatDateOfBirth = (date: any) => {
     if (!date) return ""

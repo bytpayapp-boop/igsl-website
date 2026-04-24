@@ -49,7 +49,7 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             <Link href="/auth/register">
               <Button className="text-primary-foreground bg-transparent hover:bg-white/20">
-                Login
+                SignUp
               </Button>
             </Link>
             <Link href="/admin">

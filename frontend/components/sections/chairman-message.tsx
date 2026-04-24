@@ -26,7 +26,7 @@ export function ChairmanMessage() {
 
             {/* Message */}
             <CardContent className="pt-8 md:pt-0 dark:text-white/95 text-gray-700">
-              <div onClick={()=>router.push('/verify')} className="mb-4 ">
+              <div onClick={()=>router.push('/verify/[info]')} className="mb-4 ">
                 <h3 className="text-sm font-semibold  dark:text-gray-300 uppercase tracking-wider mb-2">
                   A Message From
                 </h3>
