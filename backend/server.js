@@ -459,7 +459,7 @@ app.post('/api/anonymous-message', async (req, res) => {
 
 //Flutterwave webh00k
 
-app.post('/flutterwaveTest',async(req,res)=>{
+app.post('/flutterwaveTest/trx',async(req,res)=>{
     console.log('Incoming Flutterwave webhoook with:',req.body);
 })
 
