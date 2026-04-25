@@ -463,6 +463,7 @@ app.post('/api/anonymous-message', async (req, res) => {
  * Save transaction data before payment
  */
 app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
+  console.log('This transaction data is about to be saved',req.body);
   try {
     const { email, phone, fullName, amount, type, status, applicationData } = req.body;
 
