@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const {PrismaClient} = requre('@prisma/client')
+const {PrismaClient} = require('@prisma/client')
 const dotenv = require('dotenv')
 const {  authTokenMiddleWare,
     authRefreshMiddleware} = require('./middleware/auth');
