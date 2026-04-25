@@ -95,7 +95,7 @@ else{
   // const amount = FEES[type as keyof typeof FEES] || 5000
   const typeName = type === 'identification' ? 'Local Government ID' : 'Birth Certificate'
 
-  // Refresh access token if expired
+  // Refresh access token if expired already
   const refreshAccessToken = async () => {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
