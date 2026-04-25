@@ -128,7 +128,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     // Check if user is logged in
-    const token = localStorage.getItem('auth_token')
+    const token = localStorage.getItem('token')
     const userData = localStorage.getItem('user')
 
     if (!token || !userData) {

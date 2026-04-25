@@ -119,7 +119,9 @@ export function RegisterForm() {
       });
 
       console.log('Registration successful:',response.data);
-      localStorage.setItem('user',response.data.user);
+      localStorage.setItem('user',JSON.stringify(response.data.user));
+      localStorage.setItem('token',response.data.token);
+      console.log('Token set as:',response.data.token)
 
       toast.success('Registration successful! Redirecting to login...')
       setTimeout(() => {

@@ -458,6 +458,68 @@ app.post('/api/anonymous-message', async (req, res) => {
   }
 })
 
+/**
+ * POST /api/transactions/save
+ * Save transaction data before payment
+ */
+app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
+  try {
+    const { email, phone, fullName, amount, type, status, applicationData } = req.body;
+
+    if (!email || !amount || !type) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email, amount, and type are required',
+      });
+    }
+
+    // Generate unique transaction reference
+    const transactionRef = `TXN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    // Log transaction (TODO: Save to database with Prisma when schema is ready)
+    const transactionData = {
+      transactionRef,
+      email,
+      phone,
+      fullName,
+      amount,
+      type,
+      status: status || 'PENDING',
+      applicationData,
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log('Transaction saved:', transactionData);
+
+    //TODO: Uncomment when database is ready
+    const transaction = await prisma.transaction.create({
+      data: {
+        transactionRef,
+        email,
+        phone,
+        fullName,
+        amount,
+        type,
+        status: status || 'PENDING',
+        applicationData,
+      }
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Transaction saved successfully',
+      transactionRef,
+      data: transactionData,
+    });
+  } catch (error) {
+    console.error('Save transaction error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to save transaction',
+    });
+  }
+});
+
 //Flutterwave webh00k
 
 app.post('/flutterwaveTest/trx',async(req,res)=>{

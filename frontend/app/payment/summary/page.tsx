@@ -38,7 +38,7 @@ function PaymentSummaryContent() {
 
   })
 
- const applicationData = typeof window !== 'undefined' ? 
+ let applicationData = typeof window !== 'undefined' ? 
     JSON.parse(sessionStorage.getItem('applicationData') || '{}') : 
     {};
 
@@ -56,11 +56,16 @@ if (response.data.msg=='success'){
 }
   useEffect(()=>{
     console.log('Application data fromt payment summary page:',applicationData)
-const storedToken = sessionStorage.getItem('token');
-setToken(token)
-console.log('the token for this transaction user is:',token)
-setToken(storedToken || '');
-const userData = sessionStorage.getItem('user')
+const storedToken = localStorage.getItem('token');
+
+console.log('the token for this transaction user is:',storedToken)
+if(storedToken){
+setToken(storedToken)
+}
+else{
+  console.log('Token retrieval failed')
+}
+const userData = localStorage.getItem('user')
     if(userData){
       const user = JSON.parse(userData);
       setUser(user)
@@ -103,23 +108,49 @@ else{
   
     if(user){
         setIsProcessing(true)
+        console.log('This user is making payment:',user)
     try {
+      // Save transaction data to database
+      const transactionPayload = {
+        email: user?.email,
+        phone: user?.phone,
+        fullName: user?.fullName,
+        amount: transaction.amount,
+        type: transaction.type,
+        status: 'PENDING',
+        applicationData: applicationDataWithDate,
+        token: token,
+      };
+
+      const dbResponse = await axios.post(
+        'https://igsl-website.onrender.com/api/transactions/save',
+        transactionPayload,
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+
+      if (!dbResponse.data.success) {
+        toast.error('Failed to save transaction. Please try again.');
+        setIsProcessing(false);
+        return;
+      }
+
+      const transactionRef = dbResponse.data.transactionRef || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       FlutterwaveCheckout({
-      public_key: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
-      amount: amount,
+      public_key: 'FLWPUBK_TEST-634ea5c8aba36f6f389f15d2e2e085f1-X',//public live: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
+      amount: transaction.amount,
       currency: "NGN",
-      tx_ref: `Flutterwave_${'ezeh@gmail.com'}_${JSON.stringify(applicationData)}`,
-      payment_options: "banktransfer,ussd",
+      tx_ref: transactionRef,
+      payment_options: "banktransfer,ussd, card",
       customer: {
         email: user?.email,
         phone_number: user?.phone,
         name: user?.fullName,
       },
       customizations: {
-        title: `BytPay Funding - Ezeh Mark`, //${user?.fullName.split(" ")[0]}
+        title: `IGSL - ${transaction.type} payment`, //${user?.fullName.split(" ")[0]}
         description: "The Fastest Way to Fund Your Wallet Automatically",
-        logo: "/coatOfArm.png",
+        logo: "https://igsl.vercel.app/coatOfArm.png",
       },
       callback: (res) => {
         if (typeof (window as any).closePaymentModal === "function")
@@ -130,19 +161,49 @@ else{
 
       },
     });
-      
-    setTimeout(()=>router.push('/payment/success'),2000)
-      // Randomly succeed or fail for demo purposes (90% success rate)
-     
-    } catch (error) {
+
+  
+  } catch (error) {
+      console.error('Payment error:', error)
       toast.error('Payment processing failed')
       setIsProcessing(false)
     }
   }
+    else{
+   const guestTransactionRef = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+   FlutterwaveCheckout({
+      public_key: 'FLWPUBK_TEST-634ea5c8aba36f6f389f15d2e2e085f1-X',//public live: "FLWPUBK-4fddaba321d47611adb08ce8098c9670-X",
+      amount: transaction.amount,
+      currency: "NGN",
+      tx_ref: guestTransactionRef,
+      payment_options: "banktransfer,ussd, card",
+      customer: {
+        email: 'citizen1@gmail.com',
+        //phone_number: user?.p,
+        name: 'IGSL citizen',
+      },
+      customizations: {
+        title: `IGSL - ${transaction.type} payment`, //${user?.fullName.split(" ")[0]}
+        description: "The Fastest Way to Fund Your Wallet Automatically",
+        logo: "https://igsl.vercel.app/coatOfArm.png",
+      },
+      callback: (res) => {
+        if (typeof (window as any).closePaymentModal === "function")
+          window.closePaymentModal(); 
+      },
+      onClose: () => {
+        setLoading(false);
 
+      },
+    })
+    
+   
+  
+
+  
    setTimeout(()=>router.push('/payment/success'),2000)
       // Randomly succeed or fail for demo purposes (90% success rate)
-
+  }
   }
 
   return (
