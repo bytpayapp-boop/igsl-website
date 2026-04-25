@@ -5,7 +5,7 @@ const dotenv = require('dotenv')
 const {  authTokenMiddleWare,
     authRefreshMiddleware} = require('./middleware/auth');
 
-const {generateBothTokens, generateAccessToken}= require('./utils/jwt')
+const {generateBothTokens, generateAccessToken, verifyRefreshToken}= require('./utils/jwt')
 
 dotenv.config()
 
@@ -61,8 +61,8 @@ app.post('/api/auth/register', async (req, res) => {
     })
 console.log('Registration successful');
 console.log('Registered data:',result)
-   const token = generateAccessToken(result.user);
-    res.status(201).json({...result,token:token})
+   const tokens = generateBothTokens(result.user);
+    res.status(201).json({...result, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken})
   } catch (error) {
     console.error('Register error:', error)
     res.status(500).json({
@@ -129,6 +129,47 @@ app.post('/api/auth/verify-token', (req, res) => {
     res.status(500).json({
       valid: false,
       message: 'Internal server error',
+    })
+  }
+})
+
+/**
+ * POST /api/auth/refresh-token
+ * Refresh access token using refresh token
+ */
+app.post('/api/auth/refresh-token', (req, res) => {
+  try {
+    const { refreshToken } = req.body
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        success: false,
+        message: 'Refresh token is required',
+      })
+    }
+
+    const payload = verifyRefreshToken(refreshToken)
+    
+    if (!payload) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired refresh token',
+      })
+    }
+
+    // Generate new access token
+    const newAccessToken = generateAccessToken(payload)
+
+    res.status(200).json({
+      success: true,
+      accessToken: newAccessToken,
+      message: 'Token refreshed successfully',
+    })
+  } catch (error) {
+    console.error('Refresh token error:', error)
+    res.status(401).json({
+      success: false,
+      message: 'Failed to refresh token',
     })
   }
 })

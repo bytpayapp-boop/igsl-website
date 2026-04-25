@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
-const { generateAccessToken } = require('../utils/jwt')
+const { generateAccessToken, generateBothTokens } = require('../utils/jwt')
 
 const prisma = new PrismaClient()
 
@@ -119,16 +119,17 @@ console.log('Payload for this registration:',data)
         data: { lastLoginAt: new Date() },
       })
 
-      // Generate token
+      // Generate tokens
       let userDetail;
       let {staffProfile, ...rest}=user;
       userDetail = {...rest};
-     const token = generateAccessToken(userDetail)
+     const tokens = generateBothTokens(userDetail)
 
       return {
         success: true,
         message: 'Login successful',
-        token,
+        token: {accessToken,refreshToken},
+        refreshToken: tokens.refreshToken,
         user: {
           id: user.id,
           fullName: user.fullName,
