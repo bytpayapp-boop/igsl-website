@@ -209,7 +209,7 @@ export function LoginForm() {
             </Button>
 
             {/* Security Info */}
-            <div className="mt-4 p-3 bg-accent/10 border border-accent/20 items-center justify-center rounded-lg">
+            <div className="mt-4 p-3 bg-primary/10 border border-primary/20 items-center justify-center rounded-lg">
               <p className="text-xs text-foreground/70 flex items-start gap-2">
                 <span className="text-accent font-bold mt-0.5"><ShieldCheck className='text-green-600'/></span>
                 Your login credentials are encrypted and secure
