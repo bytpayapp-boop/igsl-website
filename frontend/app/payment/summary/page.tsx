@@ -100,6 +100,12 @@ else{
       toast.error('Please accept the terms and conditions')
       return
     }
+
+    if (!token) {
+      toast.error('Session expired. Please log in again.')
+      return
+    }
+
     const applicationDataWithDate = {...applicationData,date:Date.now()}
     sessionStorage.setItem('transaction',JSON.stringify(transaction))
     sessionStorage.setItem('applicationData',JSON.stringify(applicationDataWithDate));
@@ -121,6 +127,9 @@ else{
         applicationData: applicationDataWithDate,
         token: token,
       };
+
+      console.log('Token is:',token)
+      console.log('Starting to make api call to save transaction')
 
       const dbResponse = await axios.post(
         'https://igsl-website.onrender.com/api/transactions/save',

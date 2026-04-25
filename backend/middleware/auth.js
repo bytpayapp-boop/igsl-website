@@ -9,13 +9,19 @@ function authTokenMiddleWare(req, res, next){
 try{
     const token = req.headers.authorization?.split(' ')[1];
 
-if(!token){return}
+if(!token){
+    res.status(401).json({error:'Authorization token is required'});
+    return;
+}
+
+console.log('Attempting to verify token:', token.substring(0, 20) + '...');
 
 const payload = verifyAccessToken(token);
-if(!payload){console.log('Verify access token returned null');
+if(!payload){
+    console.log('Verify access token returned null');
     res.status(401).json({error:'Invalid access token, or token expired'});
-    return}
-
+    return
+}
 
 console.log('Token verified for user',payload)
 
@@ -25,6 +31,7 @@ next()
 }
 
 catch(err){
+    console.error('Auth middleware error:', err.message);
     res.status(401).json({error:`Error authenticating access token: ${err.message || err || 'Failed'}`})
 }
 }

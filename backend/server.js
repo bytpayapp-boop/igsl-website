@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const {PrismaClient} = requre('@prisma/client')
 const dotenv = require('dotenv')
 const {  authTokenMiddleWare,
     authRefreshMiddleware} = require('./middleware/auth');
@@ -12,6 +13,8 @@ const AuthService = require('./services/authService')
 
 const app = express()
 const PORT = process.env.PORT || 3001
+
+const prisma = new PrismaClient()
 
 // Middlewares
 // Allow requests from Render frontend
@@ -492,7 +495,7 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
 
     console.log('Transaction saved:', transactionData);
 
-    //TODO: Uncomment when database is ready
+    // TODO: Uncomment when database is ready
     const transaction = await prisma.transaction.create({
       data: {
         transactionRef,
