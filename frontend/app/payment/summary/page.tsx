@@ -111,7 +111,7 @@ else{
       );
 
       if (response.data.success) {
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('token', JSON.stringify({accessToken:response.data.accessToken,refreshToken}));
         setToken(response.data.accessToken);
         console.log('Token refreshed successfully');
         return true;
