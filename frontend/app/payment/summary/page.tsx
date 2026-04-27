@@ -56,7 +56,7 @@ if (response.data.msg=='success'){
 }
   useEffect(()=>{
     console.log('Application data fromt payment summary page:',applicationData)
-const storedToken = localStorage.getItem('token');
+const storedToken = localStorage.getItem('accessToken');
 
 console.log('the token for this transaction user is:',storedToken)
 if(storedToken){
@@ -111,7 +111,8 @@ else{
       );
 
       if (response.data.success) {
-        localStorage.setItem('token', JSON.stringify({accessToken:response.data.accessToken,refreshToken}));
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken',response.data.refreshToken)
         setToken(response.data.accessToken);
         console.log('Token refreshed successfully');
         return true;
@@ -165,7 +166,7 @@ else{
         const dbResponse = await axios.post(
           'https://igsl-website.onrender.com/api/transactions/save',
           transactionPayload,
-          { headers: { 'Authorization': `Bearer ${currentToken}` } }
+          { headers: { 'Authorization': `Bearer ${token}` } }
         );
 
         if (!dbResponse.data.success) {
@@ -212,7 +213,7 @@ else{
             return;
           }
 
-          currentToken = localStorage.getItem('token') || token;
+          currentToken = localStorage.getItem('accessToken') || token;
 
           try {
             const dbResponse = await axios.post(
