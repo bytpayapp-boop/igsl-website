@@ -653,7 +653,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
             serviceType,
             name:'Birth Certificate',
             slug:'birth_certificate',
-            feeInNaira: BigInt(2000),
+            feeInNaira: 2000,
             requiresNin:true
           }
         }
@@ -666,7 +666,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
             serviceType,
             name:'Identification Certificate',
             slug:'id_certificate',
-            feeInNaira: BigInt(2000),
+            feeInNaira: 2000,
             requiresNin:true
           }
         }
