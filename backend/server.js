@@ -510,7 +510,7 @@ app.post('/api/anonymous-message', async (req, res) => {
  */
 app.get('/api/applications', authTokenMiddleWare, async (req, res) => {
   try {
-    const userId = req.user.userId
+    const userId = req.user.id
     
     if (!userId) {
       return res.status(400).json({
@@ -554,7 +554,7 @@ app.get('/api/applications', authTokenMiddleWare, async (req, res) => {
 app.get('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
-    const userId = req.user.userId
+    const userId = req.user.id
 
     if (!id) {
       return res.status(400).json({
@@ -610,7 +610,7 @@ app.get('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
  */
 app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
   try {
-    const userId = req.user.userId
+    const userId = req.user.id
     console.log('The application payload is:',req.body)
     const { serviceType, applicationData, addressId } = req.body
 
@@ -700,7 +700,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
 app.patch('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
-    const userId = req.user.userId
+    const userId = req.user.id
     const { applicationData, status, addressId } = req.body
 
     if (!id) {
@@ -765,7 +765,7 @@ app.patch('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
 app.post('/api/applications/:id/cancel', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
-    const userId = req.user.userId
+    const userId = req.user.id
 
     if (!id) {
       return res.status(400).json({
@@ -825,7 +825,7 @@ app.post('/api/applications/:id/cancel', authTokenMiddleWare, async (req, res) =
 app.get('/api/applications/:id/download', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
-    const userId = req.user.userId
+    const userId = req.user.id
 
     if (!id) {
       return res.status(400).json({

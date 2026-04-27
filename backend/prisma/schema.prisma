@@ -293,7 +293,7 @@ model ServiceConfig {
   name                    String
   slug                    String
   description             String?
-  feeInNaira               BigInt          @map("fee_in_kobo")
+  feeInNaira               BigInt          @map("fee_in_naira")
   processingDays          Int?            @map("processing_days")
   requiresNin             Boolean?         @default(false) @map("requires_nin")
   requiresPassport        Boolean?         @default(true) @map("requires_passport")
