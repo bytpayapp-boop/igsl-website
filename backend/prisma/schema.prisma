@@ -208,6 +208,7 @@ model User {
   applications          Application[]       @relation("ApplicantApplications")
   submittedApplications Application[]       @relation("ApplicationSubmitter")
   reviews               ApplicationReview[]
+  transactions Transaction[] @relation("UserTransactions")
   certificatesIssued    Certificate[]       @relation("CertificateIssuedBy")
   auditLogs             AuditLog[]
   notifications         Notification[]
@@ -427,7 +428,7 @@ model Transaction {
   id String @id @default(cuid())
   email String 
   userId String @map("user_id")
-  user User? @relation(fields:[userId],references:[id],onDelete:Cascade)
+  user User? @relation("UserTransactions", fields:[userId],references:[id],onDelete:Cascade)
   fullName String @map("full_name")
   amount Int 
   status PaymentStatus @default(PENDING)
