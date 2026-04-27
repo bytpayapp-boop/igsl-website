@@ -502,6 +502,359 @@ app.post('/api/anonymous-message', async (req, res) => {
   }
 })
 
+// ===== APPLICATION ROUTES =====
+
+/**
+ * GET /api/applications
+ * Fetch all applications for the authenticated user
+ */
+app.get('/api/applications', authTokenMiddleWare, async (req, res) => {
+  try {
+    const userId = req.user.userId
+    
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'User ID is required',
+      })
+    }
+
+    const applications = await prisma.application.findMany({
+      where: {
+        applicantId: userId,
+      },
+      include: {
+        serviceConfig: true,
+        payments: true,
+        certificate: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    res.status(200).json({
+      success: true,
+      data: applications,
+      count: applications.length,
+    })
+  } catch (error) {
+    console.error('Get applications error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch applications',
+    })
+  }
+})
+
+/**
+ * GET /api/applications/:id
+ * Fetch a single application by ID
+ */
+app.get('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.userId
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Application ID is required',
+      })
+    }
+
+    const application = await prisma.application.findUnique({
+      where: { id },
+      include: {
+        serviceConfig: true,
+        applicant: true,
+        address: true,
+        payments: true,
+        reviews: true,
+        certificate: true,
+        attachedDocuments: true,
+      },
+    })
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      })
+    }
+
+    // Check if user is the applicant or staff
+    if (application.applicantId !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied',
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      data: application,
+    })
+  } catch (error) {
+    console.error('Get application error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch application',
+    })
+  }
+})
+
+/**
+ * POST /api/applications
+ * Submit a new application
+ */
+app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
+  try {
+    const userId = req.user.userId
+    const { serviceType, applicationData, addressId } = req.body
+
+    if (!serviceType) {
+      return res.status(400).json({
+        success: false,
+        message: 'Service type is required',
+      })
+    }
+
+    // Get service config
+    const serviceConfig = await prisma.serviceConfig.findUnique({
+      where: { serviceType },
+    })
+
+    if (!serviceConfig) {
+      return res.status(404).json({
+        success: false,
+        message: 'Service not found',
+      })
+    }
+
+    // Generate reference number
+    const refNumber = `APP-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+
+    // Create application
+    const application = await prisma.application.create({
+      data: {
+        refNumber,
+        serviceConfigId: serviceConfig.id,
+        applicantId: userId,
+        addressId: addressId || null,
+        status: 'DRAFT',
+        applicationData: applicationData || {},
+      },
+      include: {
+        serviceConfig: true,
+      },
+    })
+
+    res.status(201).json({
+      success: true,
+      message: 'Application created successfully',
+      data: application,
+    })
+  } catch (error) {
+    console.error('Create application error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create application',
+    })
+  }
+})
+
+/**
+ * PATCH /api/applications/:id
+ * Update an application
+ */
+app.patch('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.userId
+    const { applicationData, status, addressId } = req.body
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Application ID is required',
+      })
+    }
+
+    // Check if application exists and belongs to user
+    const application = await prisma.application.findUnique({
+      where: { id },
+    })
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      })
+    }
+
+    if (application.applicantId !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied',
+      })
+    }
+
+    // Update application
+    const updatedApplication = await prisma.application.update({
+      where: { id },
+      data: {
+        ...(applicationData && { applicationData }),
+        ...(status && { status }),
+        ...(addressId && { addressId }),
+      },
+      include: {
+        serviceConfig: true,
+        payments: true,
+        certificate: true,
+      },
+    })
+
+    res.status(200).json({
+      success: true,
+      message: 'Application updated successfully',
+      data: updatedApplication,
+    })
+  } catch (error) {
+    console.error('Update application error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update application',
+    })
+  }
+})
+
+/**
+ * POST /api/applications/:id/cancel
+ * Cancel an application
+ */
+app.post('/api/applications/:id/cancel', authTokenMiddleWare, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.userId
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Application ID is required',
+      })
+    }
+
+    // Check if application exists and belongs to user
+    const application = await prisma.application.findUnique({
+      where: { id },
+    })
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      })
+    }
+
+    if (application.applicantId !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied',
+      })
+    }
+
+    // Cancel application
+    const cancelledApplication = await prisma.application.update({
+      where: { id },
+      data: {
+        status: 'CANCELLED',
+      },
+      include: {
+        serviceConfig: true,
+      },
+    })
+
+    res.status(200).json({
+      success: true,
+      message: 'Application cancelled successfully',
+      data: cancelledApplication,
+    })
+  } catch (error) {
+    console.error('Cancel application error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to cancel application',
+    })
+  }
+})
+
+/**
+ * GET /api/applications/:id/download
+ * Download application certificate/document
+ */
+app.get('/api/applications/:id/download', authTokenMiddleWare, async (req, res) => {
+  try {
+    const { id } = req.params
+    const userId = req.user.userId
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Application ID is required',
+      })
+    }
+
+    // Check if application exists and belongs to user
+    const application = await prisma.application.findUnique({
+      where: { id },
+      include: {
+        certificate: true,
+        attachedDocuments: true,
+      },
+    })
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      })
+    }
+
+    if (application.applicantId !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied',
+      })
+    }
+
+    if (!application.certificate) {
+      return res.status(404).json({
+        success: false,
+        message: 'Certificate not yet issued for this application',
+      })
+    }
+
+    // Return certificate document URL (you'll need to implement actual file download logic)
+    res.status(200).json({
+      success: true,
+      data: {
+        certificateId: application.certificate.id,
+        certificateNumber: application.certificate.certificateNumber,
+        issuedAt: application.certificate.issuedAt,
+        expiresAt: application.certificate.expiresAt,
+        message: 'Certificate download initiated',
+      },
+    })
+  } catch (error) {
+    console.error('Download document error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to download document',
+    })
+  }
+})
+
 /**
  * POST /api/transactions/save
  * Save transaction data before payment

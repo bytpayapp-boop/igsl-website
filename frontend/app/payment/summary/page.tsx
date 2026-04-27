@@ -176,7 +176,7 @@ else{
         }
 
         console.log('response:',dbResponse.data)
-        const transactionRef = dbResponse.data.transactionRef || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const transactionRef = dbResponse.data.application.refNumber || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         FlutterwaveCheckout({
           public_key: 'FLWPUBK_TEST-634ea5c8aba36f6f389f15d2e2e085f1-X',
