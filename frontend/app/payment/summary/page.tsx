@@ -57,7 +57,7 @@ if (response.data.msg=='success'){
   useEffect(()=>{
     console.log('Application data fromt payment summary page:',applicationData)
 const storedToken = localStorage.getItem('accessToken');
-
+ 
 console.log('the token for this transaction user is:',storedToken)
 if(storedToken){
 setToken(storedToken)
@@ -145,13 +145,14 @@ else{
         setIsProcessing(true)
         console.log('This user is making payment:',user)
     try {
+    
       // Save transaction data to database
       const transactionPayload = {
         email: user?.email,
         phone: user?.phone,
         fullName: user?.fullName,
         amount: transaction.amount,
-        type: transaction.type,
+        serviceType: transaction.type,
         status: 'PENDING',
         applicationData: applicationDataWithDate,
         token: token,
@@ -161,10 +162,11 @@ else{
       console.log('Starting to make api call to save transaction')
 
       let currentToken = token;
+       console.log('serviceType is:',type)
 
       try {
         const dbResponse = await axios.post(
-          'https://igsl-website.onrender.com/api/transactions/save',
+          'https://igsl-website.onrender.com/api/applications',
           transactionPayload,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
