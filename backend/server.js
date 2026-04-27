@@ -640,7 +640,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
             name:'Birth Certificate',
             slug:'birth_certificate',
             feeInNaira:'2000',
-            requiresNIN:true
+            requiresNin:true
           }
         }
       )
@@ -653,7 +653,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
             name:'Identification Certificate',
             slug:'id_certificate',
             feeInNaira:'2000',
-            requiresNIN:true
+            requiresNin:true
           }
         }
       )
