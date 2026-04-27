@@ -171,15 +171,31 @@ else{
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
 
-        if (!dbResponse.data.success) {
-          toast.error('Failed to save transaction. Please try again.');
+        const transaResponse = await axios.post(
+          'https://igsl-website.onrender.com/api/transactions/save',
+          applicationPayload,
+          { headers: { 'Authorization': `Bearer ${token}` } }
+        );
+
+         if (!dbResponse.data.success) {
+          toast.error('Failed to save applicatioin. Please try again.');
           setIsProcessing(false);
           return;
         }
 
-        console.log('response:',dbResponse.data);
-        const transactionRef = dbResponse.data.refNumber || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        if(!transaResponse.data.success){
+          toast.error('Failed to save transaction. Please try again.');
+          setIsProcessing(false)
+          return
+        }
 
+
+
+       
+        console.log('response:',dbResponse.data);
+        const applicationRef = dbResponse.data.refNumber || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+        const transactionRef = transaResponse.data.transactionRef
         FlutterwaveCheckout({
           public_key: 'FLWPUBK_TEST-634ea5c8aba36f6f389f15d2e2e085f1-X',
           amount: transaction.amount,

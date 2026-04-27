@@ -948,7 +948,7 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
 
     console.log('Transaction saved:', transactionData);
 
-    res.status(201).json({
+   return res.status(201).json({
       success: true,
       message: 'Transaction saved successfully',
       transactionRef,
