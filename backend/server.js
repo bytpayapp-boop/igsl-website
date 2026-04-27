@@ -887,7 +887,7 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
       createdAt: new Date().toISOString(),
     };
 
-    console.log('Transaction saved:', transactionData);
+    
 
     // TODO: Uncomment when database is ready
     const transaction = await prisma.transaction.create({
@@ -902,6 +902,8 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
         applicationData,
       }
     });
+
+    console.log('Transaction saved:', transactionData);
 
     res.status(201).json({
       success: true,

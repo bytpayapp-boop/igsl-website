@@ -104,7 +104,7 @@ export default function ApplicationsPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const token = localStorage.getItem('auth_token')
+    const token = localStorage.getItem('accessToken')
     if (!token) {
       router.push('/auth/login')
       return

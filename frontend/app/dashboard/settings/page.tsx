@@ -39,7 +39,7 @@ export default function SettingsPage() {
   })
 
   useEffect(() => {
-    const token = localStorage.getItem('auth_token')
+    const token = localStorage.getItem('accessToken')
     const userData = localStorage.getItem('user')
 
     if (!token || !userData) {

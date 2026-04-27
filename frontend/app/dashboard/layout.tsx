@@ -10,17 +10,8 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const router = useRouter()
-  const [isChecking, setIsChecking] = useState(true)
+  const [isChecking, setIsChecking] = useState(false)
 
-  useEffect(() => {
-    // Verify authentication
-    const token = localStorage.getItem('auth_token')
-    if (!token) {
-      router.push('/auth/login')
-    } else {
-      setIsChecking(false)
-    }
-  }, [router])
 
   if (isChecking) {
     return (

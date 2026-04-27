@@ -131,6 +131,8 @@ export default function DashboardPage() {
     const token = localStorage.getItem('accessToken')
     const userData = localStorage.getItem('user')
 
+    console.log('Retrieved access token:',token)
+
     if (!token || !userData) {
       router.push('/auth/login')
       return
