@@ -696,7 +696,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Application created successfully',
-      data: serializeBigInt(application),
+      data: application,
     })
   } catch (error) {
     console.error('Create application error:', error)
