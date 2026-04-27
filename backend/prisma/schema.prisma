@@ -427,6 +427,7 @@ model Payment {
 model Transaction {
   id String @id @default(cuid())
   email String 
+  transactionRef String @map("transaction_ref")
   userId String @map("user_id")
   user User? @relation("UserTransactions", fields:[userId],references:[id],onDelete:Cascade)
   fullName String @map("full_name")
@@ -435,6 +436,7 @@ model Transaction {
   applicationData Json @map("application_data")
 @@index([userId])
 @@index([status])
+@@index([transactionRef])
 @@map("transactions")
 }
 
