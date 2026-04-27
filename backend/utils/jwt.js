@@ -1,14 +1,22 @@
 const jwt = require ('jsonwebtoken')
 
+// Remove JWT standard claims that shouldn't be manually set
+const cleanPayload = (payload) => {
+    const { exp, iat, jti, ...cleanedPayload } = payload
+    return cleanedPayload
+}
+
 const generateAccessToken = (payload)=>{
-    const token = jwt.sign(payload,process.env.JWT_SECRET,{
+    const cleanedPayload = cleanPayload(payload)
+    const token = jwt.sign(cleanedPayload, process.env.JWT_SECRET, {
         expiresIn:'1h'
     });
     return token
 }
 
 const generateRefreshToken = (payload)=>{
-    const token = jwt.sign(payload,process.env.JWT_REFRESH_SECRET,{
+    const cleanedPayload = cleanPayload(payload)
+    const token = jwt.sign(cleanedPayload, process.env.JWT_REFRESH_SECRET, {
         expiresIn:'7d'
     });
     return token;
