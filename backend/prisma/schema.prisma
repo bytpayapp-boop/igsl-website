@@ -369,10 +369,13 @@ model Application {
   certificate   Certificate?
   Ward          Ward?               @relation(fields: [wardId], references: [id])
   wardId        String?
+  userId String @map("user_id")
+  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
 
   @@index([applicantId])
   @@index([serviceConfigId])
   @@index([status])
+  @@index([userId])
   @@index([refNumber])
   @@map("applications")
 }
