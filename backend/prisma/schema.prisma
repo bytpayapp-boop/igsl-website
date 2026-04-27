@@ -427,6 +427,7 @@ model Payment {
 model Transaction {
   id String @id @default(cuid())
   email String 
+  type String
   transactionRef String @map("transaction_ref")
   userId String @map("user_id")
   user User? @relation("UserTransactions", fields:[userId],references:[id],onDelete:Cascade)
