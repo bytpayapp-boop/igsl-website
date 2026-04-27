@@ -148,14 +148,18 @@ else{
     
       // Save transaction data to database
       const applicationPayload = {
+        serviceType: transaction.type.replace('-','_').toUpperCase(),
+        applicationData: applicationDataWithDate,
+      };
+
+      const transactionPayload = {
         email: user?.email,
         phone: user?.phone,
         fullName: user?.fullName,
         amount: transaction.amount,
-        serviceType: transaction.type.replace('-','_').toUpperCase(),
+        type: transaction.type,
         status: 'PENDING',
         applicationData: applicationDataWithDate,
-        token: token,
       };
 
       console.log('Token is:',token)
@@ -173,7 +177,7 @@ else{
 
         const transaResponse = await axios.post(
           'https://igsl-website.onrender.com/api/transactions/save',
-          applicationPayload,
+          transactionPayload,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
 

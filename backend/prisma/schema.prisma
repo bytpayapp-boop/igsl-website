@@ -422,6 +422,20 @@ model Payment {
   @@index([status])
   @@map("payments")
 }
+ 
+model Transaction {
+  id String @id @default(cuid())
+  email String 
+  userId String @map("user_id")
+  user User? @relation(fields:[userId],references:[id],onDelete:Cascade)
+  fullName String @map("full_name")
+  amount Int 
+  status PaymentStatus @default(PENDING)
+  applicationData Json @map("application_data")
+@@index([userId])
+@@index([status])
+@@map("transactions")
+}
 
 model Certificate {
   id                String            @id @default(cuid())
