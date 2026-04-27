@@ -432,7 +432,7 @@ model Transaction {
   user User? @relation("UserTransactions", fields:[userId],references:[id],onDelete:Cascade)
   fullName String @map("full_name")
   amount Int 
-  phone Int?
+  phone String?
   status PaymentStatus @default(PENDING)
   applicationData Json @map("application_data")
 @@index([userId])
