@@ -174,6 +174,7 @@ else{
           return;
         }
 
+        console.log('response:',dbResponse.data)
         const transactionRef = dbResponse.data.transactionRef || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         FlutterwaveCheckout({

@@ -123,7 +123,9 @@ console.log('Payload for this registration:',data)
       let userDetail;
       let {staffProfile, ...rest}=user;
       userDetail = {...rest};
-     const tokens = generateBothTokens(userDetail)
+     const tokens = generateBothTokens(userDetail);
+
+     console.log('Both tokens are genereated:',tokens)
 
       return {
         success: true,
