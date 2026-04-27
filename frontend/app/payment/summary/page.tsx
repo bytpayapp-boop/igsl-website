@@ -149,6 +149,7 @@ else{
       // Save transaction data to database
       const applicationPayload = {
         serviceType: transaction.type.replace('-','_').toUpperCase(),
+        // userId:user.id,
         applicationData: applicationDataWithDate,
       };
 
@@ -158,6 +159,7 @@ else{
         fullName: user?.fullName,
         amount: transaction.amount,
         type: transaction.type,
+        userId:user.id,
         status: 'PENDING',
         applicationData: applicationDataWithDate,
       };
