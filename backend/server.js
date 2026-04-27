@@ -937,7 +937,7 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
       data: {
         transactionRef,
         email,
-        phone,
+        phone:phone || null,
         fullName,
         amount,
         type,
