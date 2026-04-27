@@ -621,12 +621,41 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
       })
     }
 
+    let newServiceConfig;
+    if(serviceType==='BIRTH_CERTIFICATE'){
+      newServiceConfig = await prisma.serviceConfig.create(
+        {
+          data:{
+            serviceType,
+            name:'Birth Certificate',
+            slug:'birth_certificate',
+            feeInNaira:'2000',
+            requiresNIN:true
+          }
+        }
+      )
+    }
+    else{
+      newServiceConfig = await prisma.serviceConfig.create(
+        {
+          data:{
+            serviceType,
+            name:'Identification Certificate',
+            slug:'id_certificate',
+            feeInNaira:'2000',
+            requiresNIN:true
+          }
+        }
+      )
+    }
+
     // Get service config
     const serviceConfig = await prisma.serviceConfig.findUnique({
       where: { serviceType },
     })
 
     if (!serviceConfig) {
+      console.log('No service config found')
       return res.status(404).json({
         success: false,
         message: 'Service not found',
