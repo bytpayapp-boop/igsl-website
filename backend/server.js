@@ -905,12 +905,12 @@ app.get('/api/applications/:id/download', authTokenMiddleWare, async (req, res) 
 app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
   console.log('This transaction data is about to be saved',req.body);
   try {
-    const { email, phone, fullName, amount, type, status, applicationData } = req.body;
+    const { email, phone, fullName, amount, type, status, applicationData, userId } = req.body;
 
-    if (!email || !amount || !type) {
+    if (!email || !amount || !type || !userId) {
       return res.status(400).json({
         success: false,
-        message: 'Email, amount, and type are required',
+        message: 'Email, amount, type, and userId are required',
       });
     }
 
@@ -925,6 +925,7 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
       fullName,
       amount,
       type,
+      userId,
       status: status || 'PENDING',
       applicationData,
       createdAt: new Date().toISOString(),
@@ -937,10 +938,11 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
       data: {
         transactionRef,
         email,
-        phone:phone || null,
+        phone: phone || null,
         fullName,
         amount,
         type,
+        userId,
         status: status || 'PENDING',
         applicationData,
       }
