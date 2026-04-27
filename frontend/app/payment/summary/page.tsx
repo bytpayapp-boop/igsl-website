@@ -147,12 +147,12 @@ else{
     try {
     
       // Save transaction data to database
-      const transactionPayload = {
+      const applicationPayload = {
         email: user?.email,
         phone: user?.phone,
         fullName: user?.fullName,
         amount: transaction.amount,
-        serviceType: transaction.type,
+        serviceType: transaction.type.replace('-','_').toUpperCase(),
         status: 'PENDING',
         applicationData: applicationDataWithDate,
         token: token,
@@ -167,7 +167,7 @@ else{
       try {
         const dbResponse = await axios.post(
           'https://igsl-website.onrender.com/api/applications',
-          transactionPayload,
+          applicationPayload,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
 
@@ -177,8 +177,8 @@ else{
           return;
         }
 
-        console.log('response:',dbResponse.data)
-        const transactionRef = dbResponse.data.transactionRef || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        console.log('response:',dbResponse.data);
+        const transactionRef = dbResponse.data.refNumber || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         FlutterwaveCheckout({
           public_key: 'FLWPUBK_TEST-634ea5c8aba36f6f389f15d2e2e085f1-X',
