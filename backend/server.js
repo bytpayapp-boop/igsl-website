@@ -16,6 +16,20 @@ const PORT = process.env.PORT || 3001
 
 const prisma = new PrismaClient()
 
+// Helper function to convert BigInt to string for JSON serialization
+const serializeBigInt = (data) => {
+  if (data === null || data === undefined) return data
+  if (typeof data === 'bigint') return data.toString()
+  if (Array.isArray(data)) return data.map(serializeBigInt)
+  if (typeof data === 'object') {
+    return Object.keys(data).reduce((acc, key) => {
+      acc[key] = serializeBigInt(data[key])
+      return acc
+    }, {})
+  }
+  return data
+}
+
 // Middlewares
 // Allow requests from Render frontend
 app.use(cors({
@@ -639,7 +653,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
             serviceType,
             name:'Birth Certificate',
             slug:'birth_certificate',
-            feeInNaira:'2000',
+            feeInNaira: BigInt(2000),
             requiresNin:true
           }
         }
@@ -652,7 +666,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
             serviceType,
             name:'Identification Certificate',
             slug:'id_certificate',
-            feeInNaira:'2000',
+            feeInNaira: BigInt(2000),
             requiresNin:true
           }
         }
@@ -682,7 +696,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Application created successfully',
-      data: application,
+      data: serializeBigInt(application),
     })
   } catch (error) {
     console.error('Create application error:', error)
