@@ -611,6 +611,7 @@ app.get('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
 app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
   try {
     const userId = req.user.userId
+    console.log('The application payload is:',req.body)
     const { serviceType, applicationData, addressId } = req.body
 
     if (!serviceType) {
