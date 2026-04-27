@@ -130,7 +130,7 @@ console.log('Payload for this registration:',data)
       return {
         success: true,
         message: 'Login successful',
-        token: {accessToken,refreshToken},
+        token: tokens.accessToken,
         refreshToken: tokens.refreshToken,
         user: {
           id: user.id,
