@@ -622,8 +622,18 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
     }
 
     let newServiceConfig;
-    if(serviceType==='BIRTH_CERTIFICATE'){
-      newServiceConfig = await prisma.serviceConfig.create(
+    
+
+    // Get service config
+    let serviceConfig = await prisma.serviceConfig.findUnique({
+      where: { serviceType },
+    })
+
+    if (!serviceConfig) {
+      console.log(`No service config found, creating a ${serviceType} serviceConfig`);
+
+      if(serviceType==='BIRTH_CERTIFICATE'){
+      serviceConfig = await prisma.serviceConfig.create(
         {
           data:{
             serviceType,
@@ -636,7 +646,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
       )
     }
     else{
-      newServiceConfig = await prisma.serviceConfig.create(
+      serviceConfig = await prisma.serviceConfig.create(
         {
           data:{
             serviceType,
@@ -648,18 +658,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
         }
       )
     }
-
-    // Get service config
-    const serviceConfig = await prisma.serviceConfig.findUnique({
-      where: { serviceType },
-    })
-
-    if (!serviceConfig) {
-      console.log('No service config found')
-      return res.status(404).json({
-        success: false,
-        message: 'Service not found',
-      })
+     
     }
 
     // Generate reference number
