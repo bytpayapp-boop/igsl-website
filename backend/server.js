@@ -930,7 +930,7 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
       createdAt: new Date().toISOString(),
     };
 
-    
+    console.log('Creating transaction is started')
 
     // TODO: Uncomment when database is ready
     const transaction = await prisma.transaction.create({
