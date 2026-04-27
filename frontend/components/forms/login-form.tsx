@@ -83,8 +83,11 @@ export function LoginForm() {
 
       // Store token and user in localStorage
       localStorage.setItem('accessToken', accessToken)
+      console.log('Access token saved:',accessToken)
       localStorage.setItem('user', JSON.stringify(user))
+      console.log('User saved:',user)
       localStorage.setItem('refreshToken',refreshToken)
+      console.log('Refresh token saved',refreshToken)
 
       toast.success('Login successful! Redirecting...')
       

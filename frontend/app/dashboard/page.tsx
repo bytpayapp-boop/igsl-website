@@ -141,6 +141,7 @@ export default function DashboardPage() {
       console.log('User is:',parsedUser)
       setUser(parsedUser)
 
+      console.log('accessToken:',token)
       // Fetch applications from API
       fetchApplications(token)
     } catch (error) {
