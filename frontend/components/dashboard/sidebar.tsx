@@ -46,7 +46,7 @@ export function DashboardSidebar() {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem('auth_token')
+    localStorage.removeItem('accessToken')
     localStorage.removeItem('user')
     router.push('/auth/login')
   }

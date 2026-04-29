@@ -36,9 +36,9 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
+            {navLinks.map((link,i) => (
               <Link key={link.href} href={link.href}>
-                <Button  className="text-primary-foreground hover:translate-y-[4px] cursor-pointer hover:bg-white transition-all hover:text-green-600">
+                <Button  className={`${i==0?'border-l-[1px]':i==3?'border-r-[1px]':null} text-primary-foreground bg-transparent  border-b-[1px] border-t-[1px] border-white/80 hover:translate-y-[4px] cursor-pointer hover:bg-white transition-all hover:text-green-600`}>
                   {link.label}
                 </Button>
               </Link>

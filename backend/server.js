@@ -6,7 +6,7 @@ const {  authTokenMiddleWare,
     authRefreshMiddleware} = require('./middleware/auth');
 
 const {generateBothTokens, generateAccessToken, verifyRefreshToken}= require('./utils/jwt')
-
+const axios = require('axios')
 dotenv.config()
 
 const AuthService = require('./services/authService')
@@ -171,12 +171,13 @@ app.post('/api/auth/refresh-token', (req, res) => {
       })
     }
 
-    // Generate new access token
-    const newAccessToken = generateAccessToken(payload)
+    // Generate new tokens
+    const newTokens = generateBothTokens(payload)
 
     res.status(200).json({
       success: true,
-      accessToken: newAccessToken,
+      accessToken: newTokens.accessToken,
+      refreshToken: newTokens.refreshToken,
       message: 'Token refreshed successfully',
     })
   } catch (error) {
@@ -965,10 +966,40 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
   }
 });
 
+app.post('/api/transactions/update', async(req,res)=>{
+  const {txRef} = req.body;
+
+ try{const transaction = await prisma.transaction.findFirst({
+    where:{transactionRef:txRef}
+  })
+  if(!transaction)return res.json('No transaction record found');
+
+  const updatedTransaction = await prisma.transaction.update({
+    where:{transactionRef:txRef},
+    data:{status:'SUCCESS'}
+  })
+
+  return res.status(201).json(updatedTransaction)
+}
+catch(e){console.log('Error updating transaction',e)}
+})
+
 //Flutterwave webh00k
 
 app.post('/flutterwaveTest/trx',async(req,res)=>{
     console.log('Incoming Flutterwave webhoook with:',req.body);
+    if(req.body.txRef.startsWith('guest')){
+      console.log('Payment is coming from a guest account, skipping transaction update');
+      return
+    }
+   
+   try{ const response = await axios.post('https://igsl-website.onrender.com/api/transactions/update',
+      {txRef:req.body.txRef}
+    )
+  }
+  catch(e){
+    console.log('Error sending the txRef via axios in the flutterwave webhook',e)
+  }
 })
 
 

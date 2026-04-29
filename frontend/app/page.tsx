@@ -7,8 +7,8 @@ import { ChairmanMessage } from '@/components/sections/chairman-message'
 import { AnnouncementsSection } from '@/components/sections/announcements-section'
 
 export const metadata = {
-  title: 'IGSL Local Government Portal',
-  description: 'Official portal for IGSL Local Government services including identification, birth certificates, and community information.',
+  title: 'IGSL Government Portal',
+  description: 'Official portal for Igbo-Eze South Local Government services including identification, birth certificates, and community information.',
 }
 
 export default function Home() {

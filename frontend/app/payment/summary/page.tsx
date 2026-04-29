@@ -11,6 +11,18 @@ import { ArrowRight, ShieldCheck } from 'lucide-react'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { timeStamp } from 'console'
+import type { User } from '@/lib/types'
+
+// Global type declarations
+declare global {
+  function FlutterwaveCheckout(config: any): void
+}
+
+declare global {
+  interface Window {
+    closePaymentModal(): void
+  }
+}
 
 const FEES = {
   identification: 5000,
@@ -29,11 +41,13 @@ function PaymentSummaryContent() {
   const[token,setToken]=useState('')
 
   const [polling,setPolling]=useState(false)
-  const[user,setUser]=useState(null)
+  const[user,setUser]=useState<User | null>(null)
+  const[paymentStatus,setPaymentStatus]=useState<'pending' | 'success' | 'failed'>('pending')
   const[transaction,setTransaction] =useState({
     amount:400,
     type:type,
     reference:'test-tx',
+
     timestamp:Date.now()
 
   })
@@ -45,15 +59,15 @@ function PaymentSummaryContent() {
     //polling handler:
 
     const handlePoll =async()=>{
-const response = await axios.get(`https://igsl-website.onrender.com/query/status/${user.email}`,
-  {headers:{'Authorization':`Bearer ${token}`}}
-);
+      if (!user) return;
+      const response = await axios.get(`https://igsl-website.onrender.com/query/status/${user.email}`,
+        {headers:{'Authorization':`Bearer ${token}`}}
+      );
 
-if (response.data.msg=='success'){
-  router.push('/success');
-}
-
-}
+      if (response.data.msg=='success'){
+        router.push('/success');
+      }
+    }
   useEffect(()=>{
     console.log('Application data fromt payment summary page:',applicationData)
 const storedToken = localStorage.getItem('accessToken');
@@ -75,8 +89,12 @@ const userData = localStorage.getItem('user')
 
     console.log('Application data:',applicationData)
 
-
-
+    // Handle payment success routing
+    if (paymentStatus === 'success') {
+      setTimeout(() => {
+        router.push('/payment/success');
+      }, 500);
+    }
 
 let interval;
 if(polling){
@@ -90,7 +108,7 @@ else{
 }
    
     
-  },[polling]);
+  },[polling, paymentStatus]);
 
   // const amount = FEES[type as keyof typeof FEES] || 5000
   const typeName = type === 'identification' ? 'Local Government ID' : 'Birth Certificate'
@@ -130,10 +148,10 @@ else{
       return
     }
 
-    if (!token) {
-      toast.error('Session expired. Please log in again.')
-      return
-    }
+    // if (!token) {
+    //   toast.error('Session expired. Please log in again.')
+    //   return
+    // }
 
     const applicationDataWithDate = {...applicationData,date:Date.now()}
     sessionStorage.setItem('transaction',JSON.stringify(transaction))
@@ -202,6 +220,7 @@ else{
         const applicationRef = dbResponse.data.refNumber || `${user?.email}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         const transactionRef = transaResponse.data.transactionRef
+      sessionStorage.setItem('transaction',JSON.stringify({...transaction}))
         FlutterwaveCheckout({
           public_key: 'FLWPUBK_TEST-634ea5c8aba36f6f389f15d2e2e085f1-X',
           amount: transaction.amount,
@@ -218,14 +237,24 @@ else{
             description: "The Fastest Way to Fund Your Wallet Automatically",
             logo: "https://igsl.vercel.app/coatOfArm.png",
           },
-          callback: (res) => {
+          callback: (res: any) => {
+            console.log('Flutterwave callback response:', res);
+            if (res.status === 'successful' || res.status === 'completed') {
+              setPaymentStatus('success');
+              toast.success('Payment successful!');
+            } else {
+              setPaymentStatus('failed');
+              toast.error('Payment failed. Please try again.');
+            }
             if (typeof (window as any).closePaymentModal === "function")
               window.closePaymentModal(); 
           },
           onClose: () => {
             setLoading(false);
+            setIsProcessing(false);
           },
         });
+        
       } catch (error: any) {
         // If 401, try to refresh token and retry
         if (error.response?.status === 401) {
@@ -233,7 +262,8 @@ else{
           const refreshed = await refreshAccessToken();
           
           if (!refreshed) {
-            router.push('/auth/login');
+            toast.error('Session expired. Please log in again.');
+            setTimeout(() => router.push('/auth/login'), 1000);
             return;
           }
 
@@ -270,12 +300,21 @@ else{
                 description: "The Fastest Way to Fund Your Wallet Automatically",
                 logo: "https://igsl.vercel.app/coatOfArm.png",
               },
-              callback: (res) => {
+              callback: (res: any) => {
+                console.log('Flutterwave callback response:', res);
+                if (res.status === 'successful' || res.status === 'completed') {
+                  setPaymentStatus('success');
+                  toast.success('Payment successful!');
+                } else {
+                  setPaymentStatus('failed');
+                  toast.error('Payment failed. Please try again.');
+                }
                 if (typeof (window as any).closePaymentModal === "function")
                   window.closePaymentModal(); 
               },
               onClose: () => {
                 setLoading(false);
+                setIsProcessing(false);
               },
             });
           } catch (retryError) {
@@ -287,14 +326,12 @@ else{
           throw error;
         }
       }
-
-  
-  } catch (error) {
+    } catch (error) {
       console.error('Payment error:', error)
       toast.error('Payment processing failed')
       setIsProcessing(false)
     }
-  }
+    }
     else{
    const guestTransactionRef = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
    FlutterwaveCheckout({
@@ -313,22 +350,23 @@ else{
         description: "The Fastest Way to Fund Your Wallet Automatically",
         logo: "https://igsl.vercel.app/coatOfArm.png",
       },
-      callback: (res) => {
+      callback: (res: any) => {
+        console.log('Flutterwave callback response:', res);
+        if (res.status === 'successful' || res.status === 'completed') {
+          setPaymentStatus('success');
+          toast.success('Payment successful!');
+        } else {
+          setPaymentStatus('failed');
+          toast.error('Payment failed. Please try again.');
+        }
         if (typeof (window as any).closePaymentModal === "function")
           window.closePaymentModal(); 
       },
       onClose: () => {
         setLoading(false);
-
+        setIsProcessing(false);
       },
     })
-    
-   
-  
-
-  
-   setTimeout(()=>router.push('/payment/success'),2000)
-      // Randomly succeed or fail for demo purposes (90% success rate)
   }
   }
 
@@ -455,8 +493,9 @@ else{
 
         {/* Security Note */}
         <div className="mt-8 text-center text-sm text-foreground/70">
-          <div className='flex gap-2'><ShieldCheck className='text-green-500'/> 
-          <div>Your payment is secure and encrypted</div>
+          <div className='flex gap-2 justify-center'>
+            <ShieldCheck className='text-green-500'/>
+            <div>Your payment is secure and encrypted</div>
           </div>
           <p className="mt-2">Payment is processed through Flutterwave Payment Gateway</p>
         </div>

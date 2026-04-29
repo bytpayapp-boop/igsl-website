@@ -10,10 +10,13 @@ import dayjs from 'dayjs'
 import { timeStamp } from 'console'
 
 export default function PaymentSuccessPage() {
-  const [transaction, setTransaction] = useState<any>(null)
+  const [transaction, setTransaction] = useState<any>(null);
+  const[user,setUser]=useState(null)
 
   useEffect(() => {
     const txData = sessionStorage.getItem('transaction');
+    const user = localStorage.getItem('user');
+    if(user){setUser(user)}
     console.log('Tansaction data from success page:',txData)
     if (txData) {
       setTransaction(JSON.parse(txData))
@@ -147,14 +150,21 @@ export default function PaymentSuccessPage() {
             </div>
 
             {/* Back Home */}
-            <div className="text-center">
+            {user?<div className="text-center">
+              <Link href="/dashboard">
+                <Button variant="ghost">
+                  <Home className="mr-2 w-4 h-4" />
+                  Back to Dashboard
+                </Button>
+              </Link>
+            </div>:<div className="text-center">
               <Link href="/">
                 <Button variant="ghost">
                   <Home className="mr-2 w-4 h-4" />
                   Back to Home
                 </Button>
               </Link>
-            </div>
+            </div>}
           </CardContent>
         </Card>
 

@@ -139,3 +139,12 @@ export interface RecentActivity {
   description: string
   timestamp: Date
 }
+
+// User Types
+export interface User {
+  id: string
+  email: string
+  phone?: string
+  fullName: string
+  role?: string
+}

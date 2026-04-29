@@ -97,7 +97,7 @@ function VerifyContent() {
                   Certificate is Official and Valid
                 </h1>
                 <p className="text-xl md:text-2xl text-gray-600 font-medium">
-                  Belongs to <span className="font-bold">{user.n}</span>, issued by <span className="font-bold">IGSL</span>
+                  Belongs to <span className="font-bold">{user.n}</span>, issued by <span className="font-bold">Igbo-Eze South L.G.A</span>
                 </p>
                 {user.w && (
                   <p className="text-lg text-gray-500">
