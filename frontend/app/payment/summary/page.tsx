@@ -399,7 +399,7 @@ else{
                 <div className="flex justify-between">
                   <span className="text-foreground/70">Applicant:</span>
                   <span className="font-medium text-foreground">
-                    {applicationData.fullName || applicationData.childFullName || 'N/A'}
+                    {applicationData.childFullName || 'N/A'}
                   </span>
                 </div>
                 <div className="flex justify-between">

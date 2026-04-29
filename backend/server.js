@@ -969,13 +969,16 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
 app.post('/api/transactions/update', async(req,res)=>{
   const {txRef} = req.body;
 
- try{const transaction = await prisma.transaction.findFirst({
+ try{
+  const transaction = await prisma.transaction.findFirst({
     where:{transactionRef:txRef}
   })
   if(!transaction)return res.json('No transaction record found');
 
+  const id = transaction.id
+
   const updatedTransaction = await prisma.transaction.update({
-    where:{transactionRef:txRef},
+    where:{id},
     data:{status:'SUCCESS'}
   })
 
@@ -992,6 +995,8 @@ app.post('/flutterwaveTest/trx',async(req,res)=>{
       console.log('Payment is coming from a guest account, skipping transaction update');
       return
     }
+
+    console.log('starting to call the ../update route for the transaction to be updated')
    
    try{ const response = await axios.post('https://igsl-website.onrender.com/api/transactions/update',
       {txRef:req.body.txRef}
