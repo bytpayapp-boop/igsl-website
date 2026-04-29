@@ -987,23 +987,43 @@ app.post('/api/transactions/update', async(req,res)=>{
 catch(e){console.log('Error updating transaction',e)}
 })
 
-//Flutterwave webh00k
+//Flutterwave webhook
+app.post('/flutterwaveTest/trx', async (req, res) => {
+  console.log('Incoming Flutterwave webhook with:', req.body);
+  
+  // Always respond to Flutterwave immediately
+  res.status(200).json({ status: 'received' });
+  
+  if (!req.body.txRef) {
+    console.log('No txRef in webhook payload');
+    return;
+  }
+  
+  if (req.body.txRef.startsWith('guest')) {
+    console.log('Payment is coming from a guest account, skipping transaction update');
+    return;
+  }
 
-app.post('/flutterwaveTest/trx',async(req,res)=>{
-    console.log('Incoming Flutterwave webhoook with:',req.body);
-    if(req.body.txRef.startsWith('guest')){
-      console.log('Payment is coming from a guest account, skipping transaction update');
-      return
+  console.log('Updating transaction with txRef:', req.body.txRef);
+   
+  try { 
+    const transaction = await prisma.transaction.findFirst({
+      where: { transactionRef: req.body.txRef }
+    });
+    
+    if (!transaction) {
+      console.log('No transaction record found for txRef:', req.body.txRef);
+      return;
     }
 
-    console.log('starting to call the ../update route for the transaction to be updated')
-   
-   try{ const response = await axios.post('https://igsl-website.onrender.com/api/transactions/update',
-      {txRef:req.body.txRef}
-    )
-  }
-  catch(e){
-    console.log('Error sending the txRef via axios in the flutterwave webhook',e)
+    const updatedTransaction = await prisma.transaction.update({
+      where: { id: transaction.id },
+      data: { status: 'SUCCESS' }
+    });
+
+    console.log('Transaction updated successfully:', updatedTransaction);
+  } catch (e) {
+    console.log('Error updating transaction in webhook:', e);
   }
 })
 
