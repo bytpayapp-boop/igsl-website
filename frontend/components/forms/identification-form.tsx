@@ -197,11 +197,30 @@ export function IdentificationForm({ onSubmit }: IdentificationFormProps) {
                       <SelectValue placeholder="Select your ward" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Array.from({ length: 12 }, (_, i) => (
-                        <SelectItem key={i} value={`Ward ${i + 1}`}>
-                          Ward {i + 1}
+                      {
+                      [
+                        'Alor-Agu',
+                        'Amebo/Hausa/Yoruba',
+                        'Ezema Ward',
+                        'Echara/Isiagu Ward',
+                        'Iheaka (Ugo Akoyi)',
+                        'Iheaka (Likki/Akutara Ward)',
+                        'Iheakpu (Ezzi Ngwu Ward)',
+                        'Iheakpu (Ajuona Ogbagu Ward)',
+                        'Itchi/Uwani I',
+                        'Itchi/Uwani II',
+                        'Nkalagu Obukpa',
+                        'Ovoko (Ajuona Ward)',
+                        'Ovoko (Umuelo/Ovoko Agu Ward)',
+                        'Ovoko (Umulolo Ward)',
+                        'Uhunowerre',
+                        'Unadu'
+                      ].map((it,i) => 
+                        <SelectItem
+                        key={i}>
+                       {it}
                         </SelectItem>
-                      ))}
+                      )}
                     </SelectContent>
                   </Select>
                 </div>

@@ -126,7 +126,7 @@ export function HeroSection() {
 
               <button
                 onClick={()=>router.push("/anonymous-message")}
-                className="bg-indigo-700 hover:bg-indigo-700 mx-auto text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+                className="bg-indigo-700 hover:bg-indigo-700 mx-auto cursor-pointer text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
               >
                 <span className="flex items-center justify-center gap-2">
                   <MessageCircle className="h-4 animate-bounce w-4" />

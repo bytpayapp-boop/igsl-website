@@ -43,6 +43,7 @@ app.use(express.json())
 
 // Health check
 app.head('/health', (req, res) => {
+  console.log('req body received for health check:',req.body)
   console.log('HEAD api wake-up call from Uptimerobot')
   res.json({ status: 'ok', message: 'Backend server is running' })
 })

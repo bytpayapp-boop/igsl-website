@@ -13,7 +13,7 @@ export default function IdentificationPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Local Government Identification
           </h1>
           <p className="text-lg text-foreground/70">
