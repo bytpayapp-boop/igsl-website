@@ -15,8 +15,8 @@ export default function PaymentsPage() {
   const filteredPayments = useMemo(() => {
     return mockPayments.filter((payment) => {
       const matchesSearch =
-        payment.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.referenceNumber.toLowerCase().includes(searchTerm.toLowerCase())
+        payment.applicantName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.referenceNumber?.toLowerCase().includes(searchTerm?.toLowerCase())
       const matchesStatus = !statusFilter || payment.status === statusFilter
       return matchesSearch && matchesStatus
     })

@@ -35,6 +35,7 @@ const serializeBigInt = (data) => {
 app.use(cors({
 origin: [
     'https://igsl-website.onrender.com',
+    'https://igsl-ng.vercel.app',
     'http://localhost:3000', // For local development
   ],
   credentials: true,
