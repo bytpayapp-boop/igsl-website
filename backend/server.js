@@ -43,11 +43,21 @@ origin: [
 app.use(express.json())
 
 // Health check
+
 app.head('/health', (req, res) => {
   console.log('req body received for health check:',req.body)
   console.log('HEAD api wake-up call from Uptimerobot')
-  res.json({ status: 'ok', message: 'Backend server is running' })
+  res.status(200).json({ status: 'ok', message: 'Backend server is running' })
 })
+
+//Render health check:
+
+app.get('/health', (req, res) => {
+  console.log('req body received for health check from render.com:',req.body)
+  // console.log('HEAD api wake-up call from Uptimerobot')
+  res.status(200).json({ status: 'ok', message: 'Backend server is running' })
+})
+
 
 // ===== AUTH ROUTES =====
 
