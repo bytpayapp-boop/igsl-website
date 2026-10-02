@@ -29,7 +29,7 @@ const serializeBigInt = (data) => {
   }
   return data
 }
-
+//ok
 // Middlewares
 // Allow requests from Render frontend
 app.use(cors({
