@@ -146,6 +146,12 @@ enum MessageStatus {
   CLOSED
 }
 
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  VIEWER
+}
+
 // ===== CORE MODELS =====
 
 model Ward {
@@ -586,4 +592,19 @@ model AnonymousMessage {
   @@index([status])
   @@index([submittedAt])
   @@map("anonymous_messages")
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  fullName     String    @map("full_name")
+  role         AdminRole @default(ADMIN)
+  isActive     Boolean   @default(true) @map("is_active")
+  lastLoginAt  DateTime? @map("last_login_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@map("admin_users")
 }

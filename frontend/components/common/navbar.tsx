@@ -52,7 +52,7 @@ export function Navbar() {
                 Login
               </Button>
             </Link>
-            <Link href="/admin">
+            <Link href="/admin/login">
               <Button className="border border-white bg-white text-primary hover:bg-primary hover:text-white">
                 Staff
               </Button>
@@ -98,7 +98,7 @@ export function Navbar() {
                   Sign Up
                 </Button>
               </Link>
-              <Link href="/admin">
+              <Link href="/admin/login">
                 <Button className="w-full border border-orange-600 bg-orange-600/10 text-orange-600 hover:bg-orange-600/20">
                   Staff Portal
                 </Button>

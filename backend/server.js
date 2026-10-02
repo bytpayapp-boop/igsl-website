@@ -10,6 +10,8 @@ const axios = require('axios')
 dotenv.config()
 
 const AuthService = require('./services/authService')
+const AdminService = require('./services/adminService')
+const { adminAuthMiddleware } = require('./middleware/adminAuth')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -527,6 +529,91 @@ app.post('/api/anonymous-message', async (req, res) => {
       success: false,
       message: 'Failed to process your message. Please try again later.',
     })
+  }
+})
+
+// ===== ADMIN ROUTES =====
+
+/**
+ * POST /api/admin/auth/login
+ */
+app.post('/api/admin/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required',
+      })
+    }
+
+    const result = await AdminService.login({ email, password })
+
+    if (!result.success) {
+      return res.status(401).json(result)
+    }
+
+    res.status(200).json(result)
+  } catch (error) {
+    console.error('Admin login error:', error)
+    res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+})
+
+/**
+ * GET /api/admin/auth/me
+ */
+app.get('/api/admin/auth/me', adminAuthMiddleware, async (req, res) => {
+  res.status(200).json({ success: true, admin: req.admin })
+})
+
+/**
+ * GET /api/admin/dashboard/stats
+ */
+app.get('/api/admin/dashboard/stats', adminAuthMiddleware, async (req, res) => {
+  try {
+    const stats = await AdminService.getDashboardStats()
+    res.status(200).json({
+      success: true,
+      data: serializeBigInt(stats),
+    })
+  } catch (error) {
+    console.error('Admin dashboard stats error:', error)
+    res.status(500).json({ success: false, message: 'Failed to load dashboard stats' })
+  }
+})
+
+/**
+ * GET /api/admin/applications
+ */
+app.get('/api/admin/applications', adminAuthMiddleware, async (req, res) => {
+  try {
+    const applications = await AdminService.listApplications()
+    res.status(200).json({
+      success: true,
+      data: serializeBigInt(applications),
+      count: applications.length,
+    })
+  } catch (error) {
+    console.error('Admin list applications error:', error)
+    res.status(500).json({ success: false, message: 'Failed to fetch applications' })
+  }
+})
+
+/**
+ * GET /api/admin/payments
+ */
+app.get('/api/admin/payments', adminAuthMiddleware, async (req, res) => {
+  try {
+    const data = await AdminService.listPayments()
+    res.status(200).json({
+      success: true,
+      data: serializeBigInt(data),
+    })
+  } catch (error) {
+    console.error('Admin list payments error:', error)
+    res.status(500).json({ success: false, message: 'Failed to fetch payments' })
   }
 })
 

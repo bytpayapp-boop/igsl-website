@@ -201,7 +201,7 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <div className="bg-primary dark:bg-gray-900 rounded-2xl p-8 text-white shadow-lg border border-primary/20 dark:border-primary/40">
+          <div className="bg-primary/10 dark:bg-gray-900 rounded-2xl p-8 text-white shadow-lg border border-primary/20 dark:border-primary/40">
             <div className="flex items-start justify-between flex-wrap gap-4">
               <div>
                 <p className="text-primary mb-2 flex items-center gap-2">

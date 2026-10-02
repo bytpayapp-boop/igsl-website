@@ -143,7 +143,7 @@ export function HeroSection() {
 
             {/* Service Preview Cards - Desktop view */}
             <div 
-            className="relative hidden md:block space-y-6 w-full max-w-sm">
+            className="relative hidden md:block space-y-6 w-full mb-50 max-w-sm">
               <div
               className="transform  opacity-90">
                 <div 
