@@ -31,7 +31,7 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">News & Updates</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">News & Updates</h1>
           <p className="text-lg text-foreground/70">
             Stay informed about the latest announcements and developments from IGSL
           </p>
@@ -41,10 +41,10 @@ export default function BlogPage() {
         <div className="space-y-6 mb-12">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-foreground/40" />
+            <Search className="absolute left-3 top-2  w-5 h-5 text-foreground/40" />
             <Input
               placeholder="Search articles..."
-              className="pl-10"
+              className="pl-10 dark:border-gray-300/40 border-gray-300"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

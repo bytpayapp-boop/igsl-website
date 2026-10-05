@@ -54,13 +54,13 @@ export function AdminLoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background/50 via-background to-primary/5 flex items-center justify-center p-4">
       <Card className="w-full max-w-md border-primary/20 shadow-xl">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
             <Shield className="w-6 h-6 text-primary" />
           </div>
-          <CardTitle className="text-2xl text-primary">Admin Sign In</CardTitle>
+          <CardTitle className="text-2xl">Admin Access</CardTitle>
           <CardDescription>
             Authorized IGSL staff only. This is separate from citizen login.
           </CardDescription>
@@ -76,6 +76,7 @@ export function AdminLoginForm() {
                 id="admin-email"
                 type="email"
                 autoComplete="username"
+                className='border-gray-700/50 dark:border-gray-300/50'
                 value={formData.email}
                 onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
                 placeholder="admin@igsl.gov.ng"
@@ -88,17 +89,18 @@ export function AdminLoginForm() {
                 id="admin-password"
                 type="password"
                 autoComplete="current-password"
+                className='border-gray-700/50 dark:border-gray-300/50'
                 value={formData.password}
                 onChange={(e) => setFormData((p) => ({ ...p, password: e.target.value }))}
               />
               {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Signing in…' : 'Sign in to Admin'}
+              {isLoading ? 'Signing in…' : 'Sign in'}
             </Button>
             <p className="text-center text-sm text-foreground/70">
               <Link href="/" className="text-primary hover:underline">
-                Back to public site
+                Back to Home
               </Link>
             </p>
           </form>

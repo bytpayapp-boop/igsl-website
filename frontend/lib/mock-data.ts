@@ -73,7 +73,7 @@ export const mockArchiveItems: ArchiveItem[] = [
     slug: 'annual-report-2023',
     description: 'Comprehensive annual report detailing all government activities and achievements for 2023.',
     category: 'reports',
-    year: 2023,
+    year: 2024,
     image: '/images/archive-1.jpg',
     content:
       'This comprehensive annual report covers all government activities, budget allocations, and key achievements for the fiscal year 2023.',
@@ -84,7 +84,7 @@ export const mockArchiveItems: ArchiveItem[] = [
     slug: 'census-2022',
     description: 'Population and demographic data from our latest community census.',
     category: 'census',
-    year: 2022,
+    year: 2025,
     image: '/images/archive-2.jpg',
     content: 'Detailed census results showing population distribution, age groups, and demographic information.',
   },
@@ -92,9 +92,9 @@ export const mockArchiveItems: ArchiveItem[] = [
     id: '3',
     title: 'Infrastructure Development Plan',
     slug: 'infra-plan-2023',
-    description: 'Five-year infrastructure development strategy and implementation roadmap.',
+    description: 'Infrastructure development strategy and implementation roadmap.',
     category: 'planning',
-    year: 2023,
+    year: 2025,
     image: '/images/archive-3.jpg',
     content:
       'Strategic plan for infrastructure development including roads, water systems, electricity, and public facilities.',
@@ -105,7 +105,7 @@ export const mockArchiveItems: ArchiveItem[] = [
     slug: 'education-review-2023',
     description: 'Review of educational institutions and programs within the local government.',
     category: 'education',
-    year: 2023,
+    year: 2026,
     image: '/images/archive-4.jpg',
     content:
       'Comprehensive review of all educational facilities, enrollment statistics, and development initiatives in the education sector.',

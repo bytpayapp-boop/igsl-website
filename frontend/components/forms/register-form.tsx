@@ -138,13 +138,24 @@ export function RegisterForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-primary/20 shadow-xl">
+        <Link href="/" className="flex items-center gap-3 font-bold text-xl top-5 left-10 absolute hidden md:block md:flex hover:opacity-80 transition-opacity">
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+              <img 
+                src="/coatOfArm.png" 
+                alt="Nigerian Coat of Arms" 
+                className="w-10 h-10"
+              />
+            </div>
+            <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
+          </Link>
+          <div className="font-semibold text-primary/70 text-xs absolute top-5 left-8 block md:hidden">Back to Home</div>
+      <Card className="w-full max-w-md mt-10 border-primary/20 shadow-xl">
         <CardHeader className="space-y-2  border-b">
-          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <CardTitle className="text-2xl font-bold">
            Sign Up
           </CardTitle>
           <CardDescription className="text-sm">
-        A quick way to access IGSL  in full
+        Takes less than 2 minutes...
           </CardDescription>
         </CardHeader>
 
@@ -163,7 +174,7 @@ export function RegisterForm() {
                 placeholder="Choose your username"
                 value={formData.username}
                 onChange={handleInputChange}
-                className={`transition ${
+                className={`transition border-gray-700/40 dark:border-gray-300/40 ${
                   errors.username
                     ? 'border-destructive focus-visible:ring-destructive'
                     : 'border-primary/20 focus-visible:ring-primary'
@@ -188,7 +199,7 @@ export function RegisterForm() {
                 placeholder="your.email@example.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`transition ${
+                className={`transition border-gray-700/40 dark:border-gray-300/40 ${
                   errors.email
                     ? 'border-destructive focus-visible:ring-destructive'
                     : 'border-primary/20 focus-visible:ring-primary'
@@ -213,7 +224,7 @@ export function RegisterForm() {
                 placeholder="+234 (0) 123 456 7890"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className={`transition ${
+                className={`transition border-gray-700/40 dark:border-gray-300/40 ${
                   errors.phone
                     ? 'border-destructive focus-visible:ring-destructive'
                     : 'border-primary/20 focus-visible:ring-primary'
@@ -239,7 +250,7 @@ export function RegisterForm() {
                   placeholder="Enter a strong password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`transition pr-10 ${
+                  className={`transition pr-10 border-gray-700/40 dark:border-gray-300/40 ${
                     errors.password
                       ? 'border-destructive focus-visible:ring-destructive'
                       : 'border-primary/20 focus-visible:ring-primary'
@@ -274,7 +285,7 @@ export function RegisterForm() {
                   placeholder="Re-enter your password"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`transition pr-10 ${
+                  className={`transition pr-10 border-gray-700/40 dark:border-gray-300/40 ${
                     errors.confirmPassword
                       ? 'border-destructive focus-visible:ring-destructive'
                       : 'border-primary/20 focus-visible:ring-primary'

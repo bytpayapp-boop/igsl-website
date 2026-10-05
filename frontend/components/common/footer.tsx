@@ -47,15 +47,15 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <Phone size={16} className="mt-0.5 flex-shrink-0" />
-                <span>+234-800-123-4567</span>
+                <span>+234 810 268 7279</span>
               </li>
               <li className="flex items-start gap-2">
                 <Mail size={16} className="mt-0.5 flex-shrink-0" />
-                <span>info@igsl.gov</span>
+                <span>info@igboezesouth.com</span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={16} className="mt-0.5 flex-shrink-0" />
-                <span>Government House, IGSL</span>
+                <span>Igbo-Eze South Secretariat, Ibagwa-Aka</span>
               </li>
             </ul>
           </div>

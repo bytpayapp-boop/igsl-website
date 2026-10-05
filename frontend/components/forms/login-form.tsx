@@ -106,9 +106,19 @@ export function LoginForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
+      <Link href="/" className="flex items-center gap-3 font-bold text-xl top-5 left-10 absolute hidden md:block md:flex hover:opacity-80 transition-opacity">
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+              <img 
+                src="/coatOfArm.png" 
+                alt="Nigerian Coat of Arms" 
+                className="w-10 h-10"
+              />
+            </div>
+            <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
+          </Link>
       <Card className="w-full max-w-md border-primary/20 shadow-xl">
         <CardHeader className="space-y-2  border-b">
-          <CardTitle className="text-2xl font-bold  text-gray-700 flex items-center gap-2">
+          <CardTitle className="text-2xl font-bold  text-gray-700 dark:text-gray-300 flex items-center gap-2">
             <UserCheck className="w-6 h-6" />
             Welcome Back
           </CardTitle>
@@ -139,7 +149,7 @@ export function LoginForm() {
                 placeholder="Enter your username or email"
                 value={formData.username}
                 onChange={handleInputChange}
-                className={`transition ${
+                className={`transition border-gray-700/40 dark:border-gray-300/40 ${
                   errors.username
                     ? 'border-destructive focus-visible:ring-destructive'
                     : 'border-primary/20 focus-visible:ring-primary'
@@ -174,7 +184,7 @@ export function LoginForm() {
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`transition pr-10 ${
+                    className={`transition pr-10 border-gray-700/40 dark:border-gray-300/40 ${
                     errors.password
                       ? 'border-destructive focus-visible:ring-destructive'
                       : 'border-primary/20 focus-visible:ring-primary'

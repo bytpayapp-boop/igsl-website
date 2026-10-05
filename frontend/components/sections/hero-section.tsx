@@ -27,7 +27,7 @@ export function HeroSection() {
     {
       icon: Award,
       title: 'Excellence & Progress',
-      description: 'Building a stronger Nigeria, one community at a time.'
+      description: 'Building a stronger Council, one community at a time.'
     }
   ]
 
@@ -57,7 +57,7 @@ export function HeroSection() {
                 Igbo-Eze South <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-500 to-gray-700 dark:from-gray-200 dark:via-gray-400 dark:to-gray-100">Local Government</span>
               </h1>
               <p className="text-green-700 text-lg md:text-xl mt-4">
-                Building a better future for our people...
+                Progress Agenda. Tomorrow is Here...
               </p>
             </div>
 

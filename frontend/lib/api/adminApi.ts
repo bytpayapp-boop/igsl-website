@@ -1,7 +1,5 @@
 import axios from 'axios'
-
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'https://igsl-website.onrender.com'
+import { getBackendUrl } from '@/lib/api/backendUrl'
 
 function authHeaders(token: string) {
   return { Authorization: `Bearer ${token}` }
@@ -9,7 +7,7 @@ function authHeaders(token: string) {
 
 export const adminApi = {
   async login(email: string, password: string) {
-    const response = await axios.post(`${BACKEND_URL}/api/admin/auth/login`, {
+    const response = await axios.post(`${getBackendUrl()}/api/admin/auth/login`, {
       email,
       password,
     })
@@ -17,28 +15,28 @@ export const adminApi = {
   },
 
   async getMe(token: string) {
-    const response = await axios.get(`${BACKEND_URL}/api/admin/auth/me`, {
+    const response = await axios.get(`${getBackendUrl()}/api/admin/auth/me`, {
       headers: authHeaders(token),
     })
     return response.data
   },
 
   async getDashboardStats(token: string) {
-    const response = await axios.get(`${BACKEND_URL}/api/admin/dashboard/stats`, {
+    const response = await axios.get(`${getBackendUrl()}/api/admin/dashboard/stats`, {
       headers: authHeaders(token),
     })
     return response.data
   },
 
   async getApplications(token: string) {
-    const response = await axios.get(`${BACKEND_URL}/api/admin/applications`, {
+    const response = await axios.get(`${getBackendUrl()}/api/admin/applications`, {
       headers: authHeaders(token),
     })
     return response.data
   },
 
   async getPayments(token: string) {
-    const response = await axios.get(`${BACKEND_URL}/api/admin/payments`, {
+    const response = await axios.get(`${getBackendUrl()}/api/admin/payments`, {
       headers: authHeaders(token),
     })
     return response.data
