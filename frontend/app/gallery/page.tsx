@@ -40,7 +40,7 @@ export default function GalleryPage() {
             Community Gallery
           </h1>
           <p className="text-lg text-foreground/70">
-            View community events, celebrations, and government activities
+            View community events, celebrations, and government activitie
           </p>
         </div>
 
