@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const {PrismaClient} = require('@prisma/client')
+const prisma = require('./lib/prisma')
 const dotenv = require('dotenv')
 const {  authTokenMiddleWare,
     authRefreshMiddleware} = require('./middleware/auth');
@@ -16,18 +16,16 @@ const { adminAuthMiddleware } = require('./middleware/adminAuth')
 const app = express()
 const PORT = process.env.PORT || 3001
 
-const prisma = new PrismaClient()
-
-// Helper function to convert BigInt to string for JSON serialization
+// Helper function to convert BigInt/Date for JSON serialization
 const serializeBigInt = (data) => {
   if (data === null || data === undefined) return data
   if (typeof data === 'bigint') return data.toString()
+  if (data instanceof Date) return data.toISOString()
   if (Array.isArray(data)) return data.map(serializeBigInt)
   if (typeof data === 'object') {
-    return Object.keys(data).reduce((acc, key) => {
-      acc[key] = serializeBigInt(data[key])
-      return acc
-    }, {})
+    return Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [key, serializeBigInt(value)])
+    )
   }
   return data
 }
@@ -580,7 +578,11 @@ app.get('/api/admin/dashboard/stats', adminAuthMiddleware, async (req, res) => {
     })
   } catch (error) {
     console.error('Admin dashboard stats error:', error)
-    res.status(500).json({ success: false, message: 'Failed to load dashboard stats' })
+    res.status(500).json({
+      success: false,
+      message: 'Failed to load dashboard stats',
+      error: error.message,
+    })
   }
 })
 

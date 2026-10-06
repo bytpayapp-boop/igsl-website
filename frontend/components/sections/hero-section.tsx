@@ -2,8 +2,9 @@
 
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { motion } from "motion/react";
 import { useRouter } from 'next/navigation'
-import { FileText, Users, Award, HandHeart, Facebook, Youtube, X, MessageCircle, Globe, Zap, FileUser } from 'lucide-react'
+import { FileText, Users, Award, HandHeart, GlobeCheck, X, MessageCircle, Globe, Zap, FileUser, MotorbikeIcon, View } from 'lucide-react'
 // import { useEffect} from 'react'
 
 
@@ -14,20 +15,21 @@ export function HeroSection() {
 
  
   const features = [
+   
     {
-      icon: FileText,
-      title: 'Vital Documents',
-      description: 'Access birth certificates and identification with ease.'
-    },
-    {
-      icon: HandHeart,
-      title: 'Community Service',
-      description: 'Empowering our people through responsive governance.'
+      icon: GlobeCheck,
+      title: 'E-Governance',
+      description: 'Empowered through state-of-the-art e-governance.'
     },
     {
       icon: Award,
       title: 'Excellence & Progress',
-      description: 'Building a stronger Council, one community at a time.'
+      description: "Track our past, current, and anticipated progress"
+    },
+    {
+      icon: FileText,
+      title: 'Vital Documents',
+      description: 'Access birth certificates and identification with ease.'
     }
   ]
 
@@ -46,17 +48,28 @@ export function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen py-20">
           {/* Left Content */}
           <div className="space-y-8">
+
+ {/**image box*/}
             <div
-            style={{transform:'translate(-50%,-50%)',top:'30%',left:'24%'}}
-             className='h-80 w-80 flex absolute  z-[5]'>
-              <img src={'/coatOfArm.png'} className='opacity-10 object-cover'/>
+            style={{transform:'translate(-50%,-50%)'}}
+             className='h-100 w-100 flex absolute top-[22%] md:top-[30%] left-[50%] md:left-[24%] z-[5]'>
+             
+              <img src={'/innerImage.png'} 
+              className='opacity-20 absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-60 w-60'/>
+              <motion.img
+              initial={{rotate:'0deg'}}
+              animate={{rotate:'360deg'}}
+              transition={{duration:12, repeat:Infinity,ease:'linear'}}
+              src={'/borderImage1.png'}
+              className='opacity-20 absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-80 w-80'
+              />
             </div>
             <div className='z-[50] relative'>
-              <p className="text-green-700 text-sm z-[50] font-medium mb-2">Welcome to</p>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-800 dark:text-gray-300 leading-tight mb-4">
+              <p className="text-sm z-[50] font-medium mb-2">Welcome to</p>
+              <h1 className="text-5xl text-center md:text-6xl lg:text-7xl font-bold text-gray-800 dark:text-gray-300 leading-tight mb-4">
                 Igbo-Eze South <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-500 to-gray-700 dark:from-gray-200 dark:via-gray-400 dark:to-gray-100">Local Government</span>
               </h1>
-              <p className="text-green-700 text-lg md:text-xl mt-4">
+              <p className="text-transparent mt-20 md:mt-14 text-center bg-clip-text bg-gradient-to-r  from-gray-700 dark:from-white via-green-500 to-red-500 font-bold text-lg md:text-xl mt-4">
                 Progress Agenda. Tomorrow is Here...
               </p>
             </div>
@@ -99,12 +112,12 @@ export function HeroSection() {
                 </span>
               </Link> */}
 
-              <div className='flex gap-4 md:hidden'>
+              <div className='flex ml-4 gap-4 relative mx-auto md:hidden'>
 
 
               <Link
                 href="/services/birth-certificate"
-                className="bg-green-700 hover:bg-green-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+                className="bg-green-700 block hover:bg-green-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
               >
                 <span className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
@@ -114,7 +127,7 @@ export function HeroSection() {
 
               <Link
                 href="/services/identification"
-                className="bg-orange-700 hover:bg-orange-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+                className="bg-orange-700 block hover:bg-orange-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
               >
                 <span className="flex items-center gap-2">
                   <FileUser className="h-4 w-4" />
@@ -139,16 +152,16 @@ export function HeroSection() {
           {/* Right Visual Section */}
           <div className="relative h-full lg:flex items-center justify-center">
             {/* Animated gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-transparent to-orange-500/20 rounded-3xl blur-2xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-transparent to-green-500/20 rounded-3xl blur-2xl"></div>
 
             {/* Service Preview Cards - Desktop view */}
             <div 
-            className="relative hidden md:block space-y-6 w-full mb-50 max-w-sm">
+            className="relative hidden md:block space-y-6 w-full mb-74 max-w-sm">
               <div
               className="transform  opacity-90">
                 <div 
                 onClick={()=>router.push('/services/birth-certificate')}
-                className="bg-gradient-to-tr from-green-900 to-green-500 hover:scale-[1.1] transition-all cursor-pointer rounded-xl p-6 text-white shadow-2xl border border-green-400/30">
+                className="bg-gradient-to-tl from-green-300 to-green-500 hover:scale-[1.1] transition-all cursor-pointer rounded-xl p-6 text-white shadow-2xl border border-green-400/30">
                   <h3 className="text-xl font-bold mb-2">Birth Certificate</h3>
                   <p className="text-sm opacity-90">Official LG birth registration</p>
                 </div>
@@ -157,7 +170,7 @@ export function HeroSection() {
               <div
               onClick={()=>router.push('/services/identification')}
               className="transform  opacity-90">
-                <div className="bg-gradient-to-br cursor-pointer from-white/80 to-white hover:scale-[1.1] transition-all rounded-xl p-6 text-gray-800 shadow-2xl border border-yellow-400/30">
+                <div className="bg-gradient-to-br cursor-pointer from-gray-100/90 to-white hover:scale-[1.1] transition-all rounded-xl p-6 text-gray-800 shadow-2xl border border-yellow-400/50">
                   <h3 className="text-xl font-bold mb-2">Local Government ID</h3>
                   <p className="text-sm opacity-90">Your LG, your identity</p>
                 </div>
@@ -165,9 +178,9 @@ export function HeroSection() {
 
               <div
               className="transform  opacity-90">
-                <div className="bg-gradient-to-tr from-orange-800 to-yellow-600/90 cursor-pointer hover:scale-[1.1] transition-all to-green-500 rounded-xl p-6 text-white shadow-2xl border border-orange-400/30">
+                <div className="bg-gradient-to-tl from-blue-300 to-blue-500 cursor-pointer hover:scale-[1.1] transition-all rounded-xl p-6 text-white shadow-2xl border border-orange-400/30">
                   <h3 className="text-xl font-bold mb-2">Government Services</h3>
-                  <p className="text-sm opacity-90">Our peoople-oriented services</p>
+                  <p className="text-sm opacity-90">Our peoole-oriented services</p>
                 </div>
               </div>
             </div>

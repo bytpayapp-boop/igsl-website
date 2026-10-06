@@ -1,10 +1,70 @@
 const bcrypt = require('bcryptjs')
-const { PrismaClient } = require('@prisma/client')
+const prisma = require('../lib/prisma')
 const { generateBothTokens } = require('../utils/jwt')
 
-const prisma = new PrismaClient()
-
 const PENDING_PAYMENT_STATUSES = ['PENDING', 'INITIATED', 'PROCESSING']
+
+const APPLICATION_LIST_SELECT = {
+  id: true,
+  refNumber: true,
+  applicantId: true,
+  serviceConfigId: true,
+  paymentStatus: true,
+  verificationStatus: true,
+  status: true,
+  createdAt: true,
+}
+
+async function attachApplicationRelations(applications) {
+  if (!applications.length) return applications
+
+  const applicantIds = [...new Set(applications.map((app) => app.applicantId).filter(Boolean))]
+  const serviceConfigIds = [
+    ...new Set(applications.map((app) => app.serviceConfigId).filter(Boolean)),
+  ]
+
+  const [applicants, serviceConfigs] = await Promise.all([
+    applicantIds.length
+      ? prisma.user.findMany({
+          where: { id: { in: applicantIds } },
+          select: { id: true, fullName: true, email: true, phone: true },
+        })
+      : [],
+    serviceConfigIds.length
+      ? prisma.serviceConfig.findMany({
+          where: { id: { in: serviceConfigIds } },
+          select: { id: true, name: true, serviceType: true },
+        })
+      : [],
+  ])
+
+  const applicantById = new Map(applicants.map((user) => [user.id, user]))
+  const serviceConfigById = new Map(serviceConfigs.map((config) => [config.id, config]))
+
+  return applications.map(({ applicantId, serviceConfigId, ...app }) => ({
+    ...app,
+    applicant: applicantById.get(applicantId) || null,
+    serviceConfig: serviceConfigById.get(serviceConfigId) || null,
+  }))
+}
+
+async function safeCount(label, fn) {
+  try {
+    return await fn()
+  } catch (error) {
+    console.error(`Admin stats: ${label} failed:`, error.message)
+    return 0
+  }
+}
+
+async function safeFindMany(label, fn) {
+  try {
+    return await fn()
+  } catch (error) {
+    console.error(`Admin stats: ${label} failed:`, error.message)
+    return []
+  }
+}
 
 class AdminService {
   static async login(credentials) {
@@ -90,47 +150,51 @@ class AdminService {
       recentPayments,
       recentTransactions,
     ] = await Promise.all([
-      prisma.application.count(),
-      prisma.payment.count({
-        where: { status: { in: PENDING_PAYMENT_STATUSES } },
+      safeCount('applications', () => prisma.application.count()),
+      safeCount('pending payments', () =>
+        prisma.payment.count({
+          where: { status: { in: PENDING_PAYMENT_STATUSES } },
+        })
+      ),
+      safeCount('successful payments', () =>
+        prisma.payment.count({ where: { status: 'SUCCESS' } })
+      ),
+      safeCount('staff', () => prisma.staffProfile.count()),
+      safeFindMany('recent applications', async () => {
+        const rows = await prisma.application.findMany({
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          select: APPLICATION_LIST_SELECT,
+        })
+        return attachApplicationRelations(rows)
       }),
-      prisma.payment.count({ where: { status: 'SUCCESS' } }),
-      prisma.staffProfile.count(),
-      prisma.application.findMany({
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          applicant: {
-            select: { fullName: true, email: true, phone: true },
+      safeFindMany('recent payments', () =>
+        prisma.payment.findMany({
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            referenceNumber: true,
+            status: true,
+            createdAt: true,
           },
-          serviceConfig: { select: { name: true, serviceType: true } },
-        },
-      }),
-      prisma.payment.findMany({
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          application: {
-            include: {
-              applicant: { select: { fullName: true, email: true } },
-              serviceConfig: { select: { name: true } },
-            },
+        })
+      ),
+      safeFindMany('recent transactions', () =>
+        prisma.transaction.findMany({
+          take: 5,
+          orderBy: { id: 'desc' },
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            amount: true,
+            status: true,
+            transactionRef: true,
+            type: true,
           },
-        },
-      }),
-      prisma.transaction.findMany({
-        take: 5,
-        orderBy: { id: 'desc' },
-        select: {
-          id: true,
-          fullName: true,
-          email: true,
-          amount: true,
-          status: true,
-          transactionRef: true,
-          type: true,
-        },
-      }),
+        })
+      ),
     ])
 
     const recentActivities = [
@@ -162,36 +226,63 @@ class AdminService {
   }
 
   static async listApplications() {
-    return prisma.application.findMany({
+    const rows = await prisma.application.findMany({
       orderBy: { createdAt: 'desc' },
-      include: {
-        applicant: {
-          select: { fullName: true, email: true, phone: true },
-        },
-        serviceConfig: { select: { name: true, serviceType: true } },
-      },
+      select: APPLICATION_LIST_SELECT,
     })
+    return attachApplicationRelations(rows)
   }
 
   static async listPayments() {
     const [payments, transactions] = await Promise.all([
-      prisma.payment.findMany({
-        orderBy: { createdAt: 'desc' },
-        include: {
-          application: {
-            include: {
-              applicant: { select: { fullName: true, email: true } },
-              serviceConfig: { select: { name: true, serviceType: true } },
-            },
+      safeFindMany('payments list', async () => {
+        const payments = await prisma.payment.findMany({
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            referenceNumber: true,
+            amountInKobo: true,
+            status: true,
+            createdAt: true,
+            applicationId: true,
           },
-        },
+        })
+
+        const applicationIds = [...new Set(payments.map((p) => p.applicationId).filter(Boolean))]
+        const applications = applicationIds.length
+          ? await prisma.application.findMany({
+              where: { id: { in: applicationIds } },
+              select: {
+                id: true,
+                applicantId: true,
+                serviceConfigId: true,
+              },
+            })
+          : []
+
+        const withApplicants = await attachApplicationRelations(applications)
+        const applicationById = new Map(withApplicants.map((app) => [app.id, app]))
+
+        return payments.map(({ applicationId, ...payment }) => ({
+          ...payment,
+          application: applicationById.get(applicationId) || null,
+        }))
       }),
-      prisma.transaction.findMany({
-        orderBy: { id: 'desc' },
-        include: {
-          user: { select: { fullName: true, email: true } },
-        },
-      }),
+      safeFindMany('transactions list', () =>
+        prisma.transaction.findMany({
+          orderBy: { id: 'desc' },
+          select: {
+            id: true,
+            transactionRef: true,
+            fullName: true,
+            email: true,
+            type: true,
+            amount: true,
+            status: true,
+            user: { select: { fullName: true, email: true } },
+          },
+        })
+      ),
     ])
 
     return { payments, transactions }

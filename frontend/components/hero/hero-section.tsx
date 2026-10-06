@@ -27,6 +27,9 @@ export function HeroSection() {
             </Link>
           </div>
         </div>
+        {/**Images container */}
+        <div className='flex items-center justify-center'>
+          {/**image1 */}
         <div className="flex-1 relative h-64 md:h-80 w-full">
           <Image
             src="/images/hero.jpg"
@@ -35,6 +38,16 @@ export function HeroSection() {
             className="object-cover rounded-lg shadow-2xl"
             priority
           />
+        </div>
+          <div className="flex-1 relative h-64 md:h-80 w-full">
+          <Image
+            src="/images/hero.jpg"
+            alt="Government Building"
+            fill
+            className="object-cover rounded-lg shadow-2xl"
+            priority
+          />
+        </div>
         </div>
       </div>
     </section>

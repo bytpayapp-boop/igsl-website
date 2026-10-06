@@ -24,11 +24,11 @@ export function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 font-bold text-xl hover:opacity-80 transition-opacity">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
               <img 
                 src="/coatOfArm.png" 
                 alt="Nigerian Coat of Arms" 
-                className="w-10 h-10"
+                className="object-cover block"
               />
             </div>
             <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
