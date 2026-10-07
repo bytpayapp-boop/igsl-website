@@ -3,14 +3,17 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { StaffMember } from '@/lib/types'
 import { Mail, Phone } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 interface StaffCardProps {
   member: StaffMember
 }
 
 export function StaffCard({ member }: StaffCardProps) {
+
+  const router = useRouter()
   return (
-    <Link href={`/staff/${member.id}`}>
+    <div onClick={()=>{localStorage.setItem('staff',JSON.stringify(member));router.push(`/staff/${member.name}`)}}>
       <Card className="h-full hover:shadow-lg transition-shadow overflow-hidden cursor-pointer border-border hover:border-accent">
         <div className="relative w-full h-48 bg-muted">
           <Image
@@ -41,6 +44,6 @@ export function StaffCard({ member }: StaffCardProps) {
           </div>
         </CardContent>
       </Card>
-    </Link>
+    </div>
   )
 }

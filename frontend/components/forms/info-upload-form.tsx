@@ -15,6 +15,9 @@ import {
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { Upload as UploadIcon, X } from 'lucide-react'
+import { getAdminToken } from '@/lib/api/adminApi'
+import { uploadApi } from '@/lib/api/uploadApi'
+import { uploadFileToImageKit } from '@/lib/imagekit/upload-file'
 
 interface InfoUploadFormProps {
   onBack: () => void
@@ -97,20 +100,22 @@ export default function InfoUploadForm({ onBack }: InfoUploadFormProps) {
     e.preventDefault()
     if (!validateForm()) return
 
+    const adminToken = getAdminToken()
+    if (!adminToken) {
+      toast.error('Please log in as an admin to upload content')
+      return
+    }
+
     setIsLoading(true)
     try {
-      // TODO: Replace with actual API call
-      const formDataToSend = new FormData()
-      formDataToSend.append('title', formData.title)
-      formDataToSend.append('category', formData.category)
-      formDataToSend.append('description', formData.description)
-      formDataToSend.append('content', formData.content)
-      if (formData.image) {
-        formDataToSend.append('image', formData.image)
-      }
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const image = await uploadFileToImageKit(formData.image!, 'igsl/info')
+      await uploadApi.saveInfo(adminToken, {
+        title: formData.title.trim(),
+        category: formData.category,
+        description: formData.description.trim(),
+        content: formData.content.trim(),
+        image,
+      })
 
       toast.success('Information uploaded successfully!')
       // Reset form

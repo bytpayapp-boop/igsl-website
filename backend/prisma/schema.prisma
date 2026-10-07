@@ -152,6 +152,12 @@ enum AdminRole {
   VIEWER
 }
 
+enum SiteContentType {
+  NEWS
+  INFO
+  GALLERY
+}
+
 // ===== CORE MODELS =====
 
 model Ward {
@@ -487,6 +493,8 @@ model UploadedDocument {
   fileUrl       String       @map("file_url")
   fileSize      Int          @map("file_size")
   mimeType      String       @map("mime_type")
+  imageKitFileId String?     @map("imagekit_file_id")
+  storageFolder  String?     @map("storage_folder")
 
   uploadedAt DateTime @default(now()) @map("uploaded_at")
   createdAt  DateTime @default(now()) @map("created_at")
@@ -605,6 +613,31 @@ model AdminUser {
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
 
+  siteContentUploads SiteContentUpload[]
+
   @@index([email])
   @@map("admin_users")
+}
+
+model SiteContentUpload {
+  id            String          @id @default(cuid())
+  type          SiteContentType
+  title         String
+  category      String
+  content       String?         @db.Text
+  description   String?         @db.Text
+  author        String?
+  tags          String?
+  coverImageUrl String?         @map("cover_image_url")
+  galleryImages Json?           @map("gallery_images")
+  adminUserId   String?         @map("admin_user_id")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  adminUser AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+
+  @@index([type])
+  @@index([category])
+  @@index([createdAt])
+  @@map("site_content_uploads")
 }

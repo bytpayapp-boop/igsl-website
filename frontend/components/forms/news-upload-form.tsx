@@ -15,6 +15,9 @@ import {
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { Upload as UploadIcon, X } from 'lucide-react'
+import { getAdminToken } from '@/lib/api/adminApi'
+import { uploadApi } from '@/lib/api/uploadApi'
+import { uploadFileToImageKit } from '@/lib/imagekit/upload-file'
 
 interface NewsUploadFormProps {
   onBack: () => void
@@ -98,21 +101,23 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
     e.preventDefault()
     if (!validateForm()) return
 
+    const adminToken = getAdminToken()
+    if (!adminToken) {
+      toast.error('Please log in as an admin to upload content')
+      return
+    }
+
     setIsLoading(true)
     try {
-      // TODO: Replace with actual API call
-      const formDataToSend = new FormData()
-      formDataToSend.append('title', formData.title)
-      formDataToSend.append('category', formData.category)
-      formDataToSend.append('content', formData.content)
-      formDataToSend.append('author', formData.author)
-      formDataToSend.append('tags', formData.tags)
-      if (formData.coverImage) {
-        formDataToSend.append('coverImage', formData.coverImage)
-      }
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const coverImage = await uploadFileToImageKit(formData.coverImage!, 'igsl/news')
+      await uploadApi.saveNews(adminToken, {
+        title: formData.title.trim(),
+        category: formData.category,
+        content: formData.content.trim(),
+        author: formData.author.trim(),
+        tags: formData.tags.trim() || undefined,
+        coverImage,
+      })
 
       toast.success('News article uploaded successfully!')
       // Reset form

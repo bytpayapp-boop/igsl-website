@@ -14,6 +14,9 @@ import {
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { Upload as UploadIcon, X } from 'lucide-react'
+import { getAdminToken } from '@/lib/api/adminApi'
+import { uploadApi } from '@/lib/api/uploadApi'
+import { uploadFilesToImageKit } from '@/lib/imagekit/upload-file'
 
 interface GalleryUploadFormProps {
   onBack: () => void
@@ -98,18 +101,20 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
     e.preventDefault()
     if (!validateForm()) return
 
+    const adminToken = getAdminToken()
+    if (!adminToken) {
+      toast.error('Please log in as an admin to upload content')
+      return
+    }
+
     setIsLoading(true)
     try {
-      // TODO: Replace with actual API call
-      const formDataToSend = new FormData()
-      formDataToSend.append('title', formData.title)
-      formDataToSend.append('category', formData.category)
-      formData.images.forEach((image, index) => {
-        formDataToSend.append(`images[${index}]`, image)
+      const images = await uploadFilesToImageKit(formData.images, 'igsl/gallery')
+      await uploadApi.saveGallery(adminToken, {
+        title: formData.title.trim(),
+        category: formData.category,
+        images,
       })
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
 
       toast.success(`Gallery uploaded successfully with ${formData.images.length} photo(s)!`)
       // Reset form

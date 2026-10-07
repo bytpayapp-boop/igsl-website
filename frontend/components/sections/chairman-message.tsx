@@ -30,16 +30,16 @@ export function ChairmanMessage() {
                 <h3 className="text-sm font-semibold  dark:text-gray-300 uppercase tracking-wider mb-2">
                   A Message From
                 </h3>
-                <h2 className="text-3xl md:text-4xl font-bold dark:text-gray-200 text-primary mb-4">
-                  Hon. Bar. Ugo Ferdinand Ukwueze
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  Hon. Barr. Ugo-Ferdinand Ukwueze
                 </h2>
-                <p className="text-gray-500 dark:text-primary font-medium mb-4">
-                  Chairman, IGSL
+                <p className="text-primary font-medium mb-4">
+                  Executive Chairman
                 </p>
               </div>
 
               <p className=" leading-relaxed mb-6">
-                Welcome to the official portal of our local government. We are committed to serving our community with integrity, transparency, and dedication. Through this platform, we strive to make government services more accessible and keep our citizens informed about development initiatives across our jurisdiction.
+                Welcome to the official portal of our local government. We are committed to serving our community with integrity, transparency, and dedication. Through this e-govenance platform, we strive to make government services more accessible and keep our citizens informed about development initiatives across our jurisdiction.
               </p>
 
               <p className=" leading-relaxed mb-8">

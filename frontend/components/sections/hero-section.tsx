@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { motion } from "motion/react";
 import { useRouter } from 'next/navigation'
-import { FileText, Users, Award, HandHeart, GlobeCheck, X, MessageCircle, Globe, Zap, FileUser, MotorbikeIcon, View } from 'lucide-react'
+import { FileText, Users, Award, HandHeart, X, MessageCircle, Globe, Zap, FileUser, MotorbikeIcon, View, HeartHandshake, LucideGlobe2, AtSignIcon, Globe2, GlobeIcon, ArrowUpAZIcon, LucideScanSearch, SearchCheck } from 'lucide-react'
 // import { useEffect} from 'react'
 
 
@@ -17,13 +17,13 @@ export function HeroSection() {
   const features = [
    
     {
-      icon: GlobeCheck,
+      icon: GlobeIcon,
       title: 'E-Governance',
-      description: 'Empowered through state-of-the-art e-governance.'
+      description: 'Empowered through state-of-the-art technology.'
     },
     {
-      icon: Award,
-      title: 'Excellence & Progress',
+      icon: SearchCheck,
+      title: 'Transparent Progress',
       description: "Track our past, current, and anticipated progress"
     },
     {
@@ -59,7 +59,7 @@ export function HeroSection() {
               <motion.img
               initial={{rotate:'0deg'}}
               animate={{rotate:'360deg'}}
-              transition={{duration:12, repeat:Infinity,ease:'linear'}}
+              transition={{duration:14, repeat:Infinity,ease:'linear'}}
               src={'/borderImage1.png'}
               className='opacity-20 absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 h-80 w-80'
               />
@@ -177,10 +177,11 @@ export function HeroSection() {
               </div>
 
               <div
+              onClick={()=>router.push('/staff')}
               className="transform  opacity-90">
                 <div className="bg-gradient-to-tl from-blue-300 to-blue-500 cursor-pointer hover:scale-[1.1] transition-all rounded-xl p-6 text-white shadow-2xl border border-orange-400/30">
-                  <h3 className="text-xl font-bold mb-2">Government Services</h3>
-                  <p className="text-sm opacity-90">Our peoole-oriented services</p>
+                  <h3 className="text-xl font-bold mb-2">Staff Organogram</h3>
+                  <p className="text-sm opacity-90">Get to know all the staff in active service</p>
                 </div>
               </div>
             </div>

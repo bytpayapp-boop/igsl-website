@@ -11,6 +11,9 @@ dotenv.config()
 
 const AuthService = require('./services/authService')
 const AdminService = require('./services/adminService')
+const SiteContentService = require('./services/siteContentService')
+const { saveUploadedDocument } = require('./services/uploadDocumentService')
+const { getPublicImageKitConfig } = require('./services/imagekitService')
 const { adminAuthMiddleware } = require('./middleware/adminAuth')
 
 const app = express()
@@ -600,6 +603,146 @@ app.get('/api/admin/applications', adminAuthMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Admin list applications error:', error)
     res.status(500).json({ success: false, message: 'Failed to fetch applications' })
+  }
+})
+
+/**
+ * GET /api/uploads/imagekit-config
+ * Public ImageKit settings for client-side uploads
+ */
+app.get('/api/uploads/imagekit-config', (req, res) => {
+  res.status(200).json({ success: true, data: getPublicImageKitConfig() })
+})
+
+/**
+ * POST /api/admin/uploads/news
+ * Save news article after ImageKit upload (metadata + file refs)
+ */
+app.post('/api/admin/uploads/news', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { title, category, content, author, tags, coverImage } = req.body
+    if (!title || !category || !content || !author || !coverImage?.fileUrl) {
+      return res.status(400).json({
+        success: false,
+        message: 'title, category, content, author, and coverImage are required',
+      })
+    }
+    const record = await SiteContentService.createNews({
+      adminUserId: req.admin.id,
+      title,
+      category,
+      content,
+      author,
+      tags,
+      coverImage,
+    })
+    res.status(201).json({ success: true, data: record })
+  } catch (error) {
+    console.error('Admin news upload save error:', error)
+    res.status(500).json({ success: false, message: 'Failed to save news upload' })
+  }
+})
+
+/**
+ * POST /api/admin/uploads/info
+ */
+app.post('/api/admin/uploads/info', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { title, category, description, content, image } = req.body
+    if (!title || !category || !description || !content || !image?.fileUrl) {
+      return res.status(400).json({
+        success: false,
+        message: 'title, category, description, content, and image are required',
+      })
+    }
+    const record = await SiteContentService.createInfo({
+      adminUserId: req.admin.id,
+      title,
+      category,
+      description,
+      content,
+      image,
+    })
+    res.status(201).json({ success: true, data: record })
+  } catch (error) {
+    console.error('Admin info upload save error:', error)
+    res.status(500).json({ success: false, message: 'Failed to save information upload' })
+  }
+})
+
+/**
+ * POST /api/admin/uploads/gallery
+ */
+app.post('/api/admin/uploads/gallery', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { title, category, images } = req.body
+    if (!title || !category || !Array.isArray(images) || images.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'title, category, and at least one image are required',
+      })
+    }
+    const record = await SiteContentService.createGallery({
+      adminUserId: req.admin.id,
+      title,
+      category,
+      images,
+    })
+    res.status(201).json({ success: true, data: record })
+  } catch (error) {
+    console.error('Admin gallery upload save error:', error)
+    res.status(500).json({ success: false, message: 'Failed to save gallery upload' })
+  }
+})
+
+/**
+ * POST /api/uploads/documents
+ * Register an ImageKit file against a user application
+ */
+app.post('/api/uploads/documents', authTokenMiddleWare, async (req, res) => {
+  try {
+    const userId = req.user.id
+    const {
+      applicationId,
+      documentType,
+      fileName,
+      fileUrl,
+      fileSize,
+      mimeType,
+      imageKitFileId,
+      storageFolder,
+    } = req.body
+
+    if (!documentType || !fileName || !fileUrl || fileSize == null || !mimeType) {
+      return res.status(400).json({
+        success: false,
+        message: 'documentType, fileName, fileUrl, fileSize, and mimeType are required',
+      })
+    }
+
+    if (applicationId) {
+      const application = await prisma.application.findUnique({ where: { id: applicationId } })
+      if (!application || application.applicantId !== userId) {
+        return res.status(403).json({ success: false, message: 'Access denied' })
+      }
+    }
+
+    const doc = await saveUploadedDocument({
+      userId,
+      applicationId: applicationId || null,
+      documentType,
+      fileName,
+      fileUrl,
+      fileSize,
+      mimeType,
+      imageKitFileId,
+      storageFolder,
+    })
+
+    res.status(201).json({ success: true, data: doc })
+  } catch (error) {
+    console.error('Save uploaded document error:', error)
+    res.status(500).json({ success: false, message: 'Failed to save document record' })
   }
 })
 

@@ -5,7 +5,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">About IGSL</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">About Igbo-Eze South Local Government Council</h1>
           <p className="text-lg text-foreground/70">
             Learn more about our local government and the services we provide to our community.
           </p>
@@ -19,7 +19,7 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-foreground/80 leading-relaxed">
-                IGSL Local Government is dedicated to the development and welfare of our community. With a focus on transparency, accountability, and citizen participation, we work tirelessly to improve the quality of life for all residents within our jurisdiction.
+                The current Local Government Administration is dedicated to the development and welfare of our community. With a focus on transparency, accountability, and citizen participation, we work tirelessly to improve the quality of life for all residents within our jurisdiction.
               </p>
               <p className="text-foreground/80 leading-relaxed">
                 Our administration comprises experienced professionals committed to implementing policies that promote economic development, social welfare, and infrastructure advancement.
@@ -89,7 +89,7 @@ export default function AboutPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Number of Wards: 12 local government wards</span>
+                  <span className="text-foreground/80">Number of Wards: 16 local government wards</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
@@ -101,7 +101,7 @@ export default function AboutPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Office Location: Government House, IGSL</span>
+                  <span className="text-foreground/80">Office Location: Secretariat Building, Ibagwa-Aka</span>
                 </li>
               </ul>
             </CardContent>

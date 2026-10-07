@@ -10,12 +10,11 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navLinks = [
-   
     { href: '/services/identification', label: 'Services' },
     { href: '/archive', label: 'Archive' },
     { href: '/gallery', label: 'Gallery' },
+    { href: '/staff', label: 'Our Staff' },
     { href: '/blog', label: 'News' },
-    
   ]
 
   return (
@@ -24,13 +23,16 @@ export function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 font-bold text-xl hover:opacity-80 transition-opacity">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
+           <div className="w-12 h-12 bg-white relative overflow-hidden rounded-full flex items-center justify-center shadow-md">
+            <div className="w-20 h-20 relative flex items-center justify-center rounded">
               <img 
                 src="/coatOfArm.png" 
                 alt="Nigerian Coat of Arms" 
-                className="object-cover block"
+                className="object-cover relative"
               />
             </div>
+            </div>
+            
             <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
           </Link>
 

@@ -44,10 +44,12 @@ export default function BlogManagementPage() {
             <h1 className="text-3xl font-bold text-primary mb-2">Blog Posts Management</h1>
             <p className="text-foreground/70">Create, edit, and manage blog content</p>
           </div>
-          <Button size="lg">
-            <Plus className="mr-2 w-4 h-4" />
-            New Post
-          </Button>
+          <Link href="/admin/posts/new">
+            <Button size="lg" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              New Post
+            </Button>
+          </Link>
         </div>
 
         {/* Search */}
