@@ -28,6 +28,8 @@ const imagekit = new ImageKit({
   urlEndpoint: imagekitConfig.urlEndpoint,
 })
 
+
+
 // Helper function to convert BigInt/Date for JSON serialization
 const serializeBigInt = (data) => {
   if (data === null || data === undefined) return data
@@ -629,7 +631,9 @@ app.get('/api/uploads/imagekit-config', (req, res) => {
  */
 app.get('/api/upload-auth', (req, res) => {
   try {
+    console.log('Auth request started for ImageKit')
     if (!imagekitConfig.privateKey) {
+      console.log('ImageKit Private key is missing')
       return res.status(500).json({
         success: false,
         message: 'IMAGEKIT_PRIVATE_KEY is not configured on the backend.',
