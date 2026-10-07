@@ -1,9 +1,12 @@
 const express = require('express')
 const cors = require('cors')
+const ImageKit = require('imagekit')
 const prisma = require('./lib/prisma')
 const dotenv = require('dotenv')
 const {  authTokenMiddleWare,
     authRefreshMiddleware} = require('./middleware/auth');
+
+const imagekitConfig = require('./config/imagekit')
 
 const {generateBothTokens, generateAccessToken, verifyRefreshToken}= require('./utils/jwt')
 const axios = require('axios')
@@ -18,6 +21,12 @@ const { adminAuthMiddleware } = require('./middleware/adminAuth')
 
 const app = express()
 const PORT = process.env.PORT || 3001
+
+const imagekit = new ImageKit({
+  publicKey: imagekitConfig.publicKey,
+  privateKey: imagekitConfig.privateKey,
+  urlEndpoint: imagekitConfig.urlEndpoint,
+})
 
 // Helper function to convert BigInt/Date for JSON serialization
 const serializeBigInt = (data) => {
@@ -612,6 +621,30 @@ app.get('/api/admin/applications', adminAuthMiddleware, async (req, res) => {
  */
 app.get('/api/uploads/imagekit-config', (req, res) => {
   res.status(200).json({ success: true, data: getPublicImageKitConfig() })
+})
+
+/**
+ * GET /api/upload-auth
+ * Returns signed ImageKit auth params required for authenticated uploads.
+ */
+app.get('/api/upload-auth', (req, res) => {
+  try {
+    if (!imagekitConfig.privateKey) {
+      return res.status(500).json({
+        success: false,
+        message: 'IMAGEKIT_PRIVATE_KEY is not configured on the backend.',
+      })
+    }
+
+    const authParams = imagekit.getAuthenticationParameters()
+    res.status(200).json({ success: true, ...authParams })
+  } catch (error) {
+    console.error('ImageKit upload auth error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate upload auth parameters',
+    })
+  }
 })
 
 /**
