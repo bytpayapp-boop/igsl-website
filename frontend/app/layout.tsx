@@ -7,7 +7,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata: Metadata = {
   title: 'IGSL Local Government',
-  description: 'Official portal of Igbo-Eze South LGA - Services, Information, and Citizen Engagement',
+  description: 'Official website of Igbo-Eze South LGA - Services, Information, and Citizen Engagement',
   generator: 'Ezeh Mark',
   metadataBase: new URL('https://igsl.vercel.app'),
   alternates: {
