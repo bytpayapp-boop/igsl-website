@@ -17,6 +17,12 @@ import { Upload as UploadIcon, X } from 'lucide-react'
 import { getAdminToken } from '@/lib/api/adminApi'
 import { uploadApi } from '@/lib/api/uploadApi'
 import { uploadFilesToImageKit } from '@/lib/imagekit/upload-file'
+import {
+  isVideoFile,
+  UPLOAD_MEDIA_ACCEPT,
+  UPLOAD_MEDIA_HINT,
+  validateUploadMediaFile,
+} from '@/lib/upload-media'
 
 interface GalleryUploadFormProps {
   onBack: () => void
@@ -44,33 +50,34 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
 
   const handleMultipleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files) {
-      const newFiles: File[] = []
-      const newPreviews: string[] = []
+    if (!files?.length) return
 
-      Array.from(files).forEach((file) => {
-        if (!file.type.startsWith('image/')) {
-          toast.error(`${file.name} is not a valid image file`)
-          return
-        }
-        if (file.size > 5 * 1024 * 1024) {
-          toast.error(`${file.name} is larger than 5MB`)
-          return
-        }
-        newFiles.push(file)
-
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          newPreviews.push(reader.result as string)
-          if (newPreviews.length === newFiles.length) {
-            setImagePreviews((prev) => [...prev, ...newPreviews])
-          }
-        }
-        reader.readAsDataURL(file)
-      })
-
-      setFormData((prev) => ({ ...prev, images: [...prev.images, ...newFiles] }))
+    const newFiles: File[] = []
+    for (const file of Array.from(files)) {
+      const validationError = validateUploadMediaFile(file)
+      if (validationError) {
+        toast.error(validationError)
+        continue
+      }
+      newFiles.push(file)
     }
+    if (!newFiles.length) return
+
+    const newPreviews: string[] = new Array(newFiles.length)
+    let loaded = 0
+    newFiles.forEach((file, index) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        newPreviews[index] = reader.result as string
+        loaded++
+        if (loaded === newFiles.length) {
+          setImagePreviews((prev) => [...prev, ...newPreviews])
+        }
+      }
+      reader.readAsDataURL(file)
+    })
+
+    setFormData((prev) => ({ ...prev, images: [...prev.images, ...newFiles] }))
   }
 
   const removeImage = (index: number) => {
@@ -91,7 +98,7 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
       return false
     }
     if (formData.images.length === 0) {
-      toast.error('At least one image is required')
+      toast.error('At least one image or video is required')
       return false
     }
     return true
@@ -116,7 +123,9 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
         images,
       })
 
-      toast.success(`Gallery uploaded successfully with ${formData.images.length} photo(s)!`)
+      toast.success(
+        `Gallery uploaded successfully with ${formData.images.length} file(s)!`
+      )
       // Reset form
       setFormData({
         title: '',
@@ -177,7 +186,7 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
 
           {/* Images Upload */}
           <div className="space-y-2">
-            <Label className="font-semibold">Gallery Images *</Label>
+            <Label className="font-semibold">Gallery Images & Videos *</Label>
             {imagePreviews.length > 0 ? (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -186,11 +195,19 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
                       key={index}
                       className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-border"
                     >
-                      <img
-                        src={preview}
-                        alt={`Preview ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
+                      {isVideoFile(formData.images[index]) ? (
+                        <video
+                          src={preview}
+                          controls
+                          className="w-full h-full object-cover bg-black"
+                        />
+                      ) : (
+                        <img
+                          src={preview}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
@@ -207,15 +224,15 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
                 <label className="border-2 border-dashed border-border rounded-lg p-6 cursor-pointer hover:bg-muted transition block">
                   <div className="flex flex-col items-center justify-center">
                     <UploadIcon className="w-6 h-6 text-primary mb-2" />
-                    <p className="font-medium text-foreground mb-1">Add more photos</p>
+                    <p className="font-medium text-foreground mb-1">Add more files</p>
                     <p className="text-sm text-foreground/50">
-                      {imagePreviews.length} photo(s) selected
+                      {imagePreviews.length} file(s) selected
                     </p>
                   </div>
                   <input
                     type="file"
                     multiple
-                    accept="image/*"
+                    accept={UPLOAD_MEDIA_ACCEPT}
                     onChange={handleMultipleImageChange}
                     className="hidden"
                   />
@@ -229,13 +246,13 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
                     Click to upload or drag and drop
                   </p>
                   <p className="text-sm text-foreground/50">
-                    PNG, JPG, GIF up to 5MB each (multiple files allowed)
+                    {UPLOAD_MEDIA_HINT} (multiple files allowed)
                   </p>
                 </div>
                 <input
                   type="file"
                   multiple
-                  accept="image/*"
+                  accept={UPLOAD_MEDIA_ACCEPT}
                   onChange={handleMultipleImageChange}
                   className="hidden"
                 />
@@ -246,8 +263,8 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
           {/* Info Note */}
           <div className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
             <p className="text-sm text-blue-900 dark:text-blue-100">
-              💡 Tip: You can upload multiple images at once. Each image will be stored with the
-              gallery title and category.
+              💡 Tip: You can upload multiple images and videos at once. Each file will be stored
+              with the gallery title and category.
             </p>
           </div>
         </CardContent>
@@ -261,7 +278,7 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
         <Button type="submit" disabled={isLoading || formData.images.length === 0}>
           {isLoading
             ? 'Uploading...'
-            : `Upload ${formData.images.length} Photo${formData.images.length !== 1 ? 's' : ''}`}
+            : `Upload ${formData.images.length} File${formData.images.length !== 1 ? 's' : ''}`}
         </Button>
       </div>
     </form>

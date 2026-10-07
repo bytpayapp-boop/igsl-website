@@ -102,7 +102,7 @@ export default function AdminLayout({
       <aside
         className={`${
           sidebarOpen ? 'w-64' : 'w-20 md:w-64'
-        } ${sidebarOpen ? 'fixed md:relative' : 'hidden md:flex'} md:flex md:flex-col md:w-64 border-r border-border bg-secondary/40 backdrop-blur-md transition-all duration-300 flex flex-col h-screen md:h-auto z-40`}
+        } ${sidebarOpen ? 'fixed md:relative' : 'hidden md:flex'} md:flex md:flex-col md:w-64 border-r border-border bg-background backdrop-blur-md transition-all duration-300 flex flex-col h-screen md:h-auto z-40`}
       >
         <div className="p-6 border-b border-border flex items-center justify-between">
           {sidebarOpen && (

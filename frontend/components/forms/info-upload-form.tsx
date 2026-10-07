@@ -18,6 +18,12 @@ import { Upload as UploadIcon, X } from 'lucide-react'
 import { getAdminToken } from '@/lib/api/adminApi'
 import { uploadApi } from '@/lib/api/uploadApi'
 import { uploadFileToImageKit } from '@/lib/imagekit/upload-file'
+import {
+  isVideoFile,
+  UPLOAD_MEDIA_ACCEPT,
+  UPLOAD_MEDIA_HINT,
+  validateUploadMediaFile,
+} from '@/lib/upload-media'
 
 interface InfoUploadFormProps {
   onBack: () => void
@@ -50,12 +56,9 @@ export default function InfoUploadForm({ onBack }: InfoUploadFormProps) {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please select a valid image file')
-        return
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image size must be less than 5MB')
+      const validationError = validateUploadMediaFile(file)
+      if (validationError) {
+        toast.error(validationError)
         return
       }
       setFormData((prev) => ({ ...prev, image: file }))
@@ -90,7 +93,7 @@ export default function InfoUploadForm({ onBack }: InfoUploadFormProps) {
       return false
     }
     if (!formData.image) {
-      toast.error('Image is required')
+      toast.error('Image or video is required')
       return false
     }
     return true
@@ -214,14 +217,22 @@ export default function InfoUploadForm({ onBack }: InfoUploadFormProps) {
 
           {/* Image */}
           <div className="space-y-2">
-            <Label className="font-semibold">Information Image *</Label>
+            <Label className="font-semibold">Information Image or Video *</Label>
             {imagePreview ? (
               <div className="relative w-full h-64 rounded-lg overflow-hidden border-2 border-border">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
+                {formData.image && isVideoFile(formData.image) ? (
+                  <video
+                    src={imagePreview}
+                    controls
+                    className="w-full h-full object-cover bg-black"
+                  />
+                ) : (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                )}
                 <button
                   type="button"
                   onClick={clearImage}
@@ -237,11 +248,11 @@ export default function InfoUploadForm({ onBack }: InfoUploadFormProps) {
                   <p className="font-medium text-foreground mb-1">
                     Click to upload or drag and drop
                   </p>
-                  <p className="text-sm text-foreground/50">PNG, JPG, GIF up to 5MB</p>
+                  <p className="text-sm text-foreground/50">{UPLOAD_MEDIA_HINT}</p>
                 </div>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept={UPLOAD_MEDIA_ACCEPT}
                   onChange={handleImageChange}
                   className="hidden"
                 />
