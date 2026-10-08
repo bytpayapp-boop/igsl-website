@@ -4,6 +4,7 @@ import { Navbar } from '@/components/common/navbar'
 import { Footer } from '@/components/common/footer'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: 'IGSL Local Government',
@@ -78,6 +79,7 @@ export default function RootLayout({
             {children}
           </main>
           <Analytics />
+          <Toaster richColors closeButton position="top-right" />
         </ThemeProvider>
       </body>
     </html>
