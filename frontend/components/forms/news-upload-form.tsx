@@ -129,7 +129,7 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
 
       //update the formData with the new image url from cloudinary secure url
    
-      toast.success("File uploaded succesfully");
+      toast.success("File uploaded to cloud storage succesfully");
       const coverImage = imgUrl;
       
       await uploadApi.saveNews(adminToken, {
@@ -140,6 +140,8 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
         tags: formData.tags.trim() || undefined,
         coverImage,
       })
+      toast.success('News details saved to database successfully')
+      setIsLoading(false)
       return imgUrl
     } catch (err) {
       toast.error('Error uploading file to cloudinary');

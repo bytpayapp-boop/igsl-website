@@ -23,6 +23,7 @@ export const uploadApi = {
       payload,
       { headers: adminHeaders(token) }
     )
+    console.log('News uploaded and saved successfully',response.data);
     return response.data
   },
 
