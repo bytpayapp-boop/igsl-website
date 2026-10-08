@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import {
@@ -12,6 +12,7 @@ import {
   X,
   ChevronRight,
   Home,
+  Plane,
 } from 'lucide-react'
 
 export function DashboardSidebar() {
@@ -37,6 +38,14 @@ export function DashboardSidebar() {
       icon: Settings,
     },
   ]
+const[user,setUser] = useState({fullName:'unknown',email:'Please login!'})
+  useEffect(()=>{
+    const userData = localStorage.getItem('user');
+    if(userData){
+      setUser(JSON.parse(userData))
+
+    }
+  },[])
 
   const isActive = (href: string, exact?: boolean) => {
     if (exact) {
@@ -87,7 +96,7 @@ export function DashboardSidebar() {
             </div>
             <div>
               <h1 className="font-bold text-primary dark:text-primary/95">IGSL</h1>
-              <p className="text-xs text-primary/60 dark:text-primary/50">Portal</p>
+              <p className="text-xs text-primary/60 dark:text-primary/50">Citizen -{user.fullName.split(' ')[0]} </p>
             </div>
           </Link>
         </div>
@@ -122,10 +131,12 @@ export function DashboardSidebar() {
         <div className="p-4 border-t border-primary/10 dark:border-primary/30 bg-white dark:bg-gray-800">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-accent/20 dark:hover:bg-accent/20 hover:text-accent dark:hover:text-accent rounded-lg font-medium transition-all"
+            className="w-full flex flex-col gap-2 items-center gap-3 px-4 py-3 bg-accent/10 text-gray-700 dark:text-gray-300 hover:bg-accent/20 dark:hover:bg-accent/20 hover:text-accent dark:hover:text-accent rounded-lg font-medium transition-all"
           >
-            <LogOut className="w-5 h-5" />
+            <div className='text-primary text-xs'>{user.email}</div>
+            <div className='flex gap-4 w-full justify-between'><LogOut className="w-5 h-5" />
             <span>Logout</span>
+            </div>
           </button>
         </div>
       </aside>

@@ -81,7 +81,7 @@ export default function IdentificationPage() {
                 <CardTitle className="text-accent">Application Fee</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-3xl font-bold text-primary mb-2">NGN 5,000</p>
+                <p className="text-3xl font-bold mb-2">NGN 5,000</p>
                 <p className="text-sm text-foreground/70">One-time payment for processing and delivery</p>
               </CardContent>
             </Card>

@@ -29,7 +29,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/services/identification" className="hover:text-accent transition">
+                <Link href="/services" className="hover:text-accent transition">
                   Services
                 </Link>
               </li>
