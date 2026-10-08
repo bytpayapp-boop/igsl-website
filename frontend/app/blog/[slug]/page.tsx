@@ -1,5 +1,6 @@
 
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -31,6 +32,52 @@ function calculateReadingTime(content: string): number {
 
 function isVideoUrl(url: string): boolean {
   return /\.(mp4|webm|ogg|mov|m4v|avi|mkv)(\?.*)?$/i.test(url)
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const posts = await fetchNews()
+  const post = posts.find((p) => p.slug === slug)
+
+  if (!post) {
+    return {
+      title: 'News | IGSL',
+    }
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://igsl.vercel.app'
+  const articleUrl = `${baseUrl}/blog/${post.slug}`
+  const description = post.content.replace(/<[^>]*>/g, '').slice(0, 160)
+
+  return {
+    title: post.title,
+    description,
+    openGraph: {
+      title: post.title,
+      description,
+      url: articleUrl,
+      siteName: 'IGSL',
+      type: 'article',
+      images: [
+        {
+          url: post.coverImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description,
+      images: [post.coverImage],
+    },
+  }
 }
 
 export default async function BlogDetailPage({
@@ -145,7 +192,7 @@ export default async function BlogDetailPage({
             <div className="flex items-center gap-1">
 
                <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}&quote=${shareTitle}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
