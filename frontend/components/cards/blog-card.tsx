@@ -18,7 +18,7 @@ export function BlogCard({ post }: BlogCardProps) {
          src={post.coverImage}
          
             
-            className="object-cover group-hover:scale-[1.2] transition-all"
+            className=" block h-full w-full object-cover group-hover:scale-[1.1] transition-all"
             
          /> :
           <Image
