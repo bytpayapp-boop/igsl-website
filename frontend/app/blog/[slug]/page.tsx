@@ -183,9 +183,7 @@ export default async function BlogDetailPage({
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
                   {post.title}
                 </h1>
-                <p className="text-lg text-gray-200 max-w-2xl">
-                  {post.content.substring(0, 150)}...
-                </p>
+              
               </div>
             </div>
           </div>
