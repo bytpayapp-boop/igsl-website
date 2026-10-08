@@ -79,7 +79,7 @@ export default function StaffDetailPage({
             {/* Basic Info */}
             <div>
               <h1 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">{member.name}</h1>
-              <p className="text-2xl text-accent/70  font-semibold mb-2">{member.role}</p>
+              <p className="text-2xl text-accent  font-semibold mb-2">{member.role}</p>
               <div className="flex items-center gap-2 text-foreground/70 mb-4">
                 <Building className="w-4 h-4" />
                 <span className="capitalize">{member.department}</span>

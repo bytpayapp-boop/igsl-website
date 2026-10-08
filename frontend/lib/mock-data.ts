@@ -168,7 +168,7 @@ export const mockStaffMembers: StaffMember[] = [
     bio: 'Progress Agenda, tomorrow is here',
     email: 'chairman@igsl.gov',
     phone: '08037436104',
-    profileImage: '/images/staff-1.jpg',
+    profileImage: '/images/staff/Ugo-Ferdinand.png',
   },
   {
     id: '2',
@@ -178,7 +178,7 @@ export const mockStaffMembers: StaffMember[] = [
     bio: "Let's serve the people...",
     email: 'quennmrs@gmail.com',
     phone: '+234-800-234-5678',
-    profileImage: '/images/staff-2.jpg',
+    profileImage: '/images/staff/',
   },
   {
     id: '3',
@@ -188,7 +188,7 @@ export const mockStaffMembers: StaffMember[] = [
     bio: 'A call to office is a call serve',
     email: 'zach@gmail.com',
     phone: '08034431401',
-    profileImage: '/images/staff-3.jpg',
+    profileImage: '/images/staff/ZachUkwueze.png',
   },
   {
     id: '4',
@@ -198,7 +198,7 @@ export const mockStaffMembers: StaffMember[] = [
     bio: 'When good man is in the throne, the people rejoice',
     email: 'isaaconoyim@gmail.com',
     phone: '08102687279',
-    profileImage: '/images/staff-4.jpg',
+    profileImage: '/images/staff/IsaacOnoyima.jpg',
   },
   {
     id: '5',

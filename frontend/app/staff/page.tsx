@@ -28,7 +28,7 @@ export default function StaffPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary/80">
            Igbo-Eze South Local Government 
           </p>
-          <h1 className="mt-4 text-4xl md:text-5xl font-bold text-primary">Our Staff</h1>
+          <h1 className="mt-4 text-4xl md:text-5xl font-bold">Our Staff</h1>
           <p className="mt-4 text-lg text-foreground/70 max-w-2xl mx-auto">
             The leadership and staff of the local government council, working together to serve
             our communities with integrity, dedication, and attention to public needs.
@@ -62,8 +62,8 @@ export default function StaffPage() {
                   </div>
 
                   <div className="mt-4 text-center">
-                    <h2 className="text-base font-bold text-primary md:text-lg">{member.name}</h2>
-                    <p className="mt-1 text-sm font-medium text-foreground/80">{member.role}</p>
+                    <h2 className="text-base font-bold md:text-lg">{member.name}</h2>
+                    <p className="mt-1 text-sm font-medium text-primary">{member.role}</p>
                   </div>
                 </div>
               ))}
