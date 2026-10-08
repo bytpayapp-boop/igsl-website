@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button'
 import { getBackendUrl } from '@/lib/api/backendUrl'
 import { GalleryCategory, GalleryItem } from '@/lib/types'
 import Image from 'next/image'
-import { Dialog, DialogContent, DialogClose } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogClose, DialogTitle } from '@/components/ui/dialog'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { it } from 'node:test'
+import { previousDay } from 'date-fns'
 
 const defaultCategories: GalleryCategory[] = ['events', 'community', 'leadership', 'ceremonies', 'programs']
 
@@ -18,6 +20,10 @@ export default function GalleryPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+
+  const[galleryItemIndex,setGalleryItemIndex]=useState(0)
+
+  const[selectedGallery,setSelectedGallery]=useState(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -42,7 +48,8 @@ export default function GalleryPage() {
 
         const mappedItems: GalleryItem[] = items
           .map((item: any) => {
-            console.log('Gallery Item:',item)
+           
+            
             const galleryImages = Array.isArray(item.galleryImages)
               ? item.galleryImages
                   .map((image: any) => image?.fileUrl || image?.url || image?.src || '')
@@ -65,13 +72,15 @@ export default function GalleryPage() {
                 ? normalizedCategory
                 : 'events',
               image: imageUrl,
+              galleryImages:item.galleryImages,
               date: new Date(item.date || item.createdAt || Date.now()),
             }
           })
           .filter((item: GalleryItem) => Boolean(item.image))
 
         if (isMounted) {
-          setGalleryItems(mappedItems)
+          setGalleryItems(mappedItems);
+          console.log('Gallery items:',mappedItems)
         }
       } catch (loadError) {
         if (isMounted) {
@@ -104,25 +113,37 @@ export default function GalleryPage() {
 
   const handlePrevImage = () => {
     if (filteredItems.length === 0) return
-    const previousIndex = (selectedIndex - 1 + filteredItems.length) % filteredItems.length
+    const previousIndex = (selectedIndex - 1 + selectedGallery.length) % selectedGallery.length
     setSelectedIndex(previousIndex)
-    setSelectedImage(filteredItems[previousIndex].image)
+    setSelectedImage(selectedGallery[previousIndex].fileUrl)
   }
 
   const handleNextImage = () => {
     if (filteredItems.length === 0) {
+     
       console.log('No filtered items')
       return}
-    const nextIndex = (selectedIndex + 1) % filteredItems.length
+       
+    const nextIndex = (selectedIndex + 1) % selectedGallery.length
     setSelectedIndex(nextIndex)
-    setSelectedImage(filteredItems[nextIndex].image)
+    setSelectedImage(selectedGallery[nextIndex].fileUrl)
+    setGalleryItemIndex((pre)=>
+      {
+      if(galleryItemIndex >= selectedGallery.length){
+        
+        return 0}
+        return pre+1})
   }
+
+  useEffect(()=>{
+    console.log('Selected gallery triggered by useEffect:',selectedGallery)
+  },[selectedGallery])
 
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Community Gallery</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Gallery</h1>
           <p className="text-lg text-foreground/70">
             View community events, celebrations, and government activities
           </p>
@@ -161,8 +182,12 @@ export default function GalleryPage() {
               <div
                 key={item.id}
                 onClick={() => {
-                  setSelectedImage(item.image)
+                  setSelectedImage(item.image);
+                  setGalleryItemIndex(index)
+               
+                setSelectedGallery(galleryItems[index].galleryImages)
                   setSelectedIndex(index)
+                 
                 }}
               >
                 <GalleryCard item={item} />
@@ -176,8 +201,11 @@ export default function GalleryPage() {
         )}
       </div>
 
-      <Dialog open={!!selectedImage} onOpenChange={(open) => !open && setSelectedImage(null)}>
+      <Dialog open={!!selectedGallery} onOpenChange={(open) => !open && setSelectedGallery(null)}>
         <DialogContent className="max-w-4xl w-full max-h-[90vh] p-0">
+          <DialogTitle asChild>
+            <VisuallyHidden>Gallery image viewer</VisuallyHidden>
+          </DialogTitle>
           <DialogClose className="absolute right-4 top-4 z-50 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
@@ -204,8 +232,8 @@ export default function GalleryPage() {
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-primary-foreground/20 text-primary-foreground px-4 py-2 rounded-full text-sm">
-                {filteredItems.length > 0 ? `${selectedIndex + 1} / ${filteredItems.length}` : '0 / 0'}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-gray-600/70 text-primary-foreground px-4 py-2 rounded-full text-sm">
+                {`${galleryItemIndex} / ${selectedGallery.length}`}
               </div>
             </div>
           )}
