@@ -132,7 +132,7 @@ export default async function BlogDetailPage({
       <div className="relative w-full overflow-hidden bg-black">
         <div className="mx-auto">
           <div className="relative overflow-hidden rounded-none border border-white/10 bg-background shadow-2xl">
-            <div className="relative max-h-[72vh] w-full overflow-hidden">
+            <div className="relative max-h-[74vh] w-full overflow-hidden">
               {isVideoUrl(post.coverImage) ? (
                 <video
                   src={post.coverImage}
@@ -162,8 +162,8 @@ export default async function BlogDetailPage({
                   variant="ghost"
                   className="bg-black/50 hover:bg-black/60 text-white border-white/20"
                 >
-                  <ChevronLeft className="w-4 h-4 mr-2" />
-                  Back to News
+                  <ChevronLeft className="w-4 font-semibold h-4 mx-2" />
+                  {/* <div>Back to News</div> */}
                 </Button>
               </Link>
             </div>
@@ -175,12 +175,9 @@ export default async function BlogDetailPage({
                     <Tag className="w-4 h-4" />
                     {post.category}
                   </span>
-                  <span className="inline-flex items-center gap-2 bg-white/10 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/20">
-                    <Clock className="w-4 h-4" />
-                    {readingTime} min read
-                  </span>
+                  
                 </div>
-                <div className="text-2xl z-[100] md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-0">
+                <div className="text-2xl z-[100] md:text-5xl lg:text-6xl font-bold text-white dark:text-white leading-tight mb-0">
                   {post.title}
                 </div>
               
