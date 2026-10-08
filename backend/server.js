@@ -839,6 +839,109 @@ app.post('/api/admin/uploads/gallery', adminAuthMiddleware, async (req, res) => 
 })
 
 /**
+ * GET /api/archive
+ * Public list of archive documents
+ */
+app.get('/api/archive', async (req, res) => {
+  try {
+    const records = await SiteContentService.listByType('ARCHIVE')
+
+    const items = records.map((record) => {
+      const documentMeta = Array.isArray(record.galleryImages) ? record.galleryImages[0] : null
+      const documentUrl = documentMeta?.fileUrl || documentMeta?.url || record.coverImageUrl || ''
+      const yearValue = (() => {
+        const raw = record.tags
+        if (!raw) return new Date(record.createdAt).getFullYear()
+        const parsed = Number(raw)
+        return Number.isFinite(parsed) ? parsed : new Date(record.createdAt).getFullYear()
+      })()
+
+      return {
+        id: record.id,
+        title: record.title,
+        slug: createSlug(record.title),
+        description: record.description || record.content || '',
+        category: record.category,
+        year: yearValue,
+        documentUrl,
+        fileName: documentMeta?.fileName || 'archive-document.pdf',
+        mimeType: documentMeta?.mimeType || 'application/pdf',
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt,
+      }
+    })
+
+    res.status(200).json({ success: true, data: serializeBigInt(items) })
+  } catch (error) {
+    console.error('Public archive fetch error:', error)
+    res.status(500).json({ success: false, message: 'Failed to fetch archive documents' })
+  }
+})
+
+app.get('/api/archive/:slug', async (req, res) => {
+  try {
+    const { slug } = req.params
+    const records = await SiteContentService.listByType('ARCHIVE')
+    const matched = records.find((record) => createSlug(record.title) === slug)
+
+    if (!matched) {
+      return res.status(404).json({ success: false, message: 'Archive document not found' })
+    }
+
+    const documentMeta = Array.isArray(matched.galleryImages) ? matched.galleryImages[0] : null
+    const payload = {
+      id: matched.id,
+      title: matched.title,
+      slug: createSlug(matched.title),
+      description: matched.description || matched.content || '',
+      category: matched.category,
+      year: Number(matched.tags) || new Date(matched.createdAt).getFullYear(),
+      documentUrl: documentMeta?.fileUrl || documentMeta?.url || matched.coverImageUrl || '',
+      fileName: documentMeta?.fileName || 'archive-document.pdf',
+      mimeType: documentMeta?.mimeType || 'application/pdf',
+      createdAt: matched.createdAt,
+      updatedAt: matched.updatedAt,
+    }
+
+    res.status(200).json({ success: true, data: serializeBigInt(payload) })
+  } catch (error) {
+    console.error('Public single archive fetch error:', error)
+    res.status(500).json({ success: false, message: 'Failed to fetch archive document' })
+  }
+})
+
+/**
+ * POST /api/admin/uploads/archive
+ */
+app.post('/api/admin/uploads/archive', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { title, category, description, year, document } = req.body
+    const documentUrl = document?.fileUrl || document?.url
+
+    if (!title || !category || !documentUrl) {
+      return res.status(400).json({
+        success: false,
+        message: 'title, category, and document file URL are required',
+      })
+    }
+
+    const record = await SiteContentService.createArchive({
+      adminUserId: req.admin.id,
+      title,
+      category,
+      description,
+      year,
+      document,
+    })
+
+    res.status(201).json({ success: true, data: record })
+  } catch (error) {
+    console.error('Admin archive upload save error:', error)
+    res.status(500).json({ success: false, message: error.message || 'Failed to save archive upload' })
+  }
+})
+
+/**
  * PUT /api/admin/uploads/gallery/:id
  */
 app.put('/api/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) => {

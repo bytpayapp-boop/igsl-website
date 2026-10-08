@@ -156,6 +156,7 @@ enum SiteContentType {
   NEWS
   INFO
   GALLERY
+  ARCHIVE
 }
 
 // ===== CORE MODELS =====

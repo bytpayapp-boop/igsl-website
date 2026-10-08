@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { Upload as UploadIcon, X } from 'lucide-react'
+import { LucideMountainSnow, Mountain, Upload as UploadIcon, User, X } from 'lucide-react'
 import { getAdminToken } from '@/lib/api/adminApi'
 import { uploadApi } from '@/lib/api/uploadApi'
 import { uploadFilesToImageKit } from '@/lib/imagekit/upload-file'
@@ -146,7 +146,7 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
       {/* Gallery Form Card */}
       <Card className="border-border">
         <CardHeader>
-          <CardTitle>🖼️ Gallery Upload Details</CardTitle>
+          <CardTitle> Gallery Upload Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Gallery Title */}

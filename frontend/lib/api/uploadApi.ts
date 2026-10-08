@@ -60,4 +60,22 @@ export const uploadApi = {
     )
     return response.data
   },
+
+  async saveArchive(
+    token: string,
+    payload: {
+      title: string
+      category: string
+      description?: string
+      year?: number | string
+      document: ImageKitUploadResult
+    }
+  ) {
+    const response = await axios.post(
+      `${getBackendUrl()}/api/admin/uploads/archive`,
+      payload,
+      { headers: adminHeaders(token) }
+    )
+    return response.data
+  },
 }

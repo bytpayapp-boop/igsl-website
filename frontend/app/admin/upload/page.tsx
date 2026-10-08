@@ -1,12 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -14,18 +12,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { toast } from 'sonner'
 import { ArrowLeft, Upload as UploadIcon } from 'lucide-react'
 import NewsUploadForm from '@/components/forms/news-upload-form'
 import InfoUploadForm from '@/components/forms/info-upload-form'
 import GalleryUploadForm from '@/components/forms/gallery-upload-form'
+import ArchiveUploadForm from '@/components/forms/archive-upload-form'
 
-type UploadCategory = 'news' | 'info' | 'gallery'
+type UploadCategory = 'news' | 'info' | 'gallery' | 'archive'
 
 export default function UploadPage() {
   const router = useRouter()
-  const [category, setCategory] = useState<UploadCategory | ''>('')
-  const [isLoading, setIsLoading] = useState(false)
+  const searchParams = useSearchParams()
+  const initialType = searchParams.get('type') as UploadCategory | null
+  const [category, setCategory] = useState<UploadCategory | ''>(initialType || 'archive')
+
+  useEffect(() => {
+    if (initialType && ['news', 'info', 'gallery', 'archive'].includes(initialType)) {
+      setCategory(initialType)
+    }
+  }, [initialType])
 
   const handleBack = () => {
     router.back()
@@ -38,75 +43,42 @@ export default function UploadPage() {
   return (
     <div className="min-h-screen bg-background p-0 md:p-8">
       <div className="max-w-3xl mx-auto">
-        {/* Header */}
         <div className="mb-8 flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleBack}
-            className="hover:bg-muted"
-          >
+          <Button variant="ghost" size="icon" onClick={handleBack} className="hover:bg-muted">
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-4xl font-bold text-primary">Upload Content</h1>
-            <p className="text-foreground/70 mt-2">
-              Create and upload news, information, or gallery content
-            </p>
+            <h1 className="text-4xl font-bold">Upload Content</h1>
+            <p className="text-foreground/70 mt-2">Create and upload site content</p>
           </div>
         </div>
 
-        {/* Category Selection Card */}
-        <Card className="mb-8 border-border">
-          <CardHeader>
-            <CardTitle>Select Content Type</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="category" className="text-base font-semibold">
-                  What would you like to upload?
-                </Label>
-                <Select value={category} onValueChange={handleCategoryChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Choose a category..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="news">
-                      <span className="font-medium">📰 News</span>
-                    </SelectItem>
-                    <SelectItem value="info">
-                      <span className="font-medium">ℹ️ Info</span>
-                    </SelectItem>
-                    <SelectItem value="gallery">
-                      <span className="font-medium">🖼️ Gallery</span>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {category && (
-                <div className="p-4 bg-muted rounded-lg border border-border">
-                  <p className="text-sm text-foreground/70">
-                    {category === 'news' &&
-                      'Create engaging news articles with title, content, and featured images.'}
-                    {category === 'info' &&
-                      'Share important information with title, description, and category classification.'}
-                    {category === 'gallery' &&
-                      'Upload photos to the gallery with title and category tags.'}
-                  </p>
-                </div>
-              )}
+        <Card className="mb-6 border-border">
+          <CardContent className="pt-6">
+            <div className="space-y-2">
+              <Label htmlFor="content-type" className="font-semibold">
+                Content Type
+              </Label>
+              <Select value={category || 'archive'} onValueChange={handleCategoryChange}>
+                <SelectTrigger id="content-type">
+                  <SelectValue placeholder="Choose content type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="news">News</SelectItem>
+                  <SelectItem value="info">Info</SelectItem>
+                  <SelectItem value="gallery">Gallery</SelectItem>
+                  <SelectItem value="archive">Archive</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
         </Card>
 
-        {/* Form Content */}
         {category === 'news' && <NewsUploadForm onBack={handleBack} />}
         {category === 'info' && <InfoUploadForm onBack={handleBack} />}
         {category === 'gallery' && <GalleryUploadForm onBack={handleBack} />}
+        {category === 'archive' && <ArchiveUploadForm onBack={handleBack} />}
 
-        {/* Empty State */}
         {!category && (
           <Card className="border-border border-2 border-dashed">
             <CardContent className="pt-12 pb-12 text-center">
@@ -119,8 +91,7 @@ export default function UploadPage() {
                 Select a content type to begin
               </h3>
               <p className="text-foreground/70 max-w-sm mx-auto">
-                Choose News, Info, or Gallery from the dropdown above to get started with your
-                upload.
+                Choose News, Info, Gallery, or Archive from the dropdown above to get started.
               </p>
             </CardContent>
           </Card>

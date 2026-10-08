@@ -95,20 +95,31 @@ export default function AdminLayout({
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="border border-border"
         >
-          {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          {!sidebarOpen && <Menu className="w-4 h-4" />}
         </Button>
       </div>
 
       <aside
         className={`${
           sidebarOpen ? 'w-64' : 'w-20 md:w-64'
-        } ${sidebarOpen ? 'fixed md:relative' : 'hidden md:flex'} md:flex md:flex-col md:w-64 border-r border-border bg-background backdrop-blur-md transition-all duration-300 flex flex-col h-screen md:h-auto z-40`}
+        } ${sidebarOpen ? 'fixed md:relative' : 'hidden md:flex'} md:flex md:flex-col md:w-64 border-r border-border bg-background backdrop-blur-md transition-all pt-6 duration-300 flex flex-col h-screen md:h-auto z-40`}
       >
-        <div className="p-6 border-b border-border flex items-center justify-between">
+        <div className="p-0 border-b border-border flex items-center justify-between">
           {sidebarOpen && (
-            <Link href="/" className="font-bold text-lg text-primary">
-              IGSL Admin
-            </Link>
+             
+          <Link href="/" className="flex items-center gap-3 font-bold text-xl hover:opacity-80 ml-4 transition-opacity">
+           <div className="w-12 h-12 bg-white relative overflow-hidden rounded-full flex items-center justify-center shadow-md">
+            <div className="w-20 h-20 relative flex items-center justify-center rounded">
+              <img 
+                src="/coatOfArm.png" 
+                alt="Nigerian Coat of Arms" 
+                className="object-cover relative"
+              />
+            </div>
+            </div>
+            
+            <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
+          </Link>
           )}
           <Button
             variant="ghost"
@@ -116,7 +127,7 @@ export default function AdminLayout({
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="hidden md:block"
           >
-            {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+           {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </Button>
         </div>
 

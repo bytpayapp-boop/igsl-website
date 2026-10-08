@@ -1,24 +1,75 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { mockArchiveItems } from '@/lib/mock-data'
+import { getBackendUrl } from '@/lib/api/backendUrl'
 import { Search } from 'lucide-react'
+
+interface ArchiveRecord {
+  id: string
+  title: string
+  slug: string
+  description: string
+  category: string
+  year: number
+  image?: string
+  documentUrl?: string
+}
 
 export default function ArchivePage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedYear, setSelectedYear] = useState('')
+  const [archiveItems, setArchiveItems] = useState<ArchiveRecord[]>(mockArchiveItems)
 
-  const categories = [...new Set(mockArchiveItems.map((item) => item.category))]
-  const years = [...new Set(mockArchiveItems.map((item) => item.year))].sort((a, b) => b - a)
+  useEffect(() => {
+    let isMounted = true
+
+    const fetchArchiveItems = async () => {
+      try {
+        const response = await fetch(`${getBackendUrl()}/api/archive`, { cache: 'no-store' })
+        const payload = await response.json().catch(() => ({ data: [] }))
+
+        if (!response.ok) {
+          throw new Error(payload?.message || 'Failed to load archive items')
+        }
+
+        const items = Array.isArray(payload?.data) ? payload.data : []
+        if (items.length && isMounted) {
+          setArchiveItems(
+            items.map((item: any) => ({
+              id: String(item.id),
+              title: String(item.title),
+              slug: String(item.slug || item.title),
+              description: String(item.description || ''),
+              category: String(item.category || 'records'),
+              year: Number(item.year || new Date(item.createdAt || Date.now()).getFullYear()),
+              image: item.image || item.coverImage || undefined,
+              documentUrl: item.documentUrl || ''
+            }))
+          )
+        }
+      } catch (error) {
+        console.error('Archive fetch failed, using mock data instead:', error)
+      }
+    }
+
+    fetchArchiveItems()
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const categories = [...new Set(archiveItems.map((item) => item.category))]
+  const years = [...new Set(archiveItems.map((item) => item.year))].sort((a, b) => b - a)
 
   const filteredItems = useMemo(() => {
-    return mockArchiveItems.filter((item) => {
+    return archiveItems.filter((item) => {
       const matchesSearch =
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -26,7 +77,7 @@ export default function ArchivePage() {
       const matchesYear = !selectedYear || item.year === parseInt(selectedYear)
       return matchesSearch && matchesCategory && matchesYear
     })
-  }, [searchTerm, selectedCategory, selectedYear])
+  }, [archiveItems, searchTerm, selectedCategory, selectedYear])
 
   return (
     <div className="min-h-screen bg-background">

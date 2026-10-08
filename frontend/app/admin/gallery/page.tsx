@@ -225,7 +225,7 @@ export default function AdminGalleryPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-primary">Gallery</h1>
+          <h1 className="text-3xl font-bold">Gallery</h1>
           <p className="text-foreground/70 mt-1">Manage gallery photos and images</p>
         </div>
         <Button className="flex items-center gap-2" onClick={() => router.push('/admin/upload')}>
@@ -289,7 +289,7 @@ export default function AdminGalleryPage() {
                 </div>
               </div>
               <CardContent className="pt-4">
-                <h3 className="font-bold text-primary text-lg mb-1 line-clamp-1">
+                <h3 className="font-bold text-lg mb-1 line-clamp-1">
                   {item.title}
                 </h3>
                 <p className="text-sm text-foreground/70 mb-4 line-clamp-2">
@@ -308,7 +308,7 @@ export default function AdminGalleryPage() {
                     onClick={() => handleEdit(item)}
                     disabled={isSaving}
                   >
-                    <Edit className="w-4 h-4" />
+                    <Edit className="w-4 h-4 text-primary/90" />
                     Edit
                   </Button>
                   <Button

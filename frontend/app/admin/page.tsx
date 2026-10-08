@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-2 md:p-0">
+    <div className="min-h-screen bg-background p-0 md:p-0">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-2">Admin Dashboard</h1>

@@ -49,6 +49,30 @@ class SiteContentService {
     })
   }
 
+  static async createArchive({ adminUserId, title, category, description, year, document }) {
+    const normalizedYear = year !== undefined && year !== null && year !== '' ? Number(year) : null
+    const documentMeta = document && typeof document === 'object' ? document : null
+    const documentUrl = documentMeta?.fileUrl || documentMeta?.url || document || null
+
+    if (!title || !category || !documentUrl) {
+      throw new Error('Archive title, category, and document URL are required')
+    }
+
+    const payload = {
+      type: 'ARCHIVE',
+      title,
+      category,
+      description: description || '',
+      content: description || '',
+      tags: normalizedYear ? String(normalizedYear) : null,
+      coverImageUrl: documentMeta?.thumbnailUrl || documentMeta?.previewUrl || null,
+      adminUserId: adminUserId || null,
+      galleryImages: documentMeta ? [documentMeta] : [],
+    }
+
+    return prisma.siteContentUpload.create({ data: payload })
+  }
+
   static async updateGallery({ id, title, category, coverImageUrl, galleryImages }) {
     const updateData = {}
 

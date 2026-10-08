@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "SiteContentType" ADD VALUE IF NOT EXISTS 'ARCHIVE';
