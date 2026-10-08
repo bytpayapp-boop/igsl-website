@@ -55,6 +55,19 @@ export function AdminLoginForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background/50 via-background to-primary/5 flex items-center justify-center p-4">
+       <Link href="/" className="flex items-center gap-3 absolute top-8 left-8 font-bold text-xl hover:opacity-80 transition-opacity">
+           <div className="w-12 h-12 bg-white relative overflow-hidden rounded-full flex items-center justify-center shadow-md">
+            <div className="w-20 h-20 relative flex items-center justify-center rounded">
+              <img 
+                src="/coatOfArm.png" 
+                alt="Nigerian Coat of Arms" 
+                className="object-cover relative"
+              />
+            </div>
+            </div>
+            
+            <span className="sm:inline text-gray-700 dark:text-gray-300">Home</span>
+          </Link>
       <Card className="w-full max-w-md border-primary/20 shadow-xl">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">

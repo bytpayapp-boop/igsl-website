@@ -132,16 +132,15 @@ export default async function BlogDetailPage({
       <div className="relative w-full overflow-hidden bg-black">
         <div className="mx-auto">
           <div className="relative overflow-hidden rounded-none border border-white/10 bg-background shadow-2xl">
-            <div className="relative max-h-[74vh] w-full overflow-hidden">
+            <div className="relative max-h-[72vh] w-full overflow-hidden">
               {isVideoUrl(post.coverImage) ? (
-                <video
-                  src={post.coverImage}
-                  muted
-                  playsInline
-                  preload="metadata"
-                  controls={false}
-                  className="block max-h-[72vh] w-full bg-background object-cover"
-                  poster={post.coverImage}
+                <img
+                  src='/newCoatOfArm.png'
+                  alt={post.title}
+                 
+                 
+                  
+                  className=" w-full object-cover"
                 />
               ) : (
                 <img
@@ -154,7 +153,7 @@ export default async function BlogDetailPage({
                 />
               )}
             </div>
-            <div className="absolute z-50 inset-0 bg-gradient-to-t from-background via-background/20 to-transparent backdrop-blur-[2px]" />
+            <div className="absolute z-50 inset-0 bg-gradient-to-t from-background via-background/30 to-transparent backdrop-blur-[1px]" />
 
 <div className='flex absolute top-4 z-90 px-4 md:px-20 justify-between w-full'>
 
@@ -179,21 +178,21 @@ export default async function BlogDetailPage({
                 </div>
                 </div>
 
-            <div className="absolute bottom-0 left-0 right-0 z-100 p-8 sm:p-12">
-              <div className="max-w-4xl mx-auto">
+            {/* <div className="absolute bottom-0 left-0 right-0 z-100 p-8 sm:p-12"> */}
+              {/* <div className="max-w-4xl absolumx-auto"> */}
                 
-                <div className="text-2xl z-[100] md:text-5xl lg:text-6xl font-bold text-white shadow-sm p-2 rounded-lg backdrop-blur-sm dark:text-white leading-tight mb-0">
+                <div className="text-2xl absolute mx-2 z-[100] md:text-5xl lg:text-6xl font-bold bg-primary/30 text-white shadow-sm p-4 md:p-8 rounded-lg backdrop-blur-sm dark:text-white leading-tight top-30 max-h-40 md:max-h-100 overflow-hidden">
                   {post.title}
-                </div>
+                {/* </div> */}
               
-              </div>
+              {/* </div> */}
             </div>
           </div>
         </div>
       </div>
 
       {/* Article Container */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 py-12">
         {/* Meta Information */}
         <div className="flex flex-wrap items-center justify-between gap-6 mb-8 pb-8 border-b border-border">
           <div className="flex flex-wrap items-center gap-6 text-sm">
