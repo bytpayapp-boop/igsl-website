@@ -1,9 +1,11 @@
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { BlogCard } from '@/components/cards/blog-card'
 import { fetchNews } from '@/lib/api/newsApi'
+
 import { 
   ChevronLeft, 
   Calendar, 
@@ -13,7 +15,8 @@ import {
   Facebook,
   Twitter,
   Linkedin,
-  Link as LinkIcon
+  Link as LinkIcon,
+  MessageCircle
 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
@@ -24,6 +27,10 @@ function calculateReadingTime(content: string): number {
   const wordsPerMinute = 200
   const words = content.trim().split(/\s+/).length
   return Math.ceil(words / wordsPerMinute)
+}
+
+function isVideoUrl(url: string): boolean {
+  return /\.(mp4|webm|ogg|mov|m4v|avi|mkv)(\?.*)?$/i.test(url)
 }
 
 export default async function BlogDetailPage({
@@ -38,7 +45,7 @@ export default async function BlogDetailPage({
   if (!post) {
     notFound()
   }
-
+// const router = useRouter()
   const readingTime = calculateReadingTime(post.content)
   const relatedPosts = posts
     .filter((p) => p.id !== post.id && p.category === post.category)
@@ -50,48 +57,65 @@ export default async function BlogDetailPage({
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="relative w-full h-[500px] bg-muted overflow-hidden">
-        <Image
-          src={post.coverImage}
-          alt={post.title}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-        
-        {/* Back Button - Overlay */}
-        <div className="absolute top-6 left-6 z-20">
-          <Link href="/blog">
-            <Button 
-              variant="ghost" 
-              className="bg-black/40 hover:bg-black/60 text-white border-white/20"
-            >
-              <ChevronLeft className="w-4 h-4 mr-2" />
-              Back to News
-            </Button>
-          </Link>
-        </div>
-
-        {/* Title Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 p-8 sm:p-12">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex flex-wrap gap-3 mb-4">
-              <span className="inline-flex items-center gap-2 bg-green-600/40 text-gray-100 px-4 py-2 rounded-full capitalize font-semibold text-sm border border-green-500/30">
-                <Tag className="w-4 h-4" />
-                {post.category}
-              </span>
-              <span className="inline-flex items-center gap-2 bg-white/10 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/20">
-                <Clock className="w-4 h-4" />
-                {readingTime} min read
-              </span>
+      <div className="relative w-full overflow-hidden bg-black">
+        <div className="mx-auto">
+          <div className="relative overflow-hidden rounded-none border border-white/10 bg-black shadow-2xl">
+            <div className="relative max-h-[72vh] w-full overflow-hidden">
+              {isVideoUrl(post.coverImage) ? (
+                <video
+                  src={post.coverImage}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  controls={false}
+                  className="block max-h-[72vh] w-full bg-background object-cover"
+                  poster={post.coverImage}
+                />
+              ) : (
+                <img
+                  src={post.coverImage}
+                  alt={post.title}
+                 
+                 
+                  
+                  className=" w-full object-cover"
+                />
+              )}
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-              {post.title}
-            </h1>
-            <p className="text-lg text-gray-200 max-w-2xl">
-              {post.content.substring(0, 150)}...
-            </p>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent" />
+
+            <div className="absolute left-6 top-6 z-20">
+              <Link href="/blog">
+                <Button
+                  variant="ghost"
+                  className="bg-black/40 hover:bg-black/60 text-white border-white/20"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-2" />
+                  Back to News
+                </Button>
+              </Link>
+            </div>
+
+            <div className="absolute bottom-0 left-0 right-0 z-10 p-8 sm:p-12">
+              <div className="max-w-4xl mx-auto">
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <span className="inline-flex items-center gap-2 bg-green-600/40 text-gray-100 px-4 py-2 rounded-full capitalize font-semibold text-sm border border-green-500/30">
+                    <Tag className="w-4 h-4" />
+                    {post.category}
+                  </span>
+                  <span className="inline-flex items-center gap-2 bg-white/10 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/20">
+                    <Clock className="w-4 h-4" />
+                    {readingTime} min read
+                  </span>
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+                  {post.title}
+                </h1>
+                <p className="text-lg text-gray-200 max-w-2xl">
+                  {post.content.substring(0, 150)}...
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -175,31 +199,58 @@ export default async function BlogDetailPage({
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          
           {/* Article Content - 3 cols */}
           <article className="lg:col-span-3 space-y-6">
             <div className="prose prose-lg max-w-none text-foreground/80 leading-relaxed space-y-6">
+            <div className='flex flex-col gap-4'>
+
+            <div className="overflow-hidden rounded-2xl border border-border bg-black/5">
+              {isVideoUrl(post.coverImage) ? (
+                <video
+                  src={post.coverImage}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="block mx-auto max-h-[85vh] w-full rounded-2xl bg-black object-contain"
+                />
+              ) : (
+                <Image
+                  src={post.coverImage}
+                  alt={post.title}
+                  width={1600}
+                  height={900}
+                  className="block max-h-[85vh] w-full object-contain"
+                />
+              )}
+            </div>
               <p className="text-lg font-medium text-foreground/90">
                 {post.content}
               </p>
+              </div>
               
-              <p className="text-base">
+              {/* <p className="text-base">
                 This announcement is part of our commitment to keeping the community informed about important government initiatives and developments. Our administration believes in transparency and timely communication with all stakeholders.
-              </p>
+              </p> */}
 
               <div className="bg-accent/5 border-l-4 border-accent px-6 py-4 rounded-r">
-                <p className="font-medium text-accent mb-2">💡 Key Takeaway</p>
+                <p className="font-medium text-accent mb-2">💡 Hello...</p>
                 <p className="text-sm text-foreground/70">
-                  This initiative demonstrates our dedication to public service and community development. We encourage all citizens to take advantage of these programs and services.
+                  We welcome your feedback and suggestions on how we can continue to improve our services and communication with the public. Your input is valuable in helping us serve you better.
                 </p>
+                <Link
+                href="/anonymous-message"
+                className="bg-accent mt-2 mx-auto cursor-pointer text-white transition-all font-medium inline-flex items-center gap-2 px-2 py-1 rounded-lg shadow-lg hover:shadow-xl"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <MessageCircle className="h-4 animate-bounce w-4" />
+                  Drop Message
+                </span>
+              </Link>
               </div>
 
-              <p>
-                For more detailed information, interested parties can reach out to our office during business hours. We have dedicated staff ready to assist with inquiries and provide additional context about this announcement.
-              </p>
+              
 
-              <p>
-                We welcome your feedback and suggestions on how we can continue to improve our services and communication with the public. Your input is valuable in helping us serve you better.
-              </p>
             </div>
 
             {/* Tags */}
@@ -219,8 +270,7 @@ export default async function BlogDetailPage({
               </div>
             )}
 
-            {/* Newsletter CTA */}
-            <NewsletterForm />
+    
 
             {/* Related Posts */}
             {relatedPosts.length > 0 && (

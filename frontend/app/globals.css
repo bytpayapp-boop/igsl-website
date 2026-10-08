@@ -90,7 +90,7 @@ animation: animate-card3 1s ease 1.6s forwards;
 
 .dark {
   /* Dark Mode Theme - Nigerian colors optimized for dark backgrounds */
-  --background: oklch(32.53% 0.00539 157.281);
+  --background: oklch(29.208% 0.00778 153.633);
   --foreground: oklch(0.95 0.01 142.5);
   --card: oklch(21.918% 0.00488 145.644 / 0.943);
   --card-foreground: oklch(0.95 0.01 142.5);

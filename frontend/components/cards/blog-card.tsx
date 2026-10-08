@@ -13,13 +13,21 @@ export function BlogCard({ post }: BlogCardProps) {
     <Link href={`/blog/${post.slug}`}>
       <Card className="h-full hover:shadow-lg group transition-shadow overflow-hidden cursor-pointer border-border hover:border-gray-500">
         <div className="relative w-full h-48 bg-muted">
+          {post.coverImage.includes('.mp4')?
+         <video autoPlay controls muted
+         src={post.coverImage}
+         
+            
+            className="object-cover group-hover:scale-[1.2] transition-all"
+            
+         /> :
           <Image
             src={post.coverImage}
             alt={post.title}
             fill
             className="object-cover group-hover:scale-[1.2] transition-all"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          />}
         </div>
         <CardHeader>
           <div className="flex items-center justify-between mb-2">

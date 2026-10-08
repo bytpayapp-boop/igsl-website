@@ -16,7 +16,7 @@ export default function NewBlogPostPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
             Create content
           </p>
-          <h1 className="mt-2 text-3xl font-bold text-primary">New Blog Post</h1>
+          <h1 className="mt-2 text-3xl font-bold">New Blog Post</h1>
         </div>
 
         <Button variant="outline" asChild>

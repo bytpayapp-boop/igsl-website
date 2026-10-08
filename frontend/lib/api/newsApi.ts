@@ -45,7 +45,7 @@ async function fetchNewsResponse() {
 
   const payload = await response.json().catch(() => ({ data: [] }))
   const items = Array.isArray(payload?.data) ? payload.data : Array.isArray(payload) ? payload : []
-
+console.log('News items fetched successfully:',items)
   return items
     .map((item) => normalizeNewsItem(item))
     .filter((item): item is BlogPost => Boolean(item))

@@ -208,6 +208,7 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
               id="title"
               name="title"
               placeholder="Enter news article title"
+              className='bg-white'
               value={formData.title}
               onChange={handleInputChange}
               maxLength={200}
@@ -311,7 +312,7 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
                 </button>
               </div>
             ) : (
-              <label className="border-2 border-dashed border-border rounded-lg p-8 cursor-pointer hover:bg-muted transition block">
+              <label className="border-2 border-dashed border-border rounded-lg p-8 bg-muted cursor-pointer hover:bg-muted/50 transition block">
                 <div className="flex flex-col items-center justify-center">
                   <UploadIcon className="w-8 h-8 text-primary mb-2" />
                   <p className="font-medium text-foreground mb-1">
