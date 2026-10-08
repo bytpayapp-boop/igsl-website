@@ -181,7 +181,7 @@ export default async function BlogDetailPage({
             {/* <div className="absolute bottom-0 left-0 right-0 z-100 p-8 sm:p-12"> */}
               {/* <div className="max-w-4xl absolumx-auto"> */}
                 
-                <div className="text-2xl absolute mx-2 z-[100] md:text-5xl lg:text-6xl font-bold bg-primary/30 text-white shadow-sm p-4 md:p-8 rounded-lg backdrop-blur-sm dark:text-white leading-tight top-30 max-h-40 md:max-h-100 overflow-hidden">
+                <div className="text-2xl absolute mx-2 z-[100] md:text-5xl lg:text-6xl font-bold bg-primary/30 text-white shadow-sm p-4 md:p-8 rounded-lg backdrop-blur-sm dark:text-white leading-tight top-25 max-h-40 md:max-h-100 overflow-hidden">
                   {post.title}
                 {/* </div> */}
               
