@@ -24,6 +24,7 @@ import {
   UPLOAD_MEDIA_HINT,
   validateUploadMediaFile,
 } from '@/lib/upload-media'
+import axios from 'axios'
 
 interface NewsUploadFormProps {
   onBack: () => void
@@ -100,19 +101,37 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
     return true
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+//The helper function to upload selected image or video files
+   const handleSubmit = async (e) => {
+      e.preventDefault()
     if (!validateForm()) return
-
-    const adminToken = getAdminToken()
-    if (!adminToken) {
+    try {
+      setIsLoading(true)
+      const adminToken = getAdminToken();
+       if (!adminToken) {
       toast.error('Please log in as an admin to upload content')
       return
     }
+      const imageForm = new FormData();
+      imageForm.append("file", formData.coverImage!);
+      imageForm.append("upload_preset", "igsl_uploads");
 
-    setIsLoading(true)
-    try {
-      const coverImage = await uploadFileToImageKit(formData.coverImage!, 'igsl/news')
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dadvxxgl1/upload",
+        imageForm,
+      );
+      console.log('Cloudinary feedback',response.data);
+      
+
+      const imgUrl = response.data.secure_url;
+  
+      console.log('secure-url:',imgUrl)
+
+      //update the formData with the new image url from cloudinary secure url
+   
+      toast.success("File uploaded succesfully");
+      const coverImage = imgUrl;
+      
       await uploadApi.saveNews(adminToken, {
         title: formData.title.trim(),
         category: formData.category,
@@ -121,25 +140,54 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
         tags: formData.tags.trim() || undefined,
         coverImage,
       })
-
-      toast.success('News article uploaded successfully!')
-      // Reset form
-      setFormData({
-        title: '',
-        category: '',
-        content: '',
-        author: '',
-        tags: '',
-        coverImage: null,
-      })
-      setImagePreview(null)
-    } catch (error) {
-      toast.error('Failed to upload news article')
-      console.error(error)
-    } finally {
+      return imgUrl
+    } catch (err) {
+      toast.error('Error uploading file to cloudinary');
+      console.log(err);
       setIsLoading(false)
     }
-  }
+  };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   if (!validateForm()) return
+
+  //   const adminToken = getAdminToken()
+  //   if (!adminToken) {
+  //     toast.error('Please log in as an admin to upload content')
+  //     return
+  //   }
+
+  //   setIsLoading(true)
+  //   try {
+  //     const coverImage = await uploadFileToImageKit(formData.coverImage!, 'igsl/news')
+  //     await uploadApi.saveNews(adminToken, {
+  //       title: formData.title.trim(),
+  //       category: formData.category,
+  //       content: formData.content.trim(),
+  //       author: formData.author.trim(),
+  //       tags: formData.tags.trim() || undefined,
+  //       coverImage,
+  //     })
+
+  //     toast.success('News article uploaded successfully!')
+  //     // Reset form
+  //     setFormData({
+  //       title: '',
+  //       category: '',
+  //       content: '',
+  //       author: '',
+  //       tags: '',
+  //       coverImage: null,
+  //     })
+  //     setImagePreview(null)
+  //   } catch (error) {
+  //     toast.error('Failed to upload news article')
+  //     console.error(error)
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
