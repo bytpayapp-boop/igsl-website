@@ -192,7 +192,7 @@ export default async function BlogDetailPage({
       </div>
 
       {/* Article Container */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Meta Information */}
         <div className="flex flex-wrap items-center justify-between gap-6 mb-8 pb-8 border-b border-border">
           <div className="flex flex-wrap items-center gap-6 text-sm">
