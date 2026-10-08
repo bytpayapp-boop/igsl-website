@@ -298,9 +298,11 @@ export default async function BlogDetailPage({
                 />
               )}
             </div>
-              <p className="text-lg font-medium text-foreground/90">
+              <div
+                className="text-lg font-medium text-foreground/90 whitespace-pre-wrap break-words leading-relaxed"
+              >
                 {post.content}
-              </p>
+              </div>
               </div>
               
               {/* <p className="text-base">
