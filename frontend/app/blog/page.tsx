@@ -1,20 +1,39 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { mockBlogPosts } from '@/lib/mock-data'
+import { useEffect, useMemo, useState } from 'react'
 import { BlogCard } from '@/components/cards/blog-card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { fetchNews } from '@/lib/api/newsApi'
+import { BlogPost } from '@/lib/types'
 import { Search } from 'lucide-react'
 
 export default function BlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [loading, setLoading] = useState(true)
 
-  const categories = [...new Set(mockBlogPosts.map((post) => post.category))]
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const news = await fetchNews()
+        setPosts(news)
+      } catch (error) {
+        console.error('Failed to load news articles:', error)
+        setPosts([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadPosts()
+  }, [])
+
+  const categories = [...new Set(posts.map((post) => post.category))]
 
   const filteredPosts = useMemo(() => {
-    return mockBlogPosts
+    return posts
       .filter((post) => post.status === 'published')
       .filter((post) => {
         const matchesSearch =
@@ -24,7 +43,7 @@ export default function BlogPage() {
         return matchesSearch && matchesCategory
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  }, [searchTerm, selectedCategory])
+  }, [posts, searchTerm, selectedCategory])
 
   return (
     <div className="min-h-screen bg-background">
@@ -76,7 +95,11 @@ export default function BlogPage() {
         </div>
 
         {/* Blog Posts */}
-        {filteredPosts.length > 0 ? (
+        {loading ? (
+          <div className="text-center py-12">
+            <p className="text-foreground/70 text-lg">Loading news articles...</p>
+          </div>
+        ) : filteredPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPosts.map((post) => (
               <BlogCard key={post.id} post={post} />

@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { BlogCard } from '@/components/cards/blog-card'
 import { Button } from '@/components/ui/button'
-import { mockBlogPosts } from '@/lib/mock-data'
+import { fetchNews } from '@/lib/api/newsApi'
 
-export function AnnouncementsSection() {
-  const featuredPosts = mockBlogPosts.slice(0, 3)
+export async function AnnouncementsSection() {
+  const featuredPosts = (await fetchNews()).slice(0, 3)
 
   return (
     <section className="max-w-7xl bg-white/20  dark:bg-gray-800 mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -25,9 +25,13 @@ export function AnnouncementsSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {featuredPosts.map((post) => (
-          <BlogCard key={post.id} post={post} />
-        ))}
+        {featuredPosts.length > 0 ? (
+          featuredPosts.map((post) => <BlogCard key={post.id} post={post} />)
+        ) : (
+          <div className="col-span-full text-center py-10 text-foreground/70">
+            No news articles available yet.
+          </div>
+        )}
       </div>
 
       <div className="flex justify-center md:hidden">

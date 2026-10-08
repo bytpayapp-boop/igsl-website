@@ -43,6 +43,15 @@ const serializeBigInt = (data) => {
   }
   return data
 }
+
+const createSlug = (title) => {
+  if (!title) return 'news-item'
+  return String(title)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'news-item'
+}
 //ok
 // Middlewares
 // Allow requests from Render frontend
@@ -648,6 +657,98 @@ app.get('/api/upload-auth', (req, res) => {
       success: false,
       message: 'Failed to generate upload auth parameters',
     })
+  }
+})
+
+/**
+ * GET /api/news
+ * Public endpoint for latest uploaded news items
+ */
+app.get('/api/news', async (req, res) => {
+  try {
+    const type = req.query.type || 'NEWS'
+    const records = await SiteContentService.listByType(type)
+
+    const items = records.map((record) => {
+      const tags = Array.isArray(record.tags)
+        ? record.tags
+        : typeof record.tags === 'string'
+          ? record.tags
+              .split(',')
+              .map((tag) => tag.trim())
+              .filter(Boolean)
+          : []
+
+      const coverImageUrl =
+        record.coverImageUrl ||
+        (Array.isArray(record.galleryImages) && record.galleryImages[0]?.fileUrl) ||
+        '/blog-1.png'
+
+      return {
+        id: record.id,
+        title: record.title,
+        slug: createSlug(record.title),
+        category: record.category,
+        content: record.content || record.description || '',
+        description: record.description || record.content || '',
+        author: record.author || 'IGSL Communications',
+        tags,
+        coverImage: coverImageUrl,
+        coverImageUrl,
+        date: record.createdAt,
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt,
+        status: 'published',
+      }
+    })
+
+    res.status(200).json({ success: true, data: serializeBigInt(items) })
+  } catch (error) {
+    console.error('Public news fetch error:', error)
+    res.status(500).json({ success: false, message: 'Failed to fetch news' })
+  }
+})
+
+app.get('/api/news/:slug', async (req, res) => {
+  try {
+    const { slug } = req.params
+    const records = await SiteContentService.listByType('NEWS')
+    const matched = records.find((record) => createSlug(record.title) === slug)
+
+    if (!matched) {
+      return res.status(404).json({ success: false, message: 'News article not found' })
+    }
+
+    const tags = Array.isArray(matched.tags)
+      ? matched.tags
+      : typeof matched.tags === 'string'
+        ? matched.tags
+            .split(',')
+            .map((tag) => tag.trim())
+            .filter(Boolean)
+        : []
+
+    const payload = {
+      id: matched.id,
+      title: matched.title,
+      slug: createSlug(matched.title),
+      category: matched.category,
+      content: matched.content || matched.description || '',
+      description: matched.description || matched.content || '',
+      author: matched.author || 'IGSL Communications',
+      tags,
+      coverImage: matched.coverImageUrl || '/blog-1.png',
+      coverImageUrl: matched.coverImageUrl || '/blog-1.png',
+      date: matched.createdAt,
+      createdAt: matched.createdAt,
+      updatedAt: matched.updatedAt,
+      status: 'published',
+    }
+
+    res.status(200).json({ success: true, data: serializeBigInt(payload) })
+  } catch (error) {
+    console.error('Public single news fetch error:', error)
+    res.status(500).json({ success: false, message: 'Failed to fetch news article' })
   }
 })
 

@@ -2,8 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { mockBlogPosts } from '@/lib/mock-data'
 import { BlogCard } from '@/components/cards/blog-card'
+import { fetchNews } from '@/lib/api/newsApi'
 import { 
   ChevronLeft, 
   Calendar, 
@@ -19,12 +19,6 @@ import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
 import NewsletterForm from './newsletter-form'
 
-export async function generateStaticParams() {
-  return mockBlogPosts.map((post) => ({
-    slug: post.slug,
-  }))
-}
-
 // Calculate reading time
 function calculateReadingTime(content: string): number {
   const wordsPerMinute = 200
@@ -38,15 +32,15 @@ export default async function BlogDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  
-  const post = mockBlogPosts.find((p) => p.slug === slug)
+  const posts = await fetchNews()
+  const post = posts.find((p) => p.slug === slug)
 
   if (!post) {
     notFound()
   }
 
   const readingTime = calculateReadingTime(post.content)
-  const relatedPosts = mockBlogPosts
+  const relatedPosts = posts
     .filter((p) => p.id !== post.id && p.category === post.category)
     .slice(0, 3)
   const baseUrl = 'https://igsl-website.com'
@@ -290,7 +284,7 @@ export default async function BlogDetailPage({
               <CardContent className="pt-6">
                 <h3 className="font-bold text-foreground mb-4">Latest Articles</h3>
                 <div className="space-y-3">
-                  {mockBlogPosts
+                  {posts
                     .filter((p) => p.id !== post.id)
                     .slice(0, 4)
                     .map((article) => (
