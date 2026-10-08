@@ -52,7 +52,7 @@ export default function BlogPage() {
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">News & Updates</h1>
           <p className="text-lg text-foreground/70">
-            Stay informed about the latest announcements and developments from IGSL
+            Stay informed about the latest announcements and developments from Igbo-Eze South
           </p>
         </div>
 

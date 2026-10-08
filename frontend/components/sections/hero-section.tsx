@@ -112,7 +112,7 @@ export function HeroSection() {
                 </span>
               </Link> */}
 
-              <div className='flex ml-4 gap-4 relative mx-auto md:hidden'>
+              <div className='flex ml-2 gap-4 relative mx-auto md:hidden'>
 
 
               <Link

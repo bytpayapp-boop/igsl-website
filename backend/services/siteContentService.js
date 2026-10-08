@@ -49,6 +49,38 @@ class SiteContentService {
     })
   }
 
+  static async updateGallery({ id, title, category, coverImageUrl, galleryImages }) {
+    const updateData = {}
+
+    if (title !== undefined && title !== null) {
+      updateData.title = String(title).trim()
+    }
+    if (category !== undefined && category !== null) {
+      updateData.category = String(category).trim()
+    }
+    if (coverImageUrl !== undefined && coverImageUrl !== null) {
+      updateData.coverImageUrl = coverImageUrl
+    }
+    if (galleryImages !== undefined && galleryImages !== null) {
+      updateData.galleryImages = galleryImages
+    }
+
+    if (!Object.keys(updateData).length) {
+      throw new Error('No valid gallery fields were provided for update')
+    }
+
+    return prisma.siteContentUpload.update({
+      where: { id },
+      data: updateData,
+    })
+  }
+
+  static async deleteGallery({ id }) {
+    return prisma.siteContentUpload.delete({
+      where: { id },
+    })
+  }
+
   static async listByType(type) {
     return prisma.siteContentUpload.findMany({
       where: type ? { type } : undefined,

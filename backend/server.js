@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const bcrypt = require('bcryptjs')
 const ImageKit = require('imagekit')
 const prisma = require('./lib/prisma')
 const dotenv = require('dotenv')
@@ -694,6 +695,7 @@ app.get('/api/news', async (req, res) => {
         author: record.author || 'IGSL Communications',
         tags,
         coverImage: coverImageUrl,
+        galleryImages:record.galleryImages,
         coverImageUrl,
         date: record.createdAt,
         createdAt: record.createdAt,
@@ -833,6 +835,76 @@ app.post('/api/admin/uploads/gallery', adminAuthMiddleware, async (req, res) => 
   } catch (error) {
     console.error('Admin gallery upload save error:', error)
     res.status(500).json({ success: false, message: 'Failed to save gallery upload' })
+  }
+})
+
+/**
+ * PUT /api/admin/uploads/gallery/:id
+ */
+app.put('/api/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params
+    const { title, category, coverImageUrl, galleryImages } = req.body
+
+    if (!id) {
+      return res.status(400).json({ success: false, message: 'Gallery ID is required' })
+    }
+
+    const record = await SiteContentService.updateGallery({
+      id,
+      title,
+      category,
+      coverImageUrl,
+      galleryImages,
+    })
+
+    res.status(200).json({ success: true, data: record })
+  } catch (error) {
+    console.error('Admin gallery update error:', error)
+    const message = error.message || 'Failed to update gallery item'
+    const status = error.message?.includes('No valid gallery fields') ? 400 : 500
+    res.status(status).json({ success: false, message })
+  }
+})
+
+/**
+ * DELETE /api/admin/uploads/gallery/:id
+ */
+app.delete('/api/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params
+    const { password } = req.body
+
+    if (!id) {
+      return res.status(400).json({ success: false, message: 'Gallery ID is required' })
+    }
+
+    if (!password || !String(password).trim()) {
+      return res.status(400).json({ success: false, message: 'Admin password is required' })
+    }
+
+    const admin = await prisma.adminUser.findUnique({
+      where: { id: req.admin.id },
+      select: { passwordHash: true },
+    })
+
+    if (!admin) {
+      return res.status(404).json({ success: false, message: 'Admin user not found' })
+    }
+
+    const isPasswordValid = await bcrypt.compare(String(password), admin.passwordHash)
+    if (!isPasswordValid) {
+      return res.status(401).json({ success: false, message: 'Incorrect admin password' })
+    }
+
+    await SiteContentService.deleteGallery({ id })
+
+    res.status(200).json({ success: true, message: 'Gallery item deleted successfully' })
+  } catch (error) {
+    console.error('Admin gallery delete error:', error)
+    const message = error.message || 'Failed to delete gallery item'
+    const status = error.code === 'P2025' ? 404 : 500
+    res.status(status).json({ success: false, message })
   }
 })
 
