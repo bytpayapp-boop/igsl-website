@@ -115,7 +115,14 @@ export default function GalleryPage() {
     if (filteredItems.length === 0) return
     const previousIndex = (selectedIndex - 1 + selectedGallery.length) % selectedGallery.length
     setSelectedIndex(previousIndex)
-    setSelectedImage(selectedGallery[previousIndex].fileUrl)
+    setSelectedImage(selectedGallery[previousIndex].fileUrl);
+    setGalleryItemIndex(previousIndex)
+   
+      // if(galleryItemIndex==0){
+      //   setSelectedImage(selectedGallery[selectedGallery.length].fileUrl)
+        
+      // }
+    
   }
 
   const handleNextImage = () => {
@@ -130,6 +137,7 @@ export default function GalleryPage() {
     setGalleryItemIndex((pre)=>
       {
       if(galleryItemIndex >= selectedGallery.length){
+        setSelectedImage(selectedGallery[0].fileUrl)
         
         return 0}
         return pre+1})
@@ -201,8 +209,8 @@ export default function GalleryPage() {
         )}
       </div>
 
-      <Dialog open={!!selectedGallery} onOpenChange={(open) => !open && setSelectedGallery(null)}>
-        <DialogContent className="max-w-4xl w-full max-h-[90vh] p-0">
+      <Dialog open={!!selectedImage} onOpenChange={(open) => !open && setSelectedImage(null)}>
+        <DialogContent className="max-w-4xl md:max-w-5xl w-full  group max-h-[950vh] p-0">
           <DialogTitle asChild>
             <VisuallyHidden>Gallery image viewer</VisuallyHidden>
           </DialogTitle>
@@ -232,7 +240,7 @@ export default function GalleryPage() {
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-gray-600/70 text-primary-foreground px-4 py-2 rounded-full text-sm">
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 group-hover:opacity-0 transition-all bg-gray-600/70 text-primary-foreground px-4 py-2 rounded-full opacity-50 text-sm">
                 {`${galleryItemIndex} / ${selectedGallery.length}`}
               </div>
             </div>
