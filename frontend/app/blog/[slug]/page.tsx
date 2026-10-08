@@ -217,7 +217,7 @@ export default async function BlogDetailPage({
             <div className="flex items-center gap-1">
 
                <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}&quote=${encodeURIComponent(post.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -231,7 +231,7 @@ export default async function BlogDetailPage({
                 </Button>
               </a>
               <a
-                href={`https://x.com/intent/tweet?text=${shareTitle}'\n'${post.content}&url=${articleUrl}`}
+                href={`https://x.com/intent/tweet?text=${shareTitle}'\\n'${post.content}&url=${articleUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
