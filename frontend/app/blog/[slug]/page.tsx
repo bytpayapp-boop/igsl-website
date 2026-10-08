@@ -231,7 +231,7 @@ export default async function BlogDetailPage({
                 </Button>
               </a>
               <a
-                href={`https://x.com/intent/tweet?text=${shareTitle }&url=${articleUrl}`}
+                href={`https://x.com/intent/tweet?text=${shareTitle}'\n'${post.content}&url=${articleUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
