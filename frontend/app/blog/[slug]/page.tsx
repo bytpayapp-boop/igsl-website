@@ -143,22 +143,9 @@ export default async function BlogDetailPage({
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-foreground/60">Share:</span>
             <div className="flex items-center gap-1">
-              <a
-                href={`https://twitter.com/intent/tweet?text=${shareTitle}&url=${articleUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-foreground/60 hover:text-blue-500 hover:bg-blue-500/10"
-                  title="Share on Twitter"
-                >
-                  <Twitter className="w-4 h-4" />
-                </Button>
-              </a>
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${articleUrl}`}
+
+               <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}&quote=${shareTitle}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -171,6 +158,21 @@ export default async function BlogDetailPage({
                   <Facebook className="w-4 h-4" />
                 </Button>
               </a>
+              <a
+                href={`https://x.com/intent/tweet?text=${shareTitle}&url=${articleUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-foreground/60 hover:text-blue-500 hover:bg-blue-500/10"
+                  title="Share on Twitter"
+                >
+                  <Twitter className="w-4 h-4" />
+                </Button>
+              </a>
+             
               <a
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${articleUrl}`}
                 target="_blank"
