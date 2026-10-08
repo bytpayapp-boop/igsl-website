@@ -5,8 +5,8 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { BlogCard } from '@/components/cards/blog-card'
+import { ShareButtons } from '@/components/news/share-buttons'
 import { fetchNews } from '@/lib/api/newsApi'
-
 import { 
   ChevronLeft, 
   Calendar, 
@@ -160,7 +160,7 @@ export default async function BlogDetailPage({
               <Link href="/blog">
                 <Button
                   variant="ghost"
-                  className="bg-black/40 hover:bg-black/60 text-white border-white/20"
+                  className="bg-black/50 hover:bg-black/60 text-white border-white/20"
                 >
                   <ChevronLeft className="w-4 h-4 mr-2" />
                   Back to News
@@ -211,64 +211,7 @@ export default async function BlogDetailPage({
             </div>
           </div>
 
-          {/* Share Buttons */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground/60">Share:</span>
-            <div className="flex items-center gap-1">
-
-               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}&quote=${encodeURIComponent(post.title)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-foreground/60 hover:text-blue-600 hover:bg-blue-600/10"
-                  title="Share on Facebook"
-                >
-                  <Facebook className="w-4 h-4" />
-                </Button>
-              </a>
-              <a
-               href={`https://x.com/intent/tweet?text=${encodeURIComponent(`${shareTitle}\n${post.content}`)}&url=${encodeURIComponent(articleUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-foreground/60 hover:text-blue-500 hover:bg-blue-500/10"
-                  title="Share on Twitter"
-                >
-                  <Twitter className="w-4 h-4" />
-                </Button>
-              </a>
-             
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${articleUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-foreground/60 hover:text-blue-700 hover:bg-blue-700/10"
-                  title="Share on LinkedIn"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </Button>
-              </a>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-foreground/60 hover:text-green-600 hover:bg-green-600/10"
-                title="Copy link"
-              >
-                <LinkIcon className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
+          <ShareButtons articleUrl={articleUrl} postTitle={post.title} postContent={post.content} />
         </div>
 
         {/* Main Content */}
