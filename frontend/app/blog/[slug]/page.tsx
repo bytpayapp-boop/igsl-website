@@ -131,7 +131,7 @@ export default async function BlogDetailPage({
       {/* Hero Section */}
       <div className="relative w-full overflow-hidden bg-black">
         <div className="mx-auto">
-          <div className="relative overflow-hidden rounded-none border border-white/10 bg-black shadow-2xl">
+          <div className="relative overflow-hidden rounded-none border border-white/10 bg-background shadow-2xl">
             <div className="relative max-h-[72vh] w-full overflow-hidden">
               {isVideoUrl(post.coverImage) ? (
                 <video
