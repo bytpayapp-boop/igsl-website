@@ -34,6 +34,18 @@ function isVideoUrl(url: string): boolean {
   return /\.(mp4|webm|ogg|mov|m4v|avi|mkv)(\?.*)?$/i.test(url)
 }
 
+function getSocialImageUrl(url: string): string {
+  if (!isVideoUrl(url)) {
+    return url
+  }
+
+  if (url.includes('cloudinary.com')) {
+    return url.replace(/\.(mp4|webm|ogg|mov|m4v|avi|mkv)(\?.*)?$/i, '.jpg')
+  }
+
+  return 'https://igsl.vercel.app/og-image.png'
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -52,6 +64,7 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://igsl.vercel.app'
   const articleUrl = `${baseUrl}/blog/${post.slug}`
   const description = post.content.replace(/<[^>]*>/g, '').slice(0, 160)
+  const socialImage = getSocialImageUrl(post.coverImage)
 
   return {
     title: post.title,
@@ -64,18 +77,30 @@ export async function generateMetadata({
       type: 'article',
       images: [
         {
-          url: post.coverImage,
+          url: socialImage,
           width: 1200,
           height: 630,
           alt: post.title,
         },
       ],
+      ...(isVideoUrl(post.coverImage) && {
+        videos: [
+          {
+            url: post.coverImage,
+            secureUrl: post.coverImage,
+            type: 'video/mp4',
+            width: 1280,
+            height: 720,
+            alt: post.title,
+          },
+        ],
+      }),
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description,
-      images: [post.coverImage],
+      images: [socialImage],
     },
   }
 }
@@ -206,7 +231,7 @@ export default async function BlogDetailPage({
                 </Button>
               </a>
               <a
-                href={`https://x.com/intent/tweet?text=${shareTitle}&url=${articleUrl}`}
+                href={`https://x.com/intent/tweet?text=${shareTitle }&url=${articleUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
