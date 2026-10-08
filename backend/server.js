@@ -916,9 +916,11 @@ app.get('/api/archive/:slug', async (req, res) => {
 app.post('/api/admin/uploads/archive', adminAuthMiddleware, async (req, res) => {
   try {
     const { title, category, description, year, document } = req.body
+    console.log('Document sent for database:',req.body)
     const documentUrl = document?.fileUrl || document?.url
 
     if (!title || !category || !documentUrl) {
+      console.log('Missing document attribute')
       return res.status(400).json({
         success: false,
         message: 'title, category, and document file URL are required',
@@ -932,7 +934,9 @@ app.post('/api/admin/uploads/archive', adminAuthMiddleware, async (req, res) => 
       description,
       year,
       document,
-    })
+    });
+
+    console.log('Document file saved to DB successfully:',record)
 
     res.status(201).json({ success: true, data: record })
   } catch (error) {
