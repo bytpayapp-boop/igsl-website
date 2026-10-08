@@ -2,7 +2,8 @@ const prisma = require('../lib/prisma')
 
 class SiteContentService {
   static async createNews({ adminUserId, title, category, content, author, tags, coverImage }) {
-    return prisma.siteContentUpload.create({
+    
+    const data = prisma.siteContentUpload.create({
       data: {
         type: 'NEWS',
         title,
@@ -15,6 +16,8 @@ class SiteContentService {
         galleryImages: [coverImage],
       },
     })
+    // console.log('News created successfully',data)
+    return data;
   }
 
   static async createInfo({ adminUserId, title, category, description, content, image }) {

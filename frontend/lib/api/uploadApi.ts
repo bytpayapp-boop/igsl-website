@@ -15,7 +15,7 @@ export const uploadApi = {
       content: string
       author: string
       tags?: string
-      coverImage: ImageKitUploadResult
+      coverImage: any
     }
   ) {
     const response = await axios.post(

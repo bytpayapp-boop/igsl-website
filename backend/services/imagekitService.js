@@ -30,6 +30,7 @@ async function uploadBufferToImageKit({ buffer, fileName, mimeType, folder = 'ig
     maxContentLength: Infinity,
   })
 
+  
   return {
     fileId: data.fileId,
     fileName: data.name,
@@ -44,6 +45,7 @@ function getPublicImageKitConfig() {
   const { imagekitId, urlEndpoint, publicKey, uploadEndpoint } = imagekitConfig
   return { imagekitId, urlEndpoint, publicKey, uploadEndpoint }
 }
+
 
 module.exports = {
   uploadBufferToImageKit,

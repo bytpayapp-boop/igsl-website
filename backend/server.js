@@ -657,8 +657,10 @@ app.get('/api/upload-auth', (req, res) => {
  */
 app.post('/api/admin/uploads/news', adminAuthMiddleware, async (req, res) => {
   try {
+    console.log('Uploading news data has started with:',req.body)
     const { title, category, content, author, tags, coverImage } = req.body
     if (!title || !category || !content || !author || !coverImage?.fileUrl) {
+      console.log('Missing details')
       return res.status(400).json({
         success: false,
         message: 'title, category, content, author, and coverImage are required',
@@ -672,7 +674,8 @@ app.post('/api/admin/uploads/news', adminAuthMiddleware, async (req, res) => {
       author,
       tags,
       coverImage,
-    })
+    });
+    console.log('News created successfully',record)
     res.status(201).json({ success: true, data: record })
   } catch (error) {
     console.error('Admin news upload save error:', error)
