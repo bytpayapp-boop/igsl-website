@@ -50,7 +50,7 @@ export default async function BlogDetailPage({
   const relatedPosts = posts
     .filter((p) => p.id !== post.id && p.category === post.category)
     .slice(0, 3)
-  const baseUrl = 'https://igsl-website.com'
+  const baseUrl = 'https://igsl.vercel.app'
   const articleUrl = `${baseUrl}/blog/${post.slug}`
   const shareTitle = encodeURIComponent(post.title)
 
