@@ -659,7 +659,7 @@ app.post('/api/admin/uploads/news', adminAuthMiddleware, async (req, res) => {
   try {
     console.log('Uploading news data has started with:',req.body)
     const { title, category, content, author, tags, coverImage } = req.body
-    if (!title || !category || !content || !author || !coverImage?.fileUrl) {
+    if (!title || !category || !content || !author || !coverImage) {
       console.log('Missing details')
       return res.status(400).json({
         success: false,

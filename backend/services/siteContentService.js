@@ -11,7 +11,7 @@ class SiteContentService {
         content,
         author,
         tags: tags || null,
-        coverImageUrl: coverImage.fileUrl,
+        coverImageUrl: coverImage,
         adminUserId: adminUserId || null,
         galleryImages: [coverImage],
       },
