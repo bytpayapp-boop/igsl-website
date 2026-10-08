@@ -114,7 +114,7 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
     }
       const imageForm = new FormData();
       imageForm.append("file", formData.coverImage!);
-      imageForm.append("upload_preset", "igsl_uploads");
+      imageForm.append("upload_preset", "igsl_news_uploads");
 
       const response = await axios.post(
         "https://api.cloudinary.com/v1_1/dadvxxgl1/upload",
