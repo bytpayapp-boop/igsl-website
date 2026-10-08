@@ -154,9 +154,11 @@ export default async function BlogDetailPage({
                 />
               )}
             </div>
-            <div className="absolute z-50 inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+            <div className="absolute z-50 inset-0 bg-gradient-to-t from-background via-background/20 to-transparent backdrop-blur-[2px]" />
 
-            <div className="absolute left-6 top-6 z-100">
+<div className='flex absolute top-4 z-90 px-4 md:px-20 justify-between w-full'>
+
+ <div >
               <Link href="/blog">
                 <Button
                   variant="ghost"
@@ -168,16 +170,19 @@ export default async function BlogDetailPage({
               </Link>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 z-100 p-8 sm:p-12">
-              <div className="max-w-4xl mx-auto">
-                <div className="flex flex-wrap gap-3 mb-4">
+            <div className="flex flex-wrap gap-3">
                   <span className="inline-flex items-center gap-2 bg-green-600/40 text-gray-100 px-4 py-2 rounded-full capitalize font-semibold text-sm border border-green-500/30">
                     <Tag className="w-4 h-4" />
                     {post.category}
                   </span>
                   
                 </div>
-                <div className="text-2xl z-[100] md:text-5xl lg:text-6xl font-bold text-white dark:text-white leading-tight mb-0">
+                </div>
+
+            <div className="absolute bottom-0 left-0 right-0 z-100 p-8 sm:p-12">
+              <div className="max-w-4xl mx-auto">
+                
+                <div className="text-2xl z-[100] md:text-5xl lg:text-6xl font-bold text-white shadow-sm p-2 rounded-lg backdrop-blur-sm dark:text-white leading-tight mb-0">
                   {post.title}
                 </div>
               
