@@ -285,7 +285,7 @@ export default function NewsUploadForm({ onBack }: NewsUploadFormProps) {
             </p>
           </div>
 
-          {/* Cover Image */}
+          {/* Cover Images */}
           <div className="space-y-2">
             <Label className="font-semibold">Cover Image or Video *</Label>
             {imagePreview ? (
