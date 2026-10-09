@@ -14,9 +14,9 @@ export function ChairmanMessage() {
         <Card className="overflow-hidden bg-white/90 dark:bg-gray-900 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             {/* Image */}
-            <div className="relative h-64 md:h-96 w-full rounded-lg">
+            <div className="relative h-64 md:h-96 pt-20 w-full rounded-lg">
               <Image
-                src="/lgaChairman (1).png"
+                src="/images/staff/Ugo-Ferdinand3.png"
                 alt="Chairman IGSL"
                 fill
                 className="object-cover rounded-tr-[20px] rounded-br-[20px]"

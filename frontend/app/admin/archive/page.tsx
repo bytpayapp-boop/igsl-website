@@ -33,12 +33,14 @@ export default function ArchiveManagementPage() {
         const response = await fetch(`${getBackendUrl()}/api/archive`, { cache: 'no-store' })
         const payload = await response.json().catch(() => ({ data: [] }))
 
+    
         if (!response.ok) {
           throw new Error(payload?.message || 'Failed to fetch archive documents')
         }
 
         if (isMounted) {
           setItems(Array.isArray(payload?.data) ? payload.data : [])
+          console.log('Document items:',payload.data)
         }
       } catch (error) {
         console.error('Failed to load archive documents:', error)
@@ -104,37 +106,59 @@ export default function ArchiveManagementPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredItems.map((item) => (
-              <Card key={item.id} className="hover:shadow-md transition">
-                <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-lg bg-muted p-3">
-                      <FileText className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-foreground">{item.title}</h3>
-                        <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded capitalize">
-                          {item.category}
-                        </span>
-                        <span className="text-xs text-foreground/60">{item.year}</span>
-                      </div>
-                      <p className="text-sm text-foreground/70 line-clamp-2">{item.description}</p>
-                      <p className="text-xs text-foreground/50 mt-1">{item.fileName}</p>
-                    </div>
-                  </div>
+            {filteredItems.map((item) => {
+              const isDocumentPreview =
+                item.documentUrl.includes('.pdf') ||
+                item.documentUrl.includes('.doc') ||
+                item.documentUrl.includes('.xlsx') ||
+                item.documentUrl.includes('.docx')
 
-                  <div className="flex gap-2 shrink-0">
-                    <Button asChild variant="outline">
-                      <a href={item.documentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center">
-                        <Download className="mr-2 w-4 h-4" />
-                        Open
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+              return (
+                <Card key={item.id} className="hover:shadow-md transition">
+                  <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-start gap-4">
+                      <div className="rounded-lg bg-muted p-3">
+                        <FileText className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-foreground">{item.title}</h3>
+                          <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded capitalize">
+                            {item.category}
+                          </span>
+                          <span className="text-xs text-foreground/60">{item.year}</span>
+                        </div>
+                        <p className="text-sm text-foreground/70 line-clamp-2">{item.description}</p>
+                        <p className="text-xs text-foreground/50 mt-1">{item.fileName}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 shrink-0">
+                      {isDocumentPreview ? (
+                        <Button
+                          variant="outline"
+                          className="bg-green-500 text-white hover:bg-green-600"
+                          onClick={() => {
+                            localStorage.setItem('pdfLink', item.documentUrl)
+                            router.push('/pdf-Viewer')
+                          }}
+                        >
+                          <Download className="mr-2 w-4 h-4" />
+                          Open PDF
+                        </Button>
+                      ) : (
+                        <Button asChild variant="outline">
+                          <a href={item.documentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center">
+                            <Download className="mr-2 w-4 h-4" />
+                            Open
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         )}
       </div>
