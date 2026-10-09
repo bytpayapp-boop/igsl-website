@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { fetchNews } from '@/lib/api/newsApi'
 import { BlogPost } from '@/lib/types'
 import { Search } from 'lucide-react'
+import Link from 'next/link'
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([])
@@ -47,7 +48,17 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+       <Link href="/" className="flex items-center gap-3 font-bold top-5 left-5 text-xl md:top-5 md:left-10 absolute  md:block md:flex hover:opacity-80 transition-opacity">
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+              <img 
+                src="/coatOfArm.png" 
+                alt="Nigerian Coat of Arms" 
+                className="w-10 h-10"
+              />
+            </div>
+            <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
+          </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-22">
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">News & Updates</h1>
