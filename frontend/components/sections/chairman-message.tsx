@@ -51,7 +51,7 @@ export function ChairmanMessage() {
               <Link href="/staff">
                 <Button 
                 className="bg-primary hover:bg-primary/90">
-                  See Staff Organogram
+                  View Staff Organogram
                 </Button>
               </Link>
               {/* Social Media Icons */}
