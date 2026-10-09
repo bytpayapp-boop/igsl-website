@@ -140,7 +140,7 @@ export default function ArchiveManagementPage() {
                           className="bg-green-500 text-white hover:bg-green-600"
                           onClick={() => {
                             localStorage.setItem('pdfLink', item.documentUrl)
-                            router.push('/pdf-Viewer')
+                            router.push('/admin/archive/pdf-Viewer')
                           }}
                         >
                           <Download className="mr-2 w-4 h-4" />
