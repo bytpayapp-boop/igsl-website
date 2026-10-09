@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { mockStaffMembers } from '@/lib/mock-data'
 import { StaffCard } from '@/components/cards/staff-card'
-import { ChevronLeft, Mail, Phone, Building } from 'lucide-react'
+import { ChevronLeft, Mail, Phone, Building, Facebook } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -114,6 +114,23 @@ export default function StaffDetailPage({
                   <span className="text-foreground/80">{member.phone}</span>
                 </a>
               )}
+              {member.facebook &&(
+                 <a
+                 className="flex items-center gap-3 p-3 bg-muted rounded-lg bg-muted/80 transition"
+          href={member.facebook}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button
+            size="sm"
+            variant="ghost"
+            className="text-foreground/60 text-blue-600 bg-blue-600/10"
+            title="Facebook"
+            type="button"
+          >
+            <Facebook className="w-4 h-4" /> Connect on Facebook
+          </Button>
+        </a>)}
             </div>
           </div>
         </div>

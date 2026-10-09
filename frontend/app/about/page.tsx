@@ -5,7 +5,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">About Igbo-Eze South Local Government Council</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">About Igbo-Eze South Local Government Council</h1>
           <p className="text-lg text-foreground/70">
             Learn more about our local government and the services we provide to our community.
           </p>
@@ -15,7 +15,7 @@ export default function AboutPage() {
           {/* Overview */}
           <Card className="border-border">
             <CardHeader>
-              <CardTitle className="text-2xl text-primary">Our Organization</CardTitle>
+              <CardTitle className="text-2xl text-primary">Our Administration</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-foreground/80 leading-relaxed">

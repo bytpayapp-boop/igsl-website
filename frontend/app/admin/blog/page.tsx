@@ -1,17 +1,41 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { mockBlogPosts } from '@/lib/mock-data'
+import { fetchNews } from '@/lib/api/newsApi'
+import { BlogPost } from '@/lib/types'
 import { Edit, Trash2, Plus, Eye, EyeOff } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+
 
 export default function BlogManagementPage() {
-  const [posts, setPosts] = useState(mockBlogPosts)
+  
+   const [posts, setPosts] = useState<BlogPost[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [loading, setLoading] = useState(true)
 
+
+  useEffect(() => {
+      const loadPosts = async () => {
+        try {
+          const news = await fetchNews()
+          setPosts(news)
+        } catch (error) {
+          console.error('Failed to load news articles:', error)
+          setPosts([])
+        } finally {
+          setLoading(false)
+        }
+      }
+  
+      loadPosts()
+    }, [])
+
+  const router = useRouter()
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -41,7 +65,7 @@ export default function BlogManagementPage() {
         {/* Header with Create Button */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-primary mb-2">Blog Posts Management</h1>
+            <h1 className="text-3xl font-bold  mb-2">Posts Management</h1>
             <p className="text-foreground/70">Create, edit, and manage blog content</p>
           </div>
           <Link href="/admin/posts/new">
@@ -64,6 +88,7 @@ export default function BlogManagementPage() {
         </Card>
 
         {/* Posts Table */}
+        {loading?'Loading Posts':!filteredPosts?'No posts available':
         <Card>
           <CardHeader>
             <CardTitle>All Blog Posts ({filteredPosts.length})</CardTitle>
@@ -142,9 +167,9 @@ export default function BlogManagementPage() {
                               <EyeOff className="w-4 h-4" />
                             )}
                           </Button>
-                          <Button size="sm" variant="ghost">
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                           <Link href={`/blog/${post.slug}`}> 
+                            View
+                          </Link>
                           <Button
                             size="sm"
                             variant="ghost"
@@ -167,7 +192,7 @@ export default function BlogManagementPage() {
               </div>
             )}
           </CardContent>
-        </Card>
+        </Card>}
       </div>
     </div>
   )

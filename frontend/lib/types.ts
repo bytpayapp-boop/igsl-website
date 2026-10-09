@@ -44,6 +44,7 @@ export interface StaffMember {
   bio: string
   email?: string
   phone?: string
+  facebook?:string
   profileImage: string
 }
 

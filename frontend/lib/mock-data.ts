@@ -168,6 +168,7 @@ export const mockStaffMembers: StaffMember[] = [
     bio: 'Progress Agenda, tomorrow is here',
     email: 'chairman@igsl.gov',
     phone: '08037436104',
+    facebook: 'https://www.facebook.com/ugoferdinand.ukwueze',
     profileImage: '/images/staff/Ugo-Ferdinand.png',
   },
   {
@@ -178,6 +179,7 @@ export const mockStaffMembers: StaffMember[] = [
     bio: "Let's serve the people...",
     email: 'quennmrs@gmail.com',
     phone: '+234-800-234-5678',
+  
     profileImage: '/images/staff/',
   },
   {
