@@ -114,7 +114,7 @@ export default function ArchiveManagementPage() {
                 item.documentUrl.includes('.docx')
 
               return (
-                <Card key={item.id} className="hover:shadow-md transition">
+                <Card key={item.id} className="hover:shadow-md overflow-hidden transition">
                   <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
                     <div className="flex items-start gap-4">
                       <div className="rounded-lg bg-muted p-3">
@@ -144,7 +144,7 @@ export default function ArchiveManagementPage() {
                           }}
                         >
                           <Download className="mr-2 w-4 h-4" />
-                          Open PDF
+                          Open File
                         </Button>
                       ) : (
                         <Button asChild variant="outline">
