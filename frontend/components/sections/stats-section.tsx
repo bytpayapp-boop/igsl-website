@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '../ui/button'
+import { useRouter } from 'next/navigation'
 
 interface StatItemProps {
   number: number
@@ -56,7 +57,9 @@ export function StatsSection() {
       { number: 10000, label: 'Students supported in WAEC & JAMB', img:'projects/jambEmpowerment.jpg'},
     { number: 2300, label: 'Kilometers of New Asphated Roads',img:'projects/roadConstruction.jpg' }
   
-  ]
+  ];
+
+  const router = useRouter()
 
   return (
     <section className="bg-white/20 dark:bg-gray-800 bg-gradient-to-b  from-white via-green-200/10 to-white dark:from-gray-800 dark:via-green-200/20 dark:to-gray-800 py-16">
@@ -79,7 +82,9 @@ export function StatsSection() {
             />
           ))}
         </div>
-        <Button className='mt-4' >See More in Gallery</Button>
+        <Button 
+        onClick={()=>router.push('/gallery')}
+        className='mt-4 bg-primary cursor-pointer' >See More in Gallery</Button>
       </div>
     </section>
   )

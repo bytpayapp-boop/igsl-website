@@ -48,10 +48,10 @@ export function ChairmanMessage() {
 
               <div className='flex gap-4 justify-between items-center md:px-4'>
 
-              <Link href="/about">
+              <Link href="/staff">
                 <Button 
                 className="bg-primary hover:bg-primary/90">
-                  Learn More About Our Vision
+                  See Staff Organogram
                 </Button>
               </Link>
               {/* Social Media Icons */}
