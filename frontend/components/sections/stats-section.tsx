@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '../ui/button'
 
 interface StatItemProps {
   number: number
   label: string
-  index:number
+  image?: string
 }
 
-function StatItem({ number, index, label }: StatItemProps) {
+function StatItem({ number, label, image }: StatItemProps) {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -24,12 +25,25 @@ function StatItem({ number, index, label }: StatItemProps) {
 
   return (
     <Card className="group text-center border-transparent hover:border-green-600/10 relative overflow-hidden hover:shadow-lg transition-all">
-      <div className={`absolute h-40 w-40 rounded-full group-hover:scale-[1.8] transition-all bg-green-600/10 z-[80]  -bottom-20 -right-20`}/>
-      <CardContent className="pt-8 pb-8 z-[100] ">
-        <div className="text-4xl md:text-5xl font-bold text-green-600/80 mb-2">
-          {count.toLocaleString()}
+      <div className="absolute h-40 w-40 rounded-full group-hover:scale-[1.8] transition-all bg-green-600/10 z-[80] -bottom-20 -right-20" />
+      <CardContent className="pt-8 pb-5 z-[100]">
+        <div className="space-y-3">
+          <div className="text-4xl md:text-5xl font-bold text-primary">
+            {count.toLocaleString()}
+          </div>
+          <p className="text-foreground/80 text-lg leading-relaxed">{label}</p>
         </div>
-        <p className="text-foreground/90 text-lg">{label}</p>
+
+        {image ? (
+          <div className="mt-5 overflow-hidden rounded-xl border border-green-600/10 bg-muted/20">
+            <img
+              src={image}
+              alt={label}
+              loading="lazy"
+              className="h-32 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   )
@@ -37,10 +51,11 @@ function StatItem({ number, index, label }: StatItemProps) {
 
 export function StatsSection() {
   const stats = [
-    { number: 4500, label: 'Capacity Modern Secretariat Building' },
-    { number: 3500, label: 'Youths Trained & Empowered' },
-    { number: 2300, label: 'Kilometers of New Asphated Roads' },
-    { number: 10000, label: 'Students supported in WAEC & JAMB' },
+    { number: 4500, label: 'Capacity Modern Secretariat Building',img:'projects/buildingProject.jpg' },
+    { number: 3500, label: 'Youths Trained & Empowered', img:'projects/aiTraining.jpg' },
+      { number: 10000, label: 'Students supported in WAEC & JAMB', img:'projects/jambEmpowerment.jpg'},
+    { number: 2300, label: 'Kilometers of New Asphated Roads',img:'projects/roadConstruction.jpg' }
+  
   ]
 
   return (
@@ -55,10 +70,16 @@ export function StatsSection() {
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat,i) => (
-            <StatItem key={stat.label} index={i} number={stat.number} label={stat.label} />
+          {stats.map((stat) => (
+            <StatItem
+              key={stat.label}
+              number={stat.number}
+              label={stat.label}
+              image={stat.img}
+            />
           ))}
         </div>
+        <Button className='mt-4' >See More in Gallery</Button>
       </div>
     </section>
   )
