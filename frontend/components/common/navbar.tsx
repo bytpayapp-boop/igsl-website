@@ -11,7 +11,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: '/services', label: 'Services' },
-    { href: '/archive', label: 'Archive' },
+    // { href: '/archive', label: 'Archive' },
     { href: '/gallery', label: 'Gallery' },
     { href: '/staff', label: 'Our Staff' },
     { href: '/blog', label: 'News' },

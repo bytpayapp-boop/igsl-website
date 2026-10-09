@@ -68,7 +68,7 @@ export const uploadApi = {
       category: string
       description?: string
       year?: number | string
-      document: ImageKitUploadResult
+      document: Partial<ImageKitUploadResult> & { fileUrl?: string; url?: string } | string
     }
   ) {
     const response = await axios.post(

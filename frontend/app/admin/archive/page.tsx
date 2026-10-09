@@ -71,10 +71,12 @@ export default function ArchiveManagementPage() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-primary mb-2">Archive Management</h1>
+            <h1 className="text-3xl font-bold  mb-2">Archive Management</h1>
             <p className="text-foreground/70">Manage government documents and records</p>
           </div>
-          <Button size="lg" onClick={() => router.push('/admin/archive/new')}>
+          <Button size="lg"
+          className='-mt-34 md:mt-0' 
+          onClick={() => router.push('/admin/archive/new')}>
             <Plus className="mr-2 w-4 h-4" />
             Add Document
           </Button>

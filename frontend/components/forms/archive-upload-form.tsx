@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import axios from 'axios'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,10 +18,11 @@ import { toast } from 'sonner'
 import { ArrowLeft, FileText, Upload as UploadIcon, X } from 'lucide-react'
 import { getAdminToken } from '@/lib/api/adminApi'
 import { uploadApi } from '@/lib/api/uploadApi'
-import { uploadFileToImageKit } from '@/lib/imagekit/upload-file'
 
 const ARCHIVE_CATEGORIES = ['policies', 'reports', 'minutes', 'publications', 'records', 'miscellaneous']
 const MAX_DOCUMENT_BYTES = 20 * 1024 * 1024
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024
 
 interface ArchiveUploadFormProps {
   onBack: () => void
@@ -37,6 +39,11 @@ const isAllowedDocumentType = (file: File) => {
   ]
 
   return allowedTypes.includes(file.type) || file.name.toLowerCase().endsWith('.pdf')
+}
+
+const isAllowedArchiveFile = (file: File) => {
+  const isMedia = file.type.startsWith('image/') || file.type.startsWith('video/')
+  return isMedia || isAllowedDocumentType(file)
 }
 
 export default function ArchiveUploadForm({ onBack }: ArchiveUploadFormProps) {
@@ -58,13 +65,23 @@ export default function ArchiveUploadForm({ onBack }: ArchiveUploadFormProps) {
     const file = e.target.files?.[0]
     if (!file) return
 
-    if (!isAllowedDocumentType(file)) {
-      toast.error('Only PDF, DOC, DOCX, XLS, XLSX, and TXT files are allowed.')
+    if (!isAllowedArchiveFile(file)) {
+      toast.error('Only PDF, DOC, DOCX, XLS, XLSX, TXT, image, and video files are allowed.')
       return
     }
 
-    if (file.size > MAX_DOCUMENT_BYTES) {
-      toast.error('Document must be 20MB or smaller.')
+    if (file.type.startsWith('image/')) {
+      if (file.size > MAX_IMAGE_BYTES) {
+        toast.error('Image files must be 5MB or smaller.')
+        return
+      }
+    } else if (file.type.startsWith('video/')) {
+      if (file.size > MAX_VIDEO_BYTES) {
+        toast.error('Video files must be 50MB or smaller.')
+        return
+      }
+    } else if (file.size > MAX_DOCUMENT_BYTES) {
+      toast.error('Document files must be 20MB or smaller.')
       return
     }
 
@@ -99,14 +116,32 @@ export default function ArchiveUploadForm({ onBack }: ArchiveUploadFormProps) {
 
     setIsLoading(true)
     try {
-      const uploadedDocument = await uploadFileToImageKit(formData.document!, 'igsl/archive')
+      const documentForm = new FormData()
+      documentForm.append('file', formData.document!)
+      documentForm.append('upload_preset', 'igsl_news_uploads')
+
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/dadvxxgl1/upload',
+        documentForm
+      );
+      console.log('Response from cloud:',response.data)
+
+      const documentUrl = response.data.secure_url
 
       await uploadApi.saveArchive(adminToken, {
         title: formData.title.trim(),
         category: formData.category,
         description: formData.description.trim(),
         year: formData.year || new Date().getFullYear(),
-        document: uploadedDocument,
+        document: {
+          fileUrl: documentUrl,
+          url: documentUrl,
+          fileName: formData.document?.name || 'archive-document',
+          fileId: '',
+          fileSize: formData.document?.size || 0,
+          mimeType: formData.document?.type || 'application/octet-stream',
+          folder: 'igsl/archive',
+        },
       })
 
       toast.success('Archive document uploaded successfully!')
@@ -118,8 +153,9 @@ export default function ArchiveUploadForm({ onBack }: ArchiveUploadFormProps) {
         document: null,
       })
     } catch (error) {
-      console.error(error)
-      toast.error(error instanceof Error ? error.message : 'Failed to upload archive document')
+      console.error(error);
+      
+      toast.error('Error uploading file to Cloudinary')
     } finally {
       setIsLoading(false)
     }
@@ -196,18 +232,23 @@ export default function ArchiveUploadForm({ onBack }: ArchiveUploadFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="font-semibold">Document File *</Label>
+            <Label className="font-semibold">Document or Media File *</Label>
             <label className="border-2 border-dashed border-border rounded-lg p-6 cursor-pointer hover:bg-muted transition block">
               <div className="flex flex-col items-center justify-center text-center">
                 <UploadIcon className="w-7 h-7 text-primary mb-2" />
                 <p className="font-medium text-foreground mb-1">
-                  {formData.document ? formData.document.name : 'Click to upload document'}
+                  {formData.document ? formData.document.name : 'Click to upload document or media'}
                 </p>
                 <p className="text-sm text-foreground/50">
-                  PDF, DOC, DOCX, XLS, XLSX, or TXT up to 20MB
+                  PDF, DOC, DOCX, XLS, XLSX, TXT, image, or video files
                 </p>
               </div>
-              <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,application/pdf,application/msword,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" className="hidden" onChange={handleDocumentChange} />
+              <input
+                type="file"
+                accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,application/pdf,application/msword,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain"
+                className="hidden"
+                onChange={handleDocumentChange}
+              />
             </label>
 
             {formData.document && (
