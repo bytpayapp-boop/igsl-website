@@ -219,7 +219,7 @@ export default function GalleryPage() {
             <span className="sr-only">Close</span>
           </DialogClose>
           {selectedImage && (
-            <div className="relative w-full h-[90vh] md:h-[70vh] flex items-center justify-center z-[20] bg-background">
+            <div className="relative w-full h-[90vh] md:h-[90vh] flex items-center justify-center z-[20] bg-background">
               <Image
                 src={selectedImage}
                 alt="Gallery Image"
