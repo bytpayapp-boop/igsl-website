@@ -12,6 +12,38 @@ export default function AboutPage() {
         </div>
 
         <div className="space-y-8">
+
+          {/* Quick Facts */}
+          <Card className="border-border bg-secondary/5">
+            <CardHeader>
+              <CardTitle className="text-2xl text-accent">Quick Facts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                 <li className="flex items-start gap-3">
+                  <span className="text-accent font-bold">●</span>
+                  <span className="text-foreground/80">Currrent LGA Chairman: <span className='font-bold'>Barr. Ugo Ferdinand Ukwueze</span></span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-accent font-bold">●</span>
+                  <span className="text-foreground/80">Population: <span className='font-bold'>Over 147,328 citizens</span></span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-accent font-bold">●</span>
+                  <span className="text-foreground/80">Number of Wards: <span className='font-bold'>16 local government wards</span></span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-accent font-bold">●</span>
+                  <span className="text-foreground/80">Land Mass: <span className='font-bold'>158 km2 (61 sq mi)</span></span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-accent font-bold">●</span>
+                  <span className="text-foreground/80">Major Traditional Market: <span className='font-bold'>Nkwo Market</span></span>
+                </li>
+               
+              </ul>
+            </CardContent>
+          </Card>
           {/* Overview */}
           <Card className="border-border">
             <CardHeader>
@@ -76,37 +108,7 @@ export default function AboutPage() {
             </CardContent>
           </Card>
 
-          {/* Quick Facts */}
-          <Card className="border-border bg-secondary/5">
-            <CardHeader>
-              <CardTitle className="text-2xl text-accent">Quick Facts</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                 <li className="flex items-start gap-3">
-                  <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Currrent LGA Chairman: <span className='font-bold'>Barr. Ugo Ferdinand Ukwueze</span></span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Population: <span className='font-bold'>Over 147,328 citizens</span></span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Number of Wards: <span className='font-bold'>16 local government wards</span></span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Land Mass: <span className='font-bold'>158 km2 (61 sq mi)</span></span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Major Traditional Market: <span className='font-bold'>Nkwo Market</span></span>
-                </li>
-               
-              </ul>
-            </CardContent>
-          </Card>
+          
         </div>
       </div>
     </div>
