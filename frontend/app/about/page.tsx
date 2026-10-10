@@ -15,7 +15,7 @@ export default function AboutPage() {
           {/* Overview */}
           <Card className="border-border">
             <CardHeader>
-              <CardTitle className="text-2xl text-primary">Our Administration</CardTitle>
+              <CardTitle className="text-2xl dark:text-green-100">Our Administration</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-foreground/80 leading-relaxed">
@@ -31,10 +31,10 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="border-border">
               <CardHeader>
-                <CardTitle className="text-xl text-primary">Our Vision</CardTitle>
+                <CardTitle className="text-xl dark:text-green-100">Our Vision</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/80 leading-relaxed">
+                <p className="text-green-400 dark:text-green-200 leading-relaxed">
                   A prosperous, peaceful, and progressive local government where all citizens have equal opportunities for social and economic advancement.
                 </p>
               </CardContent>
@@ -42,10 +42,10 @@ export default function AboutPage() {
 
             <Card className="border-border">
               <CardHeader>
-                <CardTitle className="text-xl text-primary">Our Mission</CardTitle>
+                <CardTitle className="text-xl dark:text-green-100">Our Mission</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground/80 leading-relaxed">
+                <p className="text-green-400 dark:text-green-200 leading-relaxed">
                   To provide efficient and responsive governance, deliver quality services, and foster community participation in development initiatives.
                 </p>
               </CardContent>
@@ -55,7 +55,7 @@ export default function AboutPage() {
           {/* Core Values */}
           <Card className="border-border">
             <CardHeader>
-              <CardTitle className="text-2xl text-primary">Core Values</CardTitle>
+              <CardTitle className="text-2xl dark:text-green-100">Core Values</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -68,7 +68,7 @@ export default function AboutPage() {
                   { title: 'Innovation', desc: 'Embracing modern solutions and best practices' },
                 ].map((value) => (
                   <div key={value.title}>
-                    <h4 className="font-bold text-primary mb-2">{value.title}</h4>
+                    <h4 className="font-bold text-gray-700 dark:text-green-200 mb-2">{value.title}</h4>
                     <p className="text-foreground/70">{value.desc}</p>
                   </div>
                 ))}
