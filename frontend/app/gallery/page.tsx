@@ -68,9 +68,7 @@ export default function GalleryPage() {
             return {
               id: String(item.id ?? `${item.title}-${item.createdAt}`),
               title: String(item.title || 'Gallery item'),
-              category: defaultCategories.includes(normalizedCategory)
-                ? normalizedCategory
-                : 'events',
+              category:item.category,
               image: imageUrl,
               galleryImages:item.galleryImages,
               date: new Date(item.date || item.createdAt || Date.now()),
