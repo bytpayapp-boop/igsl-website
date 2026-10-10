@@ -44,7 +44,7 @@ export default function AboutPage() {
               </ul>
             </CardContent>
           </Card>
-          {/* Overview */}
+          {/* Overviews */}
           <Card className="border-border">
             <CardHeader>
               <CardTitle className="text-2xl dark:text-green-100">Our Administration</CardTitle>
