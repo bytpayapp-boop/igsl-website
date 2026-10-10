@@ -24,7 +24,7 @@ export default function AboutPage() {
 
         <div className="space-y-8">
 
-          {/* Quick Facts */}
+          {/* Quick Factss */}
           <Card className="border-border bg-secondary/5">
             <CardHeader>
               <CardTitle className="text-2xl text-accent">Quick Facts</CardTitle>
