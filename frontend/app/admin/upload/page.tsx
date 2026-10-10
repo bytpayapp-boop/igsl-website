@@ -24,7 +24,7 @@ export default function UploadPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const initialType = searchParams.get('type') as UploadCategory | null
-  const [category, setCategory] = useState<UploadCategory | ''>(initialType || 'archive')
+  const [category, setCategory] = useState<UploadCategory | ''>(initialType || 'gallery')
 
   useEffect(() => {
     if (initialType && ['news', 'info', 'gallery', 'archive'].includes(initialType)) {
@@ -48,12 +48,12 @@ export default function UploadPage() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-4xl font-bold">Upload Content</h1>
-            <p className="text-foreground/70 mt-2">Create and upload site content</p>
+            <h1 className="text-4xl font-bold">Upload Projects, Events, Ceremonies</h1>
+            <p className="text-foreground/70 mt-2">Create and upload gallery content</p>
           </div>
         </div>
 
-        <Card className="mb-6 border-border">
+        {/* <Card className="mb-6 border-border">
           <CardContent className="pt-6">
             <div className="space-y-2">
               <Label htmlFor="content-type" className="font-semibold">
@@ -72,7 +72,7 @@ export default function UploadPage() {
               </Select>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {category === 'news' && <NewsUploadForm onBack={handleBack} />}
         {category === 'info' && <InfoUploadForm onBack={handleBack} />}

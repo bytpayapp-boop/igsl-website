@@ -33,11 +33,12 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
+    customCategory: '',
     images: [] as File[],
   })
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
 
-  const galleryCategories = ['events', 'community', 'leadership', 'ceremonies', 'programs']
+  const galleryCategories = ['projects', 'events', 'leadership', 'ceremonies', 'programs']
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -89,11 +90,13 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
   }
 
   const validateForm = () => {
+    const finalCategory = formData.customCategory.trim() || formData.category
+
     if (!formData.title.trim()) {
       toast.error('Gallery title is required')
       return false
     }
-    if (!formData.category) {
+    if (!finalCategory) {
       toast.error('Category is required')
       return false
     }
@@ -114,12 +117,14 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
       return
     }
 
+    const finalCategory = formData.customCategory.trim() || formData.category
+
     setIsLoading(true)
     try {
       const images = await uploadFilesToImageKit(formData.images, 'igsl/gallery')
       await uploadApi.saveGallery(adminToken, {
         title: formData.title.trim(),
-        category: formData.category,
+        category: finalCategory,
         images,
       })
 
@@ -130,6 +135,7 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
       setFormData({
         title: '',
         category: '',
+        customCategory: '',
         images: [],
       })
       setImagePreviews([])
@@ -182,6 +188,23 @@ export default function GalleryUploadForm({ onBack }: GalleryUploadFormProps) {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="customCategory" className="font-semibold">
+              Custom Category (Optional)
+            </Label>
+            <Input
+              id="customCategory"
+              name="customCategory"
+              placeholder="If the list does not fit, type your own category"
+              value={formData.customCategory}
+              onChange={handleInputChange}
+              maxLength={80}
+            />
+            <p className="text-xs text-foreground/50">
+              If provided, this will be used instead of the selected category.
+            </p>
           </div>
 
           {/* Images Upload */}
