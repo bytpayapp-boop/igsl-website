@@ -7,6 +7,11 @@ const staffRows = [
   mockStaffMembers.slice(0, 1),
   mockStaffMembers.slice(1, 3),
   mockStaffMembers.slice(3, 6),
+  mockStaffMembers.slice(6,9),
+  mockStaffMembers.slice(9,12),
+  mockStaffMembers.slice(12,15),
+  mockStaffMembers.slice(15,18),
+  mockStaffMembers.slice(18,21),
 ]
 
 export default function StaffPage() {
@@ -41,11 +46,14 @@ export default function StaffPage() {
           {staffRows.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className={`relative flex justify-center ${
-                rowIndex === 0 ? 'mb-10 md:mb-12' : rowIndex === 1 ? 'mb-10 gap-8 md:gap-16' : 'gap-6 md:gap-12'
-              }`}
+              className='mb-10 gap-8 md:gap-16 flex items-center justify-center flex-row'
+              // className={`relative flex justify-center ${
+              //   rowIndex === 0 ? 'mb-10 md:mb-12' : rowIndex === 1 ? 'mb-10 gap-8 md:gap-16' : 'gap-6 md:gap-12'
+              // }`}
             >
-              {row.map((member) => (
+              {row.map((member) => {
+                if(!member.profileImage)return;
+                return(
                 <div
                 onClick={()=>{localStorage.setItem('staff',JSON.stringify(member));router.push(`/staff/${member.name}?`)}}
                   key={member.id}
@@ -66,7 +74,7 @@ export default function StaffPage() {
                     <p className="mt-1 text-sm font-medium text-primary">{member.role}</p>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
           ))}
         </div>
