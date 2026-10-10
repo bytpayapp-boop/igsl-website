@@ -79,30 +79,31 @@ export default function AboutPage() {
           {/* Quick Facts */}
           <Card className="border-border bg-secondary/5">
             <CardHeader>
-              <CardTitle className="text-2xl text-primary">Quick Facts</CardTitle>
+              <CardTitle className="text-2xl text-accent">Quick Facts</CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                <li className="flex items-start gap-3">
+                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Population: Over 45,000 citizens</span>
+                  <span className="text-foreground/80">Currrent LGA Chairman: <span className='font-bold'>Barr. Ugo Ferdinand Ukwueze</span></span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Number of Wards: 16 local government wards</span>
+                  <span className="text-foreground/80">Population: <span className='font-bold'>Over 147,328 citizens</span></span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Departments: 8 functional departments</span>
+                  <span className="text-foreground/80">Number of Wards: <span className='font-bold'>16 local government wards</span></span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Year Established: Established with long history of service</span>
+                  <span className="text-foreground/80">Land Mass: <span className='font-bold'>158 km2 (61 sq mi)</span></span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Office Location: Secretariat Building, Ibagwa-Aka</span>
+                  <span className="text-foreground/80">Major Traditional Market: <span className='font-bold'>Nkwo Market</span></span>
                 </li>
+               
               </ul>
             </CardContent>
           </Card>

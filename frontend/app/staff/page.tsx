@@ -58,7 +58,7 @@ export default function StaffPage() {
                 onClick={()=>{localStorage.setItem('staff',JSON.stringify(member));router.push(`/staff/${member.name}?`)}}
                   key={member.id}
                   
-                  className="group flex w-40 flex-col items-center text-center transition-transform duration-200 hover:-translate-y-2 md:w-48"
+                  className="group flex cursor-pointer w-40 flex-col items-center text-center transition-transform duration-200 hover:-translate-y-2 md:w-48"
                 >
                   <div className="relative">
                     <div className="absolute inset-0 rounded-full bg-primary/15 blur-xl" />
