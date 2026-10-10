@@ -1,11 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background">
+       <Link href="/" className="flex items-center gap-3 font-bold text-xl top-5 left-10 absolute hidden md:block md:flex hover:opacity-80 transition-opacity">
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+              <img 
+                src="/coatOfArm.png" 
+                alt="Nigerian Coat of Arms" 
+                className="w-10 h-10"
+              />
+            </div>
+            <span className="sm:inline text-gray-700 dark:text-gray-300">Back</span>
+          </Link>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">About Igbo-Eze South Local Government Council</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">About Igbo-Eze South Local Government</h1>
           <p className="text-lg text-foreground/70">
             Learn more about our local government and the services we provide to our community.
           </p>
