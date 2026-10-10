@@ -1,7 +1,12 @@
+'use client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { mockStaffMembers } from '@/lib/mock-data'
+
 
 export default function AboutPage() {
+  const router = useRouter()
   return (
     <div className="min-h-screen bg-background">
        <Link href="/" className="flex items-center gap-3 font-bold text-xl top-5 left-10 absolute hidden md:block md:flex hover:opacity-80 transition-opacity">
@@ -33,7 +38,8 @@ export default function AboutPage() {
               <ul className="space-y-3">
                  <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
-                  <span className="text-foreground/80">Currrent LGA Chairman: <span className='font-bold'>Barr. Ugo Ferdinand Ukwueze</span></span>
+                  <span className="text-foreground/80">Currrent LGA Chairman: <span className='font-bold text-blue-500  underline'><button className='cursor-pointer underline'
+                  onClick={()=>{localStorage.setItem('staff',JSON.stringify(mockStaffMembers[0]));router.push(`/staff/${mockStaffMembers[0].name}?`)}}>Barr. Ugo Ferdinand Ukwueze</button></span></span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
