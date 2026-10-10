@@ -76,7 +76,7 @@ export default function GalleryPage() {
 
       const nextPage = Number(payload?.page ?? pageNumber) || pageNumber
       const totalItems = Number(payload?.total ?? mappedItems.length) || 0
-      const pages = Number(payload?.totalPages ?? Math.ceil(totalItems / GALLERY_PAGE_SIZE) || 1) || 1
+      const pages = Number(payload?.totalPages ?? (Math.ceil(totalItems / GALLERY_PAGE_SIZE) || 1)) || 1
 
       setGalleryItems(mappedItems)
       setCurrentPage(nextPage)

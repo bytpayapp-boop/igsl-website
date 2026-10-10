@@ -33,29 +33,46 @@ function normalizeNewsItem(item: any): BlogPost | null {
   }
 }
 
-async function fetchNewsResponse() {
-  const response = await fetch(`${getBackendUrl()}/api/news`, {
+async function fetchNewsResponse(page = 1, limit = 0) {
+  const url = new URL(`${getBackendUrl()}/api/news`)
+  url.searchParams.set('type', 'NEWS')
+  url.searchParams.set('page', String(page))
+  if (limit > 0) {
+    url.searchParams.set('limit', String(limit))
+  }
+
+  const response = await fetch(url.toString(), {
     cache: 'no-store',
     next: { revalidate: 0 },
   })
 
   if (!response.ok) {
-    return []
+    return { items: [], page, totalPages: 1, total: 0 }
   }
 
-  const payload = await response.json().catch(() => ({ data: [] }))
+  const payload = await response.json().catch(() => ({ data: [], page, totalPages: 1, total: 0 }))
   const items = Array.isArray(payload?.data) ? payload.data : Array.isArray(payload) ? payload : []
-console.log('News items fetched successfully:',items)
-  return items
-    .map((item) => normalizeNewsItem(item))
-    .filter((item): item is BlogPost => Boolean(item))
+
+  return {
+    items: items
+      .map((item) => normalizeNewsItem(item))
+      .filter((item): item is BlogPost => Boolean(item)),
+    page: Number(payload?.page ?? page) || page,
+    totalPages: Number(payload?.totalPages ?? 1) || 1,
+    total: Number(payload?.total ?? items.length) || 0,
+  }
 }
 
-export async function fetchNews(): Promise<BlogPost[]> {
-  return fetchNewsResponse()
+export async function fetchNews(page = 1, limit = 0): Promise<BlogPost[]> {
+  const { items } = await fetchNewsResponse(page, limit)
+  return items
+}
+
+export async function fetchPaginatedNews(page = 1, limit = 0) {
+  return fetchNewsResponse(page, limit)
 }
 
 export async function fetchNewsBySlug(slug: string): Promise<BlogPost | null> {
-  const articles = await fetchNewsResponse()
-  return articles.find((article) => article.slug === slug) ?? null
+  const { items } = await fetchNewsResponse(1, 0)
+  return items.find((article) => article.slug === slug) ?? null
 }
