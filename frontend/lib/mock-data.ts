@@ -169,7 +169,7 @@ export const mockStaffMembers: StaffMember[] = [
     email: 'chairman@igsl.gov',
     phone: '08037436104',
     facebook: 'https://www.facebook.com/ugoferdinand.ukwueze',
-    profileImage: '/images/staff/Ugo-Ferdinand.png',
+    profileImage: '/images/staff/Ugo-Ferdinand3.png',
   },
   {
     id: '2',
