@@ -31,8 +31,9 @@ export interface GalleryItem {
   id: string
   image: string
   title: string
-  category: GalleryCategory
+  category: GalleryCategory | string
   date: Date
+  galleryImages?: Array<{ fileUrl?: string; url?: string; src?: string }>
 }
 
 // Staff Types

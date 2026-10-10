@@ -668,9 +668,19 @@ app.get('/api/upload-auth', (req, res) => {
 app.get('/api/news', async (req, res) => {
   try {
     const type = req.query.type || 'NEWS'
-    const records = await SiteContentService.listByType(type)
+    const rawPage = Number.parseInt(String(req.query.page ?? '1'), 10)
+    const rawLimit = Number.parseInt(String(req.query.limit ?? '0'), 10)
+    const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1
+    const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? rawLimit : 0
 
-    const items = records.map((record) => {
+    const records = await SiteContentService.listByType(type)
+    const total = records.length
+    const totalPages = limit > 0 ? Math.max(1, Math.ceil(total / limit)) : 1
+    const safePage = limit > 0 ? Math.min(page, totalPages) : 1
+    const startIndex = limit > 0 ? (safePage - 1) * limit : 0
+    const paginatedRecords = limit > 0 ? records.slice(startIndex, startIndex + limit) : records
+
+    const items = paginatedRecords.map((record) => {
       const tags = Array.isArray(record.tags)
         ? record.tags
         : typeof record.tags === 'string'
@@ -695,7 +705,7 @@ app.get('/api/news', async (req, res) => {
         author: record.author || 'IGSL Communications',
         tags,
         coverImage: coverImageUrl,
-        galleryImages:record.galleryImages,
+        galleryImages: record.galleryImages,
         coverImageUrl,
         date: record.createdAt,
         createdAt: record.createdAt,
@@ -704,7 +714,16 @@ app.get('/api/news', async (req, res) => {
       }
     })
 
-    res.status(200).json({ success: true, data: serializeBigInt(items) })
+    res.status(200).json({
+      success: true,
+      data: serializeBigInt(items),
+      page: safePage,
+      limit,
+      total,
+      totalPages,
+      hasNext: limit > 0 ? safePage < totalPages : false,
+      hasPrev: limit > 0 ? safePage > 1 : false,
+    })
   } catch (error) {
     console.error('Public news fetch error:', error)
     res.status(500).json({ success: false, message: 'Failed to fetch news' })
