@@ -162,7 +162,7 @@ export const mockGalleryItems: GalleryItem[] = [
 export const mockStaffMembers: StaffMember[] = [
   {
     id: '1',
-    name: 'Hon. Barr. Ugo-Ferdinand Ukwueze',
+    name: 'Hon. Barr. Ugo Ferdinand Ukwueze',
     role: 'Executive Chairman',
     department: 'Executive',
     bio: 'Progress Agenda, tomorrow is here',

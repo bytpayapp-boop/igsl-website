@@ -39,7 +39,7 @@ export default function AboutPage() {
                  <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>
                   <span className="text-foreground/80">Currrent LGA Chairman: <span className='font-bold text-blue-500  underline'><button className='cursor-pointer underline'
-                  onClick={()=>{localStorage.setItem('staff',JSON.stringify(mockStaffMembers[0]));router.push(`/staff/${mockStaffMembers[0].name}?`)}}>Barr. Ugo Ferdinand Ukwueze</button></span></span>
+                  onClick={()=>{localStorage.setItem('staff',JSON.stringify(mockStaffMembers[0]));router.push(`/staff/${mockStaffMembers[0].name}?`)}}>{mockStaffMembers[0].name}</button></span></span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-accent font-bold">●</span>

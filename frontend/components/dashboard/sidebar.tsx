@@ -89,20 +89,21 @@ const[user,setUser] = useState({fullName:'unknown',email:'Please login!'})
         }`}
       >
         {/* Header */}
-        <div className="p-6 border-b border-primary/10 dark:border-primary/30 bg-white dark:bg-gray-800">
-          <Link href="/dashboard" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary dark:bg-primary flex items-center justify-center">
-              <Home className="w-6 h-6 text-white" />
+        <div className="p-6 border-b md:mt-6 border-primary/10 dark:border-primary/30 bg-white dark:bg-gray-800">
+          <Link href="/" className="flex items-center gap-3 font-bold text-xl top-4 left-10 absolute hidden md:block md:flex hover:opacity-80 transition-opacity">
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+              <img 
+                src="/coatOfArm.png" 
+                alt="Nigerian Coat of Arms" 
+                className="w-10 h-10"
+              />
             </div>
-            <div>
-              <h1 className="font-bold text-primary dark:text-primary/95">IGSL</h1>
-              <p className="text-xs text-primary/60 dark:text-primary/50">Citizen -{user.fullName.split(' ')[0]} </p>
-            </div>
+            <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
           </Link>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 md:pt-10 space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon
             const active = isActive(item.href, item.exact)

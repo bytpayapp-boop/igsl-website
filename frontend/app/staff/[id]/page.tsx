@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { mockStaffMembers } from '@/lib/mock-data'
 import { StaffCard } from '@/components/cards/staff-card'
-import { ChevronLeft, Mail, Phone, Building, Facebook } from 'lucide-react'
+import { ChevronLeft, Mail, Phone, Building, Facebook, Award, AwardIcon, LucideAward } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -81,7 +81,7 @@ export default function StaffDetailPage({
               <h1 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">{member.name}</h1>
               <p className="text-2xl text-accent  font-semibold mb-2">{member.role}</p>
               <div className="flex items-center gap-2 text-foreground/70 mb-4">
-                <Building className="w-4 h-4" />
+                <LucideAward className="w-4 h-4" />
                 <span className="capitalize">{member.department}</span>
               </div>
             </div>

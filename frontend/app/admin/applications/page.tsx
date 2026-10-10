@@ -72,7 +72,7 @@ export default function ApplicationsPage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">Applications Management</h1>
+          <h1 className="text-3xl font-bold  mb-2">Applications Management</h1>
           <p className="text-foreground/70">
             All applications from the database ({applications.length} total)
           </p>
@@ -151,7 +151,7 @@ export default function ApplicationsPage() {
                         key={app.id}
                         className="border-b border-border hover:bg-muted/50 transition"
                       >
-                        <td className="py-3 px-4 font-mono text-xs text-primary">{app.refNumber}</td>
+                        <td className="py-3 px-4 font-mono text-xs text-blue-500/80">{app.refNumber}</td>
                         <td className="py-3 px-4">
                           <div>
                             <p className="font-medium text-foreground">

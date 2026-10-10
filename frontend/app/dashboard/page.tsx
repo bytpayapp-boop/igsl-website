@@ -196,12 +196,12 @@ export default function DashboardPage() {
   ).length
 
   return (
-    <div className="min-h-screen bg-background dark:bg-gray-950">
+    <div className="min-h-screen bg-background dark:bg-background">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <div className="bg-primary/10 dark:bg-gray-900 rounded-2xl p-8 text-white shadow-lg border border-primary/20 dark:border-primary/40">
+          <div className="bg-card/80 rounded-2xl p-8 text-white shadow-lg border border-primary/20 dark:border-primary/40">
             <div className="flex items-start justify-between flex-wrap gap-4">
               <div>
                 <p className="text-primary mb-2 flex items-center gap-2">
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                 <h2 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">{user.fullName}</h2>
                 <p className="text-gray-600  dark:text-gray-300 text-lg">Manage your applications and generate verifiable documents</p>
               </div>
-              <div className="text-right">
+              <div className="text-right hidden md:block">
                 <div className="text-5xl text-gray-600 dark:text-gray-400 font-bold">{documents.length}</div>
                 <p className="text-primary">Applications</p>
               </div>
@@ -221,7 +221,7 @@ export default function DashboardPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="border border-primary/20 dark:border-primary/30 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow">
+          <Card className="border border-primary/20 dark:border-primary/30 bg-card shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold text-gray-600 dark:text-gray-300 flex items-center gap-2">
                 <FileText className="w-4 h-4 text-primary dark:text-primary/90" />
@@ -236,7 +236,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border border-primary/20 dark:border-primary/30 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow">
+          <Card className="border border-primary/20 dark:border-primary/30 bg-card shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold text-gray-600 dark:text-gray-300 flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-primary dark:text-primary/90" />
@@ -251,7 +251,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border border-primary/20 dark:border-primary/30 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow">
+          <Card className="border border-primary/20 dark:border-primary/30 bg-card shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold text-gray-600 dark:text-gray-300 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-secondary dark:text-secondary/80" />
