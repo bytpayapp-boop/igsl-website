@@ -45,7 +45,7 @@ export function HeroSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-screen py-20">
           {/* Left Content */}
           <div className="space-y-8">
 
@@ -95,57 +95,45 @@ export function HeroSection() {
                   </div>
                 )
               })}
-            </div>
+            </div> 
 
               
 
             {/* CTA Links */}
-            <div className="absolute flex flex-col gap-3 md:p-4 z-50 md:px-6 md:-mt-24 md:right-10 transition-all flex-wrap justify-center mx-auto md:justify-start ">
-              
-              {/* <Link
-                href="/services"
-                className="bg-green-600 hover:bg-green-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
-              >
-                <span className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  Explore Services
-                </span>
-              </Link> */}
+            <div className="absolute inset-x-0 flex flex-col items-center gap-3 md:p-4 z-50 md:px-6 md:-mt-24 md:right-10 transition-all md:justify-start md:inset-auto md:w-auto ">
+              <div className="flex flex-col items-center justify-center gap-3 relative mx-auto md:hidden">
+                <div className="flex gap-3 justify-center">
+                  <Link
+                    href="/services/birth-certificate"
+                    className="bg-green-700 block hover:bg-green-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+                  >
+                    <span className="flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      Birth Certificate
+                    </span>
+                  </Link>
 
-              <div className='flex ml-2 gap-4 relative mx-auto md:hidden'>
+                  <Link
+                    href="/services/identification"
+                    className="bg-orange-700 block hover:bg-orange-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+                  >
+                    <span className="flex items-center gap-2">
+                      <FileUser className="h-4 w-4" />
+                      ID Certificate
+                    </span>
+                  </Link>
+                </div>
 
-
-              <Link
-                href="/services/birth-certificate"
-                className="bg-green-700 block hover:bg-green-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
-              >
-                <span className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Birth Certificate
-                </span>
-              </Link>
-
-              <Link
-                href="/services/identification"
-                className="bg-orange-700 block hover:bg-orange-700 text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
-              >
-                <span className="flex items-center gap-2">
-                  <FileUser className="h-4 w-4" />
-                  ID Certificate
-                </span>
-              </Link>
-
+                <button
+                  onClick={() => router.push("/anonymous-message")}
+                  className="bg-indigo-700 hover:bg-indigo-700 mx-auto cursor-pointer text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <MessageCircle className="h-4 animate-bounce w-4" />
+                    Drop Message
+                  </span>
+                </button>
               </div>
-
-              <button
-                onClick={()=>router.push("/anonymous-message")}
-                className="bg-indigo-700 hover:bg-indigo-700 mx-auto cursor-pointer text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
-              >
-                <span className="flex items-center justify-center gap-2">
-                  <MessageCircle className="h-4 animate-bounce w-4" />
-                  Drop Message
-                </span>
-              </button>
             </div>
           </div>
 
@@ -184,6 +172,15 @@ export function HeroSection() {
                   <p className="text-sm opacity-90">Get to know all the staff in active service</p>
                 </div>
               </div>
+              <button
+                onClick={() => router.push("/anonymous-message")}
+                className="bg-indigo-700 hover:bg-indigo-700 mx-auto cursor-pointer text-white transition-all font-medium inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <MessageCircle className="h-4 animate-bounce w-4" />
+                  Drop Message
+                </span>
+              </button>
             </div>
           </div>
         </div>
