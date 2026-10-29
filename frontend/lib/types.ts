@@ -40,6 +40,7 @@ export interface GalleryItem {
 export interface StaffMember {
   id: string
   name: string
+  title: string
   role: string
   department: string
   bio: string
