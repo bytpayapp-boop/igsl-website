@@ -159,7 +159,7 @@ class AdminService {
       safeCount('successful payments', () =>
         prisma.payment.count({ where: { status: 'SUCCESS' } })
       ),
-      safeCount('staff', () => prisma.staffProfile.count()),
+      safeCount('staff', () => prisma.staffMember.count()),
       safeFindMany('recent applications', async () => {
         const rows = await prisma.application.findMany({
           take: 5,

@@ -15,6 +15,7 @@ dotenv.config()
 
 const AuthService = require('./services/authService')
 const AdminService = require('./services/adminService')
+const StaffMemberService = require('./services/staffMemberService')
 const SiteContentService = require('./services/siteContentService')
 const { saveUploadedDocument } = require('./services/uploadDocumentService')
 const { getPublicImageKitConfig } = require('./services/imagekitService')
@@ -1082,6 +1083,89 @@ app.post('/api/uploads/documents', authTokenMiddleWare, async (req, res) => {
   } catch (error) {
     console.error('Save uploaded document error:', error)
     res.status(500).json({ success: false, message: 'Failed to save document record' })
+  }
+})
+
+/**
+ * GET /api/staff
+ */
+app.get('/api/staff', async (req, res) => {
+  try {
+    const staff = await StaffMemberService.list()
+    res.status(200).json({ success: true, data: staff, count: staff.length })
+  } catch (error) {
+    console.error('List staff error:', error)
+    res.status(500).json({ success: false, message: 'Failed to load staff members' })
+  }
+})
+
+/**
+ * GET /api/staff/:id
+ */
+app.get('/api/staff/:id', async (req, res) => {
+  try {
+    const member = await StaffMemberService.getById(req.params.id)
+    if (!member) {
+      return res.status(404).json({ success: false, message: 'Staff member not found' })
+    }
+    res.status(200).json({ success: true, data: member })
+  } catch (error) {
+    console.error('Get staff error:', error)
+    res.status(500).json({ success: false, message: 'Failed to load staff member' })
+  }
+})
+
+/**
+ * GET /api/admin/staff
+ */
+app.get('/api/admin/staff', adminAuthMiddleware, async (req, res) => {
+  try {
+    const staff = await StaffMemberService.list()
+    res.status(200).json({ success: true, data: staff, count: staff.length })
+  } catch (error) {
+    console.error('Admin list staff error:', error)
+    res.status(500).json({ success: false, message: 'Failed to load staff members' })
+  }
+})
+
+/**
+ * POST /api/admin/staff
+ */
+app.post('/api/admin/staff', adminAuthMiddleware, async (req, res) => {
+  try {
+    const member = await StaffMemberService.create(req.body)
+    res.status(201).json({ success: true, data: member, message: 'Staff member created' })
+  } catch (error) {
+    console.error('Create staff error:', error)
+    res.status(400).json({ success: false, message: error.message || 'Failed to create staff member' })
+  }
+})
+
+/**
+ * PUT /api/admin/staff/:id
+ */
+app.put('/api/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
+  try {
+    const member = await StaffMemberService.update(req.params.id, req.body)
+    res.status(200).json({ success: true, data: member, message: 'Staff member updated' })
+  } catch (error) {
+    const status = error.message === 'Staff member not found' ? 404 : 400
+    console.error('Update staff error:', error)
+    res.status(status).json({ success: false, message: error.message || 'Failed to update staff member' })
+  }
+})
+
+/**
+ * DELETE /api/admin/staff/:id
+ */
+app.delete('/api/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
+  try {
+    await StaffMemberService.remove(req.params.id)
+    res.status(200).json({ success: true, message: 'Staff member deleted' })
+  } catch (error) {
+    const status = error.message === 'Staff member not found' ? 404 : 400
+    console.error('Delete staff error:', error)
+    res.status(status).json({ success: false, message: error.message || 'Failed to delete staff member' })
   }
 })
 

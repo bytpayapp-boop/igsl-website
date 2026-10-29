@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { mockStaffMembers } from '@/lib/mock-data'
+import { fetchStaffMembers } from '@/lib/api/staffApi'
+import { StaffMember } from '@/lib/types'
 import { StaffCard } from '@/components/cards/staff-card'
 import { ChevronLeft, Mail, Phone, Building, Facebook, Award, AwardIcon, LucideAward } from 'lucide-react'
 import { notFound } from 'next/navigation'
@@ -17,21 +19,32 @@ export default function StaffDetailPage({
   params: { id: string }
 }) {
 
-  const[member,setMember]=useState({})
+  const[member,setMember]=useState<Partial<StaffMember>>({})
+  const [directory, setDirectory] = useState<StaffMember[]>(mockStaffMembers)
 
   useEffect(()=>{
-  
   const staff = localStorage.getItem('staff');
   if(staff){
   const staff_member = JSON.parse(staff);
   setMember(staff_member)
   }
 
-  },[])
+  fetchStaffMembers()
+    .then((data) => {
+      if (!data.length) return
+      setDirectory(data)
+      const decoded = decodeURIComponent(params.id || '')
+      const matched = data.find(
+        (item) => item.id === params.id || item.name === decoded || item.name === params.id
+      )
+      if (matched) setMember(matched)
+    })
+    .catch(() => {})
+  },[params.id])
 
   
 
-  const colleagues = mockStaffMembers
+  const colleagues = directory
     .filter((m) => m.id !== member.id && m.department === member.department)
     .slice(0, 3)
 
@@ -64,13 +77,15 @@ export default function StaffDetailPage({
           {/* Profile Image */}
           <div className="md:col-span-1">
             <div className="relative w-full aspect-square bg-muted rounded-lg overflow-hidden mb-4">
+              {member.profileImage ? (
               <Image
                 src={member.profileImage}
-                alt={member.name}
+                alt={member.name || 'Staff member'}
                 fill
                 className="object-cover"
                 priority
               />
+              ) : null}
             </div>
           </div>
 

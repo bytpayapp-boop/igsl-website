@@ -183,6 +183,12 @@ export default function AdminDashboard() {
                     View Payments
                   </Link>
                 </Button>
+                <Button className="w-full justify-start" size="lg" variant="outline" asChild>
+                  <Link href="/admin/staff">
+                    <Users className="mr-2 w-4 h-4" />
+                    Manage Staff
+                  </Link>
+                </Button>
               </div>
             </CardContent>
           </Card>

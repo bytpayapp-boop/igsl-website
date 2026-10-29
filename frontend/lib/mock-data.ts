@@ -193,7 +193,7 @@ export const mockStaffMembers: StaffMember[] = [
     bio: 'Am a very accommodating, jovial  and easy to talk to but when it comes to work or business am a very serious minded person.',
     email: 'ukwuezezacchaeus0@gmail.com',
     phone: '08034431401',
-    profileImage: '/images/staff/ZachUkwuezeIkedi.jpeg',
+    profileImage: '/images/staff/ZachUkwuezeIkedi.jpg',
   },
   {
     id: '4',

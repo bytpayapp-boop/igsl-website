@@ -1,21 +1,40 @@
 'use client'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { mockStaffMembers } from '@/lib/mock-data'
+import { fetchStaffMembers } from '@/lib/api/staffApi'
+import { StaffMember } from '@/lib/types'
 import { useRouter } from 'next/navigation'
 
-const staffRows = [
-  mockStaffMembers.slice(0, 1),
-  mockStaffMembers.slice(1, 3),
-  mockStaffMembers.slice(3, 6),
-  mockStaffMembers.slice(6,9),
-  mockStaffMembers.slice(9,12),
-  mockStaffMembers.slice(12,15),
-  mockStaffMembers.slice(15,18),
-  mockStaffMembers.slice(18,21),
-]
+function buildStaffRows(members: StaffMember[]) {
+  return [
+    members.slice(0, 1),
+    members.slice(1, 3),
+    members.slice(3, 6),
+    members.slice(6, 9),
+    members.slice(9, 12),
+    members.slice(12, 15),
+    members.slice(15, 18),
+    members.slice(18, 21),
+    members.slice(21),
+  ].filter((row) => row.length > 0)
+}
 
 export default function StaffPage() {
   const router = useRouter()
+  const [members, setMembers] = useState<StaffMember[]>(mockStaffMembers)
+
+  useEffect(() => {
+    fetchStaffMembers()
+      .then((data) => {
+        if (data.length) setMembers(data)
+      })
+      .catch(() => {
+        setMembers(mockStaffMembers)
+      })
+  }, [])
+
+  const staffRows = useMemo(() => buildStaffRows(members), [members])
   return (
     <div className="min-h-screen bg-gradient-to-tr from-gray-100/60 via-background to-gray-100/40 dark:from-gray-800 dark:via-background/50 dark:to-gray-700">
       <Link href="/" className="flex items-center gap-3 font-bold text-xl top-3 md:top-5 left-5 md:left-10 absolute md:block md:flex hover:opacity-80 transition-opacity">

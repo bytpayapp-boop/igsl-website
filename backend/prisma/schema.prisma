@@ -256,6 +256,25 @@ model StaffProfile {
   @@map("staff_profiles")
 }
 
+model StaffMember {
+  id           String   @id @default(cuid())
+  name         String
+  title        String   @default("")
+  role         String
+  department   String
+  bio          String   @db.Text
+  email        String?
+  phone        String?
+  facebook     String?
+  profileImage String   @map("profile_image")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([department])
+  @@index([createdAt])
+  @@map("staff_members")
+}
+
 model OtpCode {
   id        String    @id @default(cuid())
   userId    String    @map("user_id")

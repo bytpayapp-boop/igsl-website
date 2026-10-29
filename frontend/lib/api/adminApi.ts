@@ -41,6 +41,34 @@ export const adminApi = {
     })
     return response.data
   },
+
+  async listStaff(token: string) {
+    const response = await axios.get(`${getBackendUrl()}/api/admin/staff`, {
+      headers: authHeaders(token),
+    })
+    return response.data
+  },
+
+  async createStaff(token: string, payload: Record<string, unknown>) {
+    const response = await axios.post(`${getBackendUrl()}/api/admin/staff`, payload, {
+      headers: authHeaders(token),
+    })
+    return response.data
+  },
+
+  async updateStaff(token: string, id: string, payload: Record<string, unknown>) {
+    const response = await axios.put(`${getBackendUrl()}/api/admin/staff/${id}`, payload, {
+      headers: authHeaders(token),
+    })
+    return response.data
+  },
+
+  async deleteStaff(token: string, id: string) {
+    const response = await axios.delete(`${getBackendUrl()}/api/admin/staff/${id}`, {
+      headers: authHeaders(token),
+    })
+    return response.data
+  },
 }
 
 export const ADMIN_TOKEN_KEY = 'adminAccessToken'
