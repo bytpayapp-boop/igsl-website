@@ -26,9 +26,13 @@ export default function StaffPage() {
   useEffect(() => {
     fetchStaffMembers()
       .then((data) => {
-        if (data.length) setMembers(data)
+        if (data.length) {setMembers(data);console.log('Staff members;',data);}
       })
-      .catch(() => {})
+      .catch(() => {});
+
+      
+
+
   }, [])
 
   const staffRows = useMemo(() => buildStaffRows(members), [members])
