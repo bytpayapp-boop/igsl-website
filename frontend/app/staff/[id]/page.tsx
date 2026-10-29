@@ -1,33 +1,27 @@
-import Link from 'next/link'
-import Image from 'next/image'
 import type { Metadata } from 'next'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { mockStaffMembers } from '@/lib/mock-data'
 import { fetchStaffMembers } from '@/lib/api/staffApi'
 import { StaffMember } from '@/lib/types'
-import { StaffCard } from '@/components/cards/staff-card'
-import { ShareButtons } from '@/components/news/share-buttons'
-import { ChevronLeft, Mail, Phone, Facebook, LucideAward } from 'lucide-react'
-import { notFound } from 'next/navigation'
+import StaffDetailClient from './staff-detail-client'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://igsl.vercel.app'
 
-async function getStaffDirectory(): Promise<StaffMember[]> {
-  try {
-    const data = await fetchStaffMembers()
-    if (data.length) return data
-  } catch {
-    // fall through to mock data
-  }
-  return mockStaffMembers
-}
-
 function findStaffMember(directory: StaffMember[], id: string): StaffMember | undefined {
-  const decoded = decodeURIComponent(id || '')
-  return directory.find(
-    (item) => item.id === id || item.name === decoded || item.name === id
-  )
+  const decoded = decodeURIComponent(id || '').trim()
+  const normalized = decoded.toLowerCase()
+
+  return directory.find((item) => {
+    const name = (item.name || '').trim()
+    const displayName = `${item.title ? `${item.title} ` : ''}${name}`.trim()
+    return (
+      item.id === id ||
+      name === decoded ||
+      name === id ||
+      displayName === decoded ||
+      name.toLowerCase() === normalized ||
+      displayName.toLowerCase() === normalized ||
+      normalized.endsWith(name.toLowerCase())
+    )
+  })
 }
 
 function getDisplayName(member: StaffMember): string {
@@ -45,44 +39,47 @@ export async function generateMetadata({
   params: Promise<{ id: string }>
 }): Promise<Metadata> {
   const { id } = await params
-  const directory = await getStaffDirectory()
-  const member = findStaffMember(directory, id)
 
-  if (!member) {
-    return {
-      title: 'Staff | IGSL',
+  try {
+    const directory = await fetchStaffMembers()
+    const member = findStaffMember(directory, id)
+
+    if (!member) {
+      return { title: 'Staff | IGSL' }
     }
-  }
 
-  const displayName = getDisplayName(member)
-  const description = getShareText(member).slice(0, 160)
-  const profileUrl = `${BASE_URL}/staff/${encodeURIComponent(member.name)}`
-  const socialImage = member.profileImage || `${BASE_URL}/og-image.png`
+    const displayName = getDisplayName(member)
+    const description = getShareText(member).slice(0, 160)
+    const profileUrl = `${BASE_URL}/staff/${encodeURIComponent(member.name)}`
+    const socialImage = member.profileImage || `${BASE_URL}/og-image.png`
 
-  return {
-    title: displayName,
-    description,
-    openGraph: {
+    return {
       title: displayName,
       description,
-      url: profileUrl,
-      siteName: 'IGSL',
-      type: 'profile',
-      images: [
-        {
-          url: socialImage,
-          width: 1200,
-          height: 630,
-          alt: displayName,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: displayName,
-      description,
-      images: [socialImage],
-    },
+      openGraph: {
+        title: displayName,
+        description,
+        url: profileUrl,
+        siteName: 'IGSL',
+        type: 'profile',
+        images: [
+          {
+            url: socialImage,
+            width: 1200,
+            height: 630,
+            alt: displayName,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: displayName,
+        description,
+        images: [socialImage],
+      },
+    }
+  } catch {
+    return { title: 'Staff | IGSL' }
   }
 }
 
@@ -92,146 +89,5 @@ export default async function StaffDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const directory = await getStaffDirectory()
-  const member = findStaffMember(directory, id)
-
-  if (!member) {
-    notFound()
-  }
-
-  const displayName = getDisplayName(member)
-  const profileUrl = `${BASE_URL}/staff/${encodeURIComponent(member.name)}`
-  const colleagues = directory
-    .filter((m) => m.id !== member.id && m.department === member.department)
-    .slice(0, 3)
-
-  return (
-    <div className="min-h-screen bg-gradient-to-tr from-gray-100/60 via-background to-gray-100/40 dark:from-gray-800 dark:via-background/50 dark:to-gray-700">
-      <Link
-        href="/"
-        className="items-center gap-3 font-bold text-xl top-3 md:top-5 left-5 md:left-10 absolute hidden md:flex hover:opacity-80 transition-opacity"
-      >
-        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
-          <img
-            src="/coatOfArm.png"
-            alt="Nigerian Coat of Arms"
-            className="w-5 md:w-10 h-5 md:h-10"
-          />
-        </div>
-        <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
-      </Link>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Breadcrumb */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <Link href="/staff">
-            <Button variant="ghost" className="-ml-2">
-              <ChevronLeft className="w-4 h-4 mr-2" />
-              Back to Staff Directory
-            </Button>
-          </Link>
-
-          <ShareButtons
-            articleUrl={profileUrl}
-            postTitle={member.name}
-            postContent={member.bio || ''}
-          />
-        </div>
-
-        {/* Staff Profile */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {/* Profile Image */}
-          <div className="md:col-span-1">
-            <div className="relative w-full aspect-square bg-muted rounded-lg overflow-hidden mb-4">
-              {member.profileImage ? (
-                <Image
-                  src={member.profileImage}
-                  alt={member.name || 'Staff member'}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              ) : null}
-            </div>
-          </div>
-
-          {/* Profile Information */}
-          <div className="md:col-span-2 space-y-6">
-            {/* Basic Info */}
-            <div>
-              <h1 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">
-                {displayName}
-              </h1>
-              <p className="text-2xl text-accent font-semibold mb-2">{member.role}</p>
-              <div className="flex items-center gap-2 text-foreground/70 mb-4">
-                <LucideAward className="w-4 h-4" />
-                <span className="capitalize">{member.department}</span>
-              </div>
-            </div>
-
-            {/* Bio */}
-            <Card className="border-border bg-secondary/5">
-              <CardContent className="pt-4">
-                <p className="text-foreground/80 leading-relaxed">{member.bio}</p>
-              </CardContent>
-            </Card>
-
-            {/* Contact Information */}
-            <div className="space-y-3">
-              <p className="text-sm font-medium text-foreground/70">Contact Information</p>
-              {member.email && (
-                <a
-                  href={`mailto:${member.email}`}
-                  className="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition"
-                >
-                  <Mail className="w-5 h-5 text-accent flex-shrink-0" />
-                  <span className="text-foreground/80">{member.email}</span>
-                </a>
-              )}
-              {member.phone && (
-                <a
-                  href={`tel:${member.phone}`}
-                  className="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition"
-                >
-                  <Phone className="w-5 h-5 text-accent flex-shrink-0" />
-                  <span className="text-foreground/80">{member.phone}</span>
-                </a>
-              )}
-              {member.facebook && (
-                <a
-                  className="flex items-center gap-3 p-3 bg-muted rounded-lg transition"
-                  href={member.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-blue-600 bg-blue-600/10"
-                    title="Facebook"
-                    type="button"
-                  >
-                    <Facebook className="w-4 h-4" /> Connect on Facebook
-                  </Button>
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Department Colleagues */}
-        {colleagues.length > 0 && (
-          <div className="border-t border-border pt-12">
-            <h2 className="text-2xl font-bold text-primary mb-6">
-              Other {member.department} Members
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {colleagues.map((colleague) => (
-                <StaffCard key={colleague.id} member={colleague} />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  return <StaffDetailClient id={id} />
 }

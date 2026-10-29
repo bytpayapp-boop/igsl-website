@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { mockStaffMembers } from '@/lib/mock-data'
 import { fetchStaffMembers } from '@/lib/api/staffApi'
 import { StaffMember } from '@/lib/types'
 import { useRouter } from 'next/navigation'
@@ -22,16 +21,14 @@ function buildStaffRows(members: StaffMember[]) {
 
 export default function StaffPage() {
   const router = useRouter()
-  const [members, setMembers] = useState<StaffMember[]>(mockStaffMembers)
+  const [members, setMembers] = useState<StaffMember[]>([])
 
   useEffect(() => {
     fetchStaffMembers()
       .then((data) => {
         if (data.length) setMembers(data)
       })
-      .catch(() => {
-        setMembers(mockStaffMembers)
-      })
+      .catch(() => {})
   }, [])
 
   const staffRows = useMemo(() => buildStaffRows(members), [members])
@@ -60,7 +57,9 @@ export default function StaffPage() {
         </div>
 
         <div className="relative mx-auto max-w-5xl pb-10">
-          {/* <div className="absolute left-1/2 top-12 hidden h-[72%] w-px -translate-x-1/2 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20 md:block" /> */}
+          {members.length === 0 && (
+            <p className="text-center text-foreground/60 py-12">Loading staff...</p>
+          )}
 
           {staffRows.map((row, rowIndex) => (
             <div
