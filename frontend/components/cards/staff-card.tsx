@@ -1,4 +1,5 @@
-import Link from 'next/link'
+'use client'
+
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { StaffMember } from '@/lib/types'

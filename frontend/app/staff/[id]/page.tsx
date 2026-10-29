@@ -1,76 +1,141 @@
-'use client'
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { mockStaffMembers } from '@/lib/mock-data'
 import { fetchStaffMembers } from '@/lib/api/staffApi'
 import { StaffMember } from '@/lib/types'
 import { StaffCard } from '@/components/cards/staff-card'
-import { ChevronLeft, Mail, Phone, Building, Facebook, Award, AwardIcon, LucideAward } from 'lucide-react'
+import { ShareButtons } from '@/components/news/share-buttons'
+import { ChevronLeft, Mail, Phone, Facebook, LucideAward } from 'lucide-react'
 import { notFound } from 'next/navigation'
-import { useEffect, useState } from 'react'
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://igsl.vercel.app'
 
+async function getStaffDirectory(): Promise<StaffMember[]> {
+  try {
+    const data = await fetchStaffMembers()
+    if (data.length) return data
+  } catch {
+    // fall through to mock data
+  }
+  return mockStaffMembers
+}
 
-export default function StaffDetailPage({
+function findStaffMember(directory: StaffMember[], id: string): StaffMember | undefined {
+  const decoded = decodeURIComponent(id || '')
+  return directory.find(
+    (item) => item.id === id || item.name === decoded || item.name === id
+  )
+}
+
+function getDisplayName(member: StaffMember): string {
+  return `${member.title ? `${member.title} ` : ''}${member.name}`.trim()
+}
+
+function getShareText(member: StaffMember): string {
+  const bio = (member.bio || '').trim()
+  return bio ? `${member.name} — ${bio}` : member.name
+}
+
+export async function generateMetadata({
   params,
 }: {
-  params: { id: string }
-}) {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const directory = await getStaffDirectory()
+  const member = findStaffMember(directory, id)
 
-  const[member,setMember]=useState<Partial<StaffMember>>({})
-  const [directory, setDirectory] = useState<StaffMember[]>(mockStaffMembers)
-
-  useEffect(()=>{
-  const staff = localStorage.getItem('staff');
-  if(staff){
-  const staff_member = JSON.parse(staff);
-  setMember(staff_member)
+  if (!member) {
+    return {
+      title: 'Staff | IGSL',
+    }
   }
 
-  fetchStaffMembers()
-    .then((data) => {
-      if (!data.length) return
-      setDirectory(data)
-      const decoded = decodeURIComponent(params.id || '')
-      const matched = data.find(
-        (item) => item.id === params.id || item.name === decoded || item.name === params.id
-      )
-      if (matched) setMember(matched)
-    })
-    .catch(() => {})
-  },[params.id])
+  const displayName = getDisplayName(member)
+  const description = getShareText(member).slice(0, 160)
+  const profileUrl = `${BASE_URL}/staff/${encodeURIComponent(member.name)}`
+  const socialImage = member.profileImage || `${BASE_URL}/og-image.png`
 
-  
+  return {
+    title: displayName,
+    description,
+    openGraph: {
+      title: displayName,
+      description,
+      url: profileUrl,
+      siteName: 'IGSL',
+      type: 'profile',
+      images: [
+        {
+          url: socialImage,
+          width: 1200,
+          height: 630,
+          alt: displayName,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: displayName,
+      description,
+      images: [socialImage],
+    },
+  }
+}
 
+export default async function StaffDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const directory = await getStaffDirectory()
+  const member = findStaffMember(directory, id)
+
+  if (!member) {
+    notFound()
+  }
+
+  const displayName = getDisplayName(member)
+  const profileUrl = `${BASE_URL}/staff/${encodeURIComponent(member.name)}`
   const colleagues = directory
     .filter((m) => m.id !== member.id && m.department === member.department)
     .slice(0, 3)
 
-  if(!member) return notFound()
-  
   return (
-    
     <div className="min-h-screen bg-gradient-to-tr from-gray-100/60 via-background to-gray-100/40 dark:from-gray-800 dark:via-background/50 dark:to-gray-700">
-       <Link href="/" className="flex items-center gap-3 font-bold text-xl top-3 md:top-5 left-5 md:left-10 absolute hidden md:block md:flex hover:opacity-80 transition-opacity">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
-              <img 
-                src="/coatOfArm.png" 
-                alt="Nigerian Coat of Arms" 
-                className="w-5 md:w-10 h-5 md:h-10"
-              />
-            </div>
-            <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
-          </Link> 
+      <Link
+        href="/"
+        className="items-center gap-3 font-bold text-xl top-3 md:top-5 left-5 md:left-10 absolute hidden md:flex hover:opacity-80 transition-opacity"
+      >
+        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+          <img
+            src="/coatOfArm.png"
+            alt="Nigerian Coat of Arms"
+            className="w-5 md:w-10 h-5 md:h-10"
+          />
+        </div>
+        <span className="sm:inline text-gray-700 dark:text-gray-300">IGSL</span>
+      </Link>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
-        <Link href="/staff">
-          <Button variant="ghost" className="mb-6 -ml-2">
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            Back to Staff Directory
-          </Button>
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <Link href="/staff">
+            <Button variant="ghost" className="-ml-2">
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              Back to Staff Directory
+            </Button>
+          </Link>
+
+          <ShareButtons
+            articleUrl={profileUrl}
+            postTitle={member.name}
+            postContent={member.bio || ''}
+          />
+        </div>
 
         {/* Staff Profile */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -78,13 +143,13 @@ export default function StaffDetailPage({
           <div className="md:col-span-1">
             <div className="relative w-full aspect-square bg-muted rounded-lg overflow-hidden mb-4">
               {member.profileImage ? (
-              <Image
-                src={member.profileImage}
-                alt={member.name || 'Staff member'}
-                fill
-                className="object-cover"
-                priority
-              />
+                <Image
+                  src={member.profileImage}
+                  alt={member.name || 'Staff member'}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               ) : null}
             </div>
           </div>
@@ -93,8 +158,10 @@ export default function StaffDetailPage({
           <div className="md:col-span-2 space-y-6">
             {/* Basic Info */}
             <div>
-              <h1 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">{`${member.title?member.title:''} ${member.name}`}</h1>
-              <p className="text-2xl text-accent  font-semibold mb-2">{member.role}</p>
+              <h1 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">
+                {displayName}
+              </h1>
+              <p className="text-2xl text-accent font-semibold mb-2">{member.role}</p>
               <div className="flex items-center gap-2 text-foreground/70 mb-4">
                 <LucideAward className="w-4 h-4" />
                 <span className="capitalize">{member.department}</span>
@@ -129,23 +196,24 @@ export default function StaffDetailPage({
                   <span className="text-foreground/80">{member.phone}</span>
                 </a>
               )}
-              {member.facebook &&(
-                 <a
-                 className="flex items-center gap-3 p-3 bg-muted rounded-lg bg-muted/80 transition"
-          href={member.facebook}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button
-            size="sm"
-            variant="ghost"
-            className="text-foreground/60 text-blue-600 bg-blue-600/10"
-            title="Facebook"
-            type="button"
-          >
-            <Facebook className="w-4 h-4" /> Connect on Facebook
-          </Button>
-        </a>)}
+              {member.facebook && (
+                <a
+                  className="flex items-center gap-3 p-3 bg-muted rounded-lg transition"
+                  href={member.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-blue-600 bg-blue-600/10"
+                    title="Facebook"
+                    type="button"
+                  >
+                    <Facebook className="w-4 h-4" /> Connect on Facebook
+                  </Button>
+                </a>
+              )}
             </div>
           </div>
         </div>
