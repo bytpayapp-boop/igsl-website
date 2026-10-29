@@ -93,7 +93,7 @@ export default function StaffDetailPage({
           <div className="md:col-span-2 space-y-6">
             {/* Basic Info */}
             <div>
-              <h1 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">{member.name}</h1>
+              <h1 className="text-4xl text-gray-800 dark:text-gray-200 font-bold mb-2">{`${member.title?member.title:''} ${member.name}`}</h1>
               <p className="text-2xl text-accent  font-semibold mb-2">{member.role}</p>
               <div className="flex items-center gap-2 text-foreground/70 mb-4">
                 <LucideAward className="w-4 h-4" />
