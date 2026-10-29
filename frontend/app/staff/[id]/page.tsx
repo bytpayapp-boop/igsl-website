@@ -30,7 +30,7 @@ function getDisplayName(member: StaffMember): string {
 
 function getShareText(member: StaffMember): string {
   const bio = (member.bio || '').trim()
-  return bio ? `${member.name} — ${bio}` : member.name
+  return bio ? `${member.role} — ${bio}` : member.name
 }
 
 export async function generateMetadata({

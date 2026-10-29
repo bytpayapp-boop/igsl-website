@@ -50,7 +50,7 @@ export default function StaffPage() {
           </Link> 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-16">
         <div className="mb-12 text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary/80">
+          <p className="text-sm font-semibold uppercase tracking-[0.25em]">
            Igbo-Eze South Local Government 
           </p>
           <h1 className="mt-4 text-4xl md:text-5xl font-bold">Our Staff</h1>
