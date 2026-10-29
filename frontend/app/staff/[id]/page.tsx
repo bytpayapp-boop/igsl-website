@@ -50,7 +50,7 @@ export async function generateMetadata({
 
     const displayName = getDisplayName(member)
     const description = getShareText(member).slice(0, 160)
-    const profileUrl = `${BASE_URL}/staff/${encodeURIComponent(member.name)}`
+    const profileUrl = `${BASE_URL}/staff/${encodeURIComponent(member.profileImage)}`
     const socialImage = member.profileImage || `${BASE_URL}/og-image.png`
 
     return {
