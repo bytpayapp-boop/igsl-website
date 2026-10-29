@@ -190,10 +190,10 @@ export const mockStaffMembers: StaffMember[] = [
     title: 'Hon.',
     role: 'Secretary to Local Government',
     department: 'Administrative',
-    bio: 'A call to office is a call to serve',
+    bio: 'Am a very accommodating, jovial  and easy to talk to but when it comes to work or business am a very serious minded person.',
     email: 'ukwuezezacchaeus0@gmail.com',
     phone: '08034431401',
-    profileImage: '/images/staff/ZachUkwueze.png',
+    profileImage: '/images/staff/ZachUkwuezeIkedi.jpeg',
   },
   {
     id: '4',
