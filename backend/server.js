@@ -558,6 +558,34 @@ app.post('/api/anonymous-message', async (req, res) => {
 // ===== ADMIN ROUTES =====
 
 /**
+ * POST /api/admin/auth/register
+ */
+app.post('/api/admin/auth/register', async (req, res) => {
+  try {
+    const { email, password, fullName, role } = req.body
+
+    if (!email || !password || !fullName) {
+      return res.status(400).json({
+        success: false,
+        message: 'Full name, email, and password are required',
+      })
+    }
+
+    const result = await AdminService.register({ email, password, fullName, role })
+
+    if (!result.success) {
+      const status = result.message?.includes('already exists') ? 409 : 400
+      return res.status(status).json(result)
+    }
+
+    res.status(201).json(result)
+  } catch (error) {
+    console.error('Admin register error:', error)
+    res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+})
+
+/**
  * POST /api/admin/auth/login
  */
 app.post('/api/admin/auth/login', async (req, res) => {

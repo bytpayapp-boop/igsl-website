@@ -112,6 +112,12 @@ export function AdminLoginForm() {
               {isLoading ? 'Signing in…' : 'Sign in'}
             </Button>
             <p className="text-center text-sm text-foreground/70">
+              Need an admin account?{' '}
+              <Link href="/admin/signup" className="text-primary hover:underline">
+                Sign up
+              </Link>
+            </p>
+            <p className="text-center text-sm text-foreground/70">
               <Link href="/" className="text-primary hover:underline">
                 Back to Home
               </Link>

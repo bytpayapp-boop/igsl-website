@@ -6,6 +6,16 @@ function authHeaders(token: string) {
 }
 
 export const adminApi = {
+  async register(payload: {
+    fullName: string
+    email: string
+    password: string
+    role?: string
+  }) {
+    const response = await axios.post(`${getBackendUrl()}/api/admin/auth/register`, payload)
+    return response.data
+  },
+
   async login(email: string, password: string) {
     const response = await axios.post(`${getBackendUrl()}/api/admin/auth/login`, {
       email,

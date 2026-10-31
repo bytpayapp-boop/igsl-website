@@ -67,6 +67,83 @@ async function safeFindMany(label, fn) {
 }
 
 class AdminService {
+  static async register(payload) {
+    try {
+      const { email, password, fullName, role } = payload
+
+      if (!email || !password || !fullName) {
+        throw new Error('Full name, email, and password are required')
+      }
+
+      const normalizedEmail = String(email).trim().toLowerCase()
+      const name = String(fullName).trim()
+
+      if (name.length < 2) {
+        throw new Error('Full name must be at least 2 characters')
+      }
+
+      if (String(password).length < 8) {
+        throw new Error('Password must be at least 8 characters')
+      }
+
+      const existing = await prisma.adminUser.findUnique({
+        where: { email: normalizedEmail },
+      })
+
+      if (existing) {
+        throw new Error('An admin account with this email already exists')
+      }
+
+      const allowedRoles = ['ADMIN', 'VIEWER']
+      const adminRole = allowedRoles.includes(role) ? role : 'ADMIN'
+      const passwordHash = await bcrypt.hash(String(password), 12)
+
+      const admin = await prisma.adminUser.create({
+        data: {
+          email: normalizedEmail,
+          passwordHash,
+          fullName: name,
+          role: adminRole,
+          isActive: true,
+        },
+      })
+
+      const tokenPayload = {
+        adminId: admin.id,
+        email: admin.email,
+        role: admin.role,
+        tokenType: 'admin',
+      }
+
+      const tokens = generateBothTokens(tokenPayload)
+
+      return {
+        success: true,
+        message: 'Admin account created',
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        admin: {
+          id: admin.id,
+          email: admin.email,
+          fullName: admin.fullName,
+          role: admin.role,
+        },
+      }
+    } catch (error) {
+      if (error.code === 'P2002') {
+        return {
+          success: false,
+          message: 'An admin account with this email already exists',
+        }
+      }
+
+      return {
+        success: false,
+        message: error.message,
+      }
+    }
+  }
+
   static async login(credentials) {
     try {
       const { email, password } = credentials

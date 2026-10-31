@@ -41,10 +41,10 @@ export default function AdminLayout({
   const [authReady, setAuthReady] = useState(false)
   const [adminName, setAdminName] = useState<string | null>(null)
 
-  const isLoginPage = pathname === '/admin/login'
+  const isPublicAdminPage = pathname === '/admin/login' || pathname === '/admin/signup'
 
   useEffect(() => {
-    if (isLoginPage) {
+    if (isPublicAdminPage) {
       setAuthReady(true)
       return
     }
@@ -72,9 +72,9 @@ export default function AdminLayout({
         clearAdminSession()
         router.replace('/admin/login')
       })
-  }, [isLoginPage, pathname, router])
+  }, [isPublicAdminPage, pathname, router])
 
-  if (isLoginPage) {
+  if (isPublicAdminPage) {
     return <>{children}</>
   }
 
