@@ -41,7 +41,10 @@ export default function AdminLayout({
   const [authReady, setAuthReady] = useState(false)
   const [adminName, setAdminName] = useState<string | null>(null)
 
-  const isPublicAdminPage = pathname === '/admin/login' || pathname === '/admin/signup'
+  const isPublicAdminPage =
+    pathname === '/admin/login' ||
+    pathname === '/admin/signup' ||
+    pathname === '/admin/addnewadminengrmark'
 
   useEffect(() => {
     if (isPublicAdminPage) {

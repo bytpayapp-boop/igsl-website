@@ -113,9 +113,9 @@ export function AdminLoginForm() {
             </Button>
             <p className="text-center text-sm text-foreground/70">
               Need an admin account?{' '}
-              <Link href="/admin/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
+              <a href="https://wa.me/2349036202766" className="text-primary underline hover:text-primary/80">
+                Contact IT Department
+              </a>
             </p>
             <p className="text-center text-sm text-foreground/70">
               <Link href="/" className="text-primary hover:underline">
