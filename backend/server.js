@@ -68,6 +68,8 @@ origin: [
 }))
 app.use(express.json())
 
+const api = express.Router()
+
 // Health check
 
 app.head('/health', (req, res) => {
@@ -91,7 +93,7 @@ app.get('/health', (req, res) => {
  * POST /api/auth/register
  * Register a new user
  */
-app.post('/api/auth/register', async (req, res) => {
+api.post('/auth/register', async (req, res) => {
   try {
     const { username, email, password, phone } = req.body;
     console.log('Incoming registration from:',req.body.email);
@@ -128,7 +130,7 @@ console.log('Registered data:',result)
  * POST /api/auth/login
  * User login
  */
-app.post('/api/auth/login', async (req, res) => {
+api.post('/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body
 
@@ -163,7 +165,7 @@ app.post('/api/auth/login', async (req, res) => {
  * POST /api/auth/verify-token
  * Verify JWT token
  */
-app.post('/api/auth/verify-token', (req, res) => {
+api.post('/auth/verify-token', (req, res) => {
   try {
     const { token } = req.body
 
@@ -189,7 +191,7 @@ app.post('/api/auth/verify-token', (req, res) => {
  * POST /api/auth/refresh-token
  * Refresh access token using refresh token
  */
-app.post('/api/auth/refresh-token', (req, res) => {
+api.post('/auth/refresh-token', (req, res) => {
   try {
     const { refreshToken } = req.body
 
@@ -231,7 +233,7 @@ app.post('/api/auth/refresh-token', (req, res) => {
  * POST /api/auth/forgot-password
  * Generate password reset token
  */
-app.post('/api/auth/forgot-password', async (req, res) => {
+api.post('/auth/forgot-password', async (req, res) => {
   try {
     const { email } = req.body
 
@@ -268,7 +270,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
  * POST /api/auth/reset-password
  * Reset password with token
  */
-app.post('/api/auth/reset-password', async (req, res) => {
+api.post('/auth/reset-password', async (req, res) => {
   try {
     const { email, resetToken, newPassword } = req.body
 
@@ -299,7 +301,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
  * POST /api/auth/update-password
  * Update password (requires authentication)
  */
-app.post('/api/auth/update-password', async (req, res) => {
+api.post('/auth/update-password', async (req, res) => {
   try {
     const { userId, oldPassword, newPassword } = req.body
 
@@ -330,7 +332,7 @@ app.post('/api/auth/update-password', async (req, res) => {
  * GET /api/auth/profile/:userId
  * Get user profile
  */
-app.get('/api/auth/profile/:userId', async (req, res) => {
+api.get('/auth/profile/:userId', async (req, res) => {
   try {
     const { userId } = req.params
 
@@ -361,7 +363,7 @@ app.get('/api/auth/profile/:userId', async (req, res) => {
  * PUT /api/auth/profile/:userId
  * Update user profile
  */
-app.put('/api/auth/profile/:userId', async (req, res) => {
+api.put('/auth/profile/:userId', async (req, res) => {
   try {
     const { userId } = req.params
     const updates = req.body
@@ -393,7 +395,7 @@ app.put('/api/auth/profile/:userId', async (req, res) => {
  * POST /api/auth/send-verification-otp
  * Send email verification OTP
  */
-app.post('/api/auth/send-verification-otp', async (req, res) => {
+api.post('/auth/send-verification-otp', async (req, res) => {
   try {
     const { userId } = req.body
 
@@ -428,7 +430,7 @@ app.post('/api/auth/send-verification-otp', async (req, res) => {
  * POST /api/auth/verify-email-otp
  * Verify email with OTP
  */
-app.post('/api/auth/verify-email-otp', async (req, res) => {
+api.post('/auth/verify-email-otp', async (req, res) => {
   try {
     const { userId, otp } = req.body
 
@@ -459,7 +461,7 @@ app.post('/api/auth/verify-email-otp', async (req, res) => {
  * POST /api/auth/logout
  * User logout
  */
-app.post('/api/auth/logout', async (req, res) => {
+api.post('/auth/logout', async (req, res) => {
   try {
     const { userId } = req.body
 
@@ -487,7 +489,7 @@ app.post('/api/auth/logout', async (req, res) => {
  * POST /api/anonymous-message
  * Submit an anonymous message
  */
-app.post('/api/anonymous-message', async (req, res) => {
+api.post('/anonymous-message', async (req, res) => {
   try {
     const { message, fullName, email, phone, category, lgaId, ipAddress, userAgent } = req.body
 
@@ -560,7 +562,7 @@ app.post('/api/anonymous-message', async (req, res) => {
 /**
  * POST /api/admin/auth/register
  */
-app.post('/api/admin/auth/register', async (req, res) => {
+api.post('/admin/auth/register', async (req, res) => {
   try {
     const { email, password, fullName, role } = req.body
 
@@ -588,7 +590,7 @@ app.post('/api/admin/auth/register', async (req, res) => {
 /**
  * POST /api/admin/auth/login
  */
-app.post('/api/admin/auth/login', async (req, res) => {
+api.post('/admin/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body
 
@@ -615,14 +617,14 @@ app.post('/api/admin/auth/login', async (req, res) => {
 /**
  * GET /api/admin/auth/me
  */
-app.get('/api/admin/auth/me', adminAuthMiddleware, async (req, res) => {
+api.get('/admin/auth/me', adminAuthMiddleware, async (req, res) => {
   res.status(200).json({ success: true, admin: req.admin })
 })
 
 /**
  * GET /api/admin/dashboard/stats
  */
-app.get('/api/admin/dashboard/stats', adminAuthMiddleware, async (req, res) => {
+api.get('/admin/dashboard/stats', adminAuthMiddleware, async (req, res) => {
   try {
     const stats = await AdminService.getDashboardStats()
     res.status(200).json({
@@ -642,7 +644,7 @@ app.get('/api/admin/dashboard/stats', adminAuthMiddleware, async (req, res) => {
 /**
  * GET /api/admin/applications
  */
-app.get('/api/admin/applications', adminAuthMiddleware, async (req, res) => {
+api.get('/admin/applications', adminAuthMiddleware, async (req, res) => {
   try {
     const applications = await AdminService.listApplications()
     res.status(200).json({
@@ -660,7 +662,7 @@ app.get('/api/admin/applications', adminAuthMiddleware, async (req, res) => {
  * GET /api/uploads/imagekit-config
  * Public ImageKit settings for client-side uploads
  */
-app.get('/api/uploads/imagekit-config', (req, res) => {
+api.get('/uploads/imagekit-config', (req, res) => {
   res.status(200).json({ success: true, data: getPublicImageKitConfig() })
 })
 
@@ -668,7 +670,7 @@ app.get('/api/uploads/imagekit-config', (req, res) => {
  * GET /api/upload-auth
  * Returns signed ImageKit auth params required for authenticated uploads.
  */
-app.get('/api/upload-auth', (req, res) => {
+api.get('/upload-auth', (req, res) => {
   try {
     console.log('Auth request started for ImageKit')
     if (!imagekitConfig.privateKey) {
@@ -694,7 +696,7 @@ app.get('/api/upload-auth', (req, res) => {
  * GET /api/news
  * Public endpoint for latest uploaded news items
  */
-app.get('/api/news', async (req, res) => {
+api.get('/news', async (req, res) => {
   try {
     const type = req.query.type || 'NEWS'
     const rawPage = Number.parseInt(String(req.query.page ?? '1'), 10)
@@ -759,7 +761,7 @@ app.get('/api/news', async (req, res) => {
   }
 })
 
-app.get('/api/news/:slug', async (req, res) => {
+api.get('/news/:slug', async (req, res) => {
   try {
     const { slug } = req.params
     const records = await SiteContentService.listByType('NEWS')
@@ -806,7 +808,7 @@ app.get('/api/news/:slug', async (req, res) => {
  * POST /api/admin/uploads/news
  * Save news article after ImageKit upload (metadata + file refs)
  */
-app.post('/api/admin/uploads/news', adminAuthMiddleware, async (req, res) => {
+api.post('/admin/uploads/news', adminAuthMiddleware, async (req, res) => {
   try {
     console.log('Uploading news data has started with:',req.body)
     const { title, category, content, author, tags, coverImage } = req.body
@@ -837,7 +839,7 @@ app.post('/api/admin/uploads/news', adminAuthMiddleware, async (req, res) => {
 /**
  * POST /api/admin/uploads/info
  */
-app.post('/api/admin/uploads/info', adminAuthMiddleware, async (req, res) => {
+api.post('/admin/uploads/info', adminAuthMiddleware, async (req, res) => {
   try {
     const { title, category, description, content, image } = req.body
     if (!title || !category || !description || !content || !image?.fileUrl) {
@@ -864,7 +866,7 @@ app.post('/api/admin/uploads/info', adminAuthMiddleware, async (req, res) => {
 /**
  * POST /api/admin/uploads/gallery
  */
-app.post('/api/admin/uploads/gallery', adminAuthMiddleware, async (req, res) => {
+api.post('/admin/uploads/gallery', adminAuthMiddleware, async (req, res) => {
   try {
     const { title, category, images } = req.body
     if (!title || !category || !Array.isArray(images) || images.length === 0) {
@@ -890,7 +892,7 @@ app.post('/api/admin/uploads/gallery', adminAuthMiddleware, async (req, res) => 
  * GET /api/archive
  * Public list of archive documents
  */
-app.get('/api/archive', async (req, res) => {
+api.get('/archive', async (req, res) => {
   try {
     const records = await SiteContentService.listByType('ARCHIVE')
 
@@ -926,7 +928,7 @@ app.get('/api/archive', async (req, res) => {
   }
 })
 
-app.get('/api/archive/:slug', async (req, res) => {
+api.get('/archive/:slug', async (req, res) => {
   try {
     const { slug } = req.params
     const records = await SiteContentService.listByType('ARCHIVE')
@@ -961,7 +963,7 @@ app.get('/api/archive/:slug', async (req, res) => {
 /**
  * POST /api/admin/uploads/archive
  */
-app.post('/api/admin/uploads/archive', adminAuthMiddleware, async (req, res) => {
+api.post('/admin/uploads/archive', adminAuthMiddleware, async (req, res) => {
   try {
     const { title, category, description, year, document } = req.body
     console.log('Document sent for database:',req.body)
@@ -996,7 +998,7 @@ app.post('/api/admin/uploads/archive', adminAuthMiddleware, async (req, res) => 
 /**
  * PUT /api/admin/uploads/gallery/:id
  */
-app.put('/api/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) => {
+api.put('/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) => {
   try {
     const { id } = req.params
     const { title, category, coverImageUrl, galleryImages } = req.body
@@ -1025,7 +1027,7 @@ app.put('/api/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) 
 /**
  * DELETE /api/admin/uploads/gallery/:id
  */
-app.delete('/api/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) => {
+api.delete('/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, res) => {
   try {
     const { id } = req.params
     const { password } = req.body
@@ -1067,7 +1069,7 @@ app.delete('/api/admin/uploads/gallery/:id', adminAuthMiddleware, async (req, re
  * POST /api/uploads/documents
  * Register an ImageKit file against a user application
  */
-app.post('/api/uploads/documents', authTokenMiddleWare, async (req, res) => {
+api.post('/uploads/documents', authTokenMiddleWare, async (req, res) => {
   try {
     const userId = req.user.id
     const {
@@ -1117,7 +1119,7 @@ app.post('/api/uploads/documents', authTokenMiddleWare, async (req, res) => {
 /**
  * GET /api/staff
  */
-app.get('/api/staff', async (req, res) => {
+api.get('/staff', async (req, res) => {
   try {
     const staff = await StaffMemberService.list()
     res.status(200).json({ success: true, data: staff, count: staff.length })
@@ -1130,7 +1132,7 @@ app.get('/api/staff', async (req, res) => {
 /**
  * GET /api/staff/:id
  */
-app.get('/api/staff/:id', async (req, res) => {
+api.get('/staff/:id', async (req, res) => {
   try {
     const member = await StaffMemberService.getById(req.params.id)
     if (!member) {
@@ -1146,7 +1148,7 @@ app.get('/api/staff/:id', async (req, res) => {
 /**
  * GET /api/admin/staff
  */
-app.get('/api/admin/staff', adminAuthMiddleware, async (req, res) => {
+api.get('/admin/staff', adminAuthMiddleware, async (req, res) => {
   try {
     const staff = await StaffMemberService.list()
     res.status(200).json({ success: true, data: staff, count: staff.length })
@@ -1159,7 +1161,7 @@ app.get('/api/admin/staff', adminAuthMiddleware, async (req, res) => {
 /**
  * POST /api/admin/staff
  */
-app.post('/api/admin/staff', adminAuthMiddleware, async (req, res) => {
+api.post('/admin/staff', adminAuthMiddleware, async (req, res) => {
   try {
     const member = await StaffMemberService.create(req.body)
     res.status(201).json({ success: true, data: member, message: 'Staff member created' })
@@ -1172,7 +1174,7 @@ app.post('/api/admin/staff', adminAuthMiddleware, async (req, res) => {
 /**
  * PUT /api/admin/staff/:id
  */
-app.put('/api/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
+api.put('/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
   try {
     const member = await StaffMemberService.update(req.params.id, req.body)
     res.status(200).json({ success: true, data: member, message: 'Staff member updated' })
@@ -1186,7 +1188,7 @@ app.put('/api/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
 /**
  * DELETE /api/admin/staff/:id
  */
-app.delete('/api/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
+api.delete('/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
   try {
     await StaffMemberService.remove(req.params.id)
     res.status(200).json({ success: true, message: 'Staff member deleted' })
@@ -1200,7 +1202,7 @@ app.delete('/api/admin/staff/:id', adminAuthMiddleware, async (req, res) => {
 /**
  * GET /api/admin/payments
  */
-app.get('/api/admin/payments', adminAuthMiddleware, async (req, res) => {
+api.get('/admin/payments', adminAuthMiddleware, async (req, res) => {
   try {
     const data = await AdminService.listPayments()
     res.status(200).json({
@@ -1219,7 +1221,7 @@ app.get('/api/admin/payments', adminAuthMiddleware, async (req, res) => {
  * GET /api/applications
  * Fetch all applications for the authenticated user
  */
-app.get('/api/applications', authTokenMiddleWare, async (req, res) => {
+api.get('/applications', authTokenMiddleWare, async (req, res) => {
   try {
     const userId = req.user.id
     
@@ -1262,7 +1264,7 @@ app.get('/api/applications', authTokenMiddleWare, async (req, res) => {
  * GET /api/applications/:id
  * Fetch a single application by ID
  */
-app.get('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
+api.get('/applications/:id', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
     const userId = req.user.id
@@ -1319,7 +1321,7 @@ app.get('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
  * POST /api/applications
  * Submit a new application
  */
-app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
+api.post('/applications', authTokenMiddleWare, async (req, res) => {
   try {
     const userId = req.user.id
     console.log('The application payload is:',req.body)
@@ -1408,7 +1410,7 @@ app.post('/api/applications', authTokenMiddleWare, async (req, res) => {
  * PATCH /api/applications/:id
  * Update an application
  */
-app.patch('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
+api.patch('/applications/:id', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
     const userId = req.user.id
@@ -1473,7 +1475,7 @@ app.patch('/api/applications/:id', authTokenMiddleWare, async (req, res) => {
  * POST /api/applications/:id/cancel
  * Cancel an application
  */
-app.post('/api/applications/:id/cancel', authTokenMiddleWare, async (req, res) => {
+api.post('/applications/:id/cancel', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
     const userId = req.user.id
@@ -1533,7 +1535,7 @@ app.post('/api/applications/:id/cancel', authTokenMiddleWare, async (req, res) =
  * GET /api/applications/:id/download
  * Download application certificate/document
  */
-app.get('/api/applications/:id/download', authTokenMiddleWare, async (req, res) => {
+api.get('/applications/:id/download', authTokenMiddleWare, async (req, res) => {
   try {
     const { id } = req.params
     const userId = req.user.id
@@ -1599,7 +1601,7 @@ app.get('/api/applications/:id/download', authTokenMiddleWare, async (req, res) 
  * POST /api/transactions/save
  * Save transaction data before payment
  */
-app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
+api.post('/transactions/save', authTokenMiddleWare, async (req, res) => {
   console.log('This transaction data is about to be saved',req.body);
   try {
     const { email, phone, fullName, amount, type, status, applicationData, userId } = req.body;
@@ -1662,7 +1664,7 @@ app.post('/api/transactions/save', authTokenMiddleWare, async (req, res) => {
   }
 });
 
-app.post('/api/transactions/update', async(req,res)=>{
+api.post('/transactions/update', async(req,res)=>{
   const {txRef} = req.body;
 
  try{
@@ -1725,9 +1727,16 @@ app.post('/flutterwaveTest/trx', async (req, res) => {
 
 
 
+app.use('/api', api)
+app.use('/api2', api)
+
 // Start server
 app.listen(PORT, () => {
+
+
+  
   console.log(`🚀 Backend server running on http://localhost:${PORT}`)
+  console.log(`📝 API available at /api and /api2`)
   console.log(`📝 API Documentation available at http://localhost:${PORT}/health`)
 })
 

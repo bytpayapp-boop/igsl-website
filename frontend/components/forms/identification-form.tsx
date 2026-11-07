@@ -215,9 +215,9 @@ export function IdentificationForm({ onSubmit }: IdentificationFormProps) {
                         'Ovoko (Umulolo Ward)',
                         'Uhunowerre',
                         'Unadu'
-                      ].map((it,i) => 
+                      ].map((it,__) => 
                         <SelectItem
-                        key={i}>
+                        key={it} value={it}>
                        {it}
                         </SelectItem>
                       )}
