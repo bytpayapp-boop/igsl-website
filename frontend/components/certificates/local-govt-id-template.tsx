@@ -45,6 +45,7 @@ export function LocalGovtIdTemplate({
   const [qr, setQr] = useState('')
     useEffect(() => {
       const generateQR = async () => {
+        console.log('Data:', data)
         try {
           const dataString = JSON.stringify({
             n: data.childFullName,
