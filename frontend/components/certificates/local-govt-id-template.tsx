@@ -48,8 +48,8 @@ export function LocalGovtIdTemplate({
         console.log('Data:', data)
         try {
           const dataString = JSON.stringify({
-            n: data.childFullName,
-            w: data.ward,
+            n: data.fullName,
+            w: data.originTown,
             d: data.date,
           })
           const encoded = btoa(dataString)
@@ -61,6 +61,7 @@ export function LocalGovtIdTemplate({
           console.error('Failed to generate QR code:', error)
         }
       }
+      
       generateQR()
     }, [data.fullName, data.originTown, data.date])
 
