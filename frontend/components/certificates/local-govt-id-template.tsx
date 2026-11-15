@@ -1,5 +1,6 @@
 'use client'
-
+import QRCode from 'qrcode';
+import { useEffect, useState } from 'react';
 interface LocalGovtIdTemplateProps {
   data: any
   referenceNumber: string
@@ -41,6 +42,27 @@ export function LocalGovtIdTemplate({
     year: 'numeric',
   })
 
+  const [qr, setQr] = useState('')
+    useEffect(() => {
+      const generateQR = async () => {
+        try {
+          const dataString = JSON.stringify({
+            n: data.childFullName,
+            w: data.ward,
+            d: data.date,
+          })
+          const encoded = btoa(dataString)
+          const qrImageUrl = await QRCode.toDataURL(
+            `https://igsl.vercel.app/verify/${encodeURIComponent(encoded)}`
+          )
+          setQr(qrImageUrl)
+        } catch (error) {
+          console.error('Failed to generate QR code:', error)
+        }
+      }
+      generateQR()
+    }, [data.childFullName, data.ward, data.date])
+
   return (
     <div className="min-h-screen bg-[#e9ecef] w-180 flex mx-auto items-center justify-center p-6">
       <style>{`
@@ -69,6 +91,9 @@ export function LocalGovtIdTemplate({
 
         <div className="relative z-10 h-full px-12 pt-8 pb-8 flex flex-col">
           {/* Header */}
+           <div className="h-20 w-20 absolute top-12 left-12 flex">
+            <img src={qr} className="object-cover"/>
+            </div>
           <div className="flex items-start justify-center mb-2">
             <div className="flex flex-col pt-4 items-center">
               <TopLogo />
