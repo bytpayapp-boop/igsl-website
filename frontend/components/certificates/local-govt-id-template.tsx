@@ -62,7 +62,7 @@ export function LocalGovtIdTemplate({
         }
       }
       generateQR()
-    }, [data.childFullName, data.ward, data.date])
+    }, [data.fullName, data.originTown, data.date])
 
   return (
     <div className="min-h-screen bg-[#e9ecef] w-180 flex mx-auto items-center justify-center p-6">
